@@ -2,30 +2,36 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:moleculis/services/app_esceptions.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 
 class HttpHelper {
-  HttpHelper._internal() {
+  HttpHelper._internal({String locale}) {
+    this.locale = locale == 'uk' ? 'ua' : locale;
     httpClient.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => trustSelfSigned);
     ioClient = IOClient(httpClient);
   }
 
-  static final HttpHelper _instance = HttpHelper._internal();
+  static HttpHelper _instance;
 
-  factory HttpHelper() {
+  factory HttpHelper({String locale}) {
+    if (_instance == null ||
+        (_instance != null && locale != null && _instance.locale != locale)) {
+      _instance = HttpHelper._internal(locale: locale);
+    }
     return _instance;
   }
 
   SharedPrefManager _prefs = SharedPrefManager();
   HttpClient httpClient = HttpClient();
   IOClient ioClient;
+  String locale;
   bool trustSelfSigned = true;
 
-  final String _baseUrl = "localhost:8080";
+  final String _baseUrl = "http://10.0.2.2:8080";
 
   Map<String, String> _postHeaders = {
     'accept': 'application/json',
@@ -37,7 +43,7 @@ class HttpHelper {
     try {
       final response = await ioClient.get(
         _baseUrl + endpoint,
-        headers: await _getAuthTokenHeader(),
+        headers: _getAuthTokenHeader(),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -49,7 +55,7 @@ class HttpHelper {
   Future<Map<String, dynamic>> post(
     String endpoint, {
     Map<String, String> headers,
-    String body,
+        Map<String, dynamic> body,
     authorized = true,
   }) async {
     var responseJson;
@@ -58,13 +64,14 @@ class HttpHelper {
       postHeaders.addAll(headers);
     }
     if (authorized) {
-      postHeaders.addAll(await _getAuthTokenHeader());
+      postHeaders.addAll(_getAuthTokenHeader());
     }
     try {
+      print('Locale: $locale');
       final response = await ioClient.post(
         _baseUrl + endpoint,
-        headers: postHeaders,
-        body: body,
+        headers: postHeaders..addAll({'Accept-Language': locale}),
+        body: json.encode(body),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -76,7 +83,7 @@ class HttpHelper {
   Future<Map<String, dynamic>> put(
     String endpoint, {
     Map<String, String> headers,
-    String body,
+        Map<String, dynamic> body,
     authorized = true,
   }) async {
     var responseJson;
@@ -85,13 +92,13 @@ class HttpHelper {
       postHeaders.addAll(headers);
     }
     if (authorized) {
-      postHeaders.addAll(await _getAuthTokenHeader());
+      postHeaders.addAll(_getAuthTokenHeader());
     }
     try {
       final response = await ioClient.put(
         _baseUrl + endpoint,
         headers: postHeaders,
-        body: body,
+        body: json.encode(body),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -105,7 +112,7 @@ class HttpHelper {
     try {
       final response = await ioClient.delete(
         _baseUrl + endpoint,
-        headers: await _getAuthTokenHeader(),
+        headers: _getAuthTokenHeader(),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -114,24 +121,15 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, String>> _getAuthTokenHeader() async {
-    final accessToken = await _prefs.getAccessToken();
-    return {HttpHeaders.authorizationHeader: 'Bearer $accessToken'};
+  Map<String, String> _getAuthTokenHeader() {
+    final String accessToken = _prefs.getAccessToken();
+    return {HttpHeaders.authorizationHeader: accessToken};
   }
 
-  Map<String, dynamic> _returnResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        return json.decode(response.body.toString());
-      case 400:
-        throw BadRequestException(response.body.toString());
-      case 401:
-      case 403:
-        throw UnauthorisedException(response.body.toString());
-      case 500:
-      default:
-        throw FetchDataException(
-            '${'server_communication_error'.tr()}: ${response.statusCode}');
+  Map<String, dynamic> _returnResponse(Response response) {
+    if (response.statusCode == 200) {
+      return json.decode(response.body.toString());
     }
+    throw AppException('', json.decode(response.body)['message']);
   }
 }
