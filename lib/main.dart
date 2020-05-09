@@ -1,12 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moleculis/screens/error_screen.dart';
 import 'package:moleculis/screens/login/login_screen.dart';
 import 'package:moleculis/utils/locale_utils.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[DeviceOrientation.portraitUp],
+  );
+
   runApp(
     EasyLocalization(
       supportedLocales: LocaleUtils.locales,
@@ -27,8 +34,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     easyLocalization = EasyLocalization.of(context);
-
-    context.locale = LocaleUtils.locales[1];
     super.didChangeDependencies();
   }
 
@@ -64,6 +69,15 @@ class _MyAppState extends State<MyApp> {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      builder: (BuildContext context, Widget widget) {
+        ErrorWidget.builder = (FlutterErrorDetails details) {
+          return ErrorScreen(
+            details: details,
+            showStacktrace: true,
+          );
+        };
+        return widget;
+      },
       home: LoginScreen(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
