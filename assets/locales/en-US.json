@@ -1,0 +1,4 @@
+{
+  "no_internet": "No Internet connection",
+  "server_communication_error": "Error occurred while communication with server with StatusCode"
+}

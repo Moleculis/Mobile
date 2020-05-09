@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
-import 'package:moleculis/screens/services/app_esceptions.dart';
+import 'package:moleculis/services/app_esceptions.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 
 class HttpHelper {
@@ -40,7 +41,7 @@ class HttpHelper {
       );
       responseJson = _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException('no_internet'.tr());
     }
     return responseJson;
   }
@@ -67,7 +68,7 @@ class HttpHelper {
       );
       responseJson = _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException('no_internet'.tr());
     }
     return responseJson;
   }
@@ -94,7 +95,7 @@ class HttpHelper {
       );
       responseJson = _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException('no_internet'.tr());
     }
     return responseJson;
   }
@@ -108,7 +109,7 @@ class HttpHelper {
       );
       responseJson = _returnResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet connection');
+      throw FetchDataException('no_internet'.tr());
     }
     return responseJson;
   }
@@ -130,7 +131,7 @@ class HttpHelper {
       case 500:
       default:
         throw FetchDataException(
-            'Error occured while communication with Server with StatusCode : ${response.statusCode}');
+            '${'server_communication_error'.tr()}: ${response.statusCode}');
     }
   }
 }
