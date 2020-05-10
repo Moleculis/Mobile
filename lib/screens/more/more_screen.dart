@@ -8,6 +8,7 @@ import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/screens/auth/auth_screen.dart';
 import 'package:moleculis/screens/more/widgets/more_tile.dart';
 import 'package:moleculis/screens/settings/settings_screen.dart';
+import 'package:moleculis/screens/user_details/user_details_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
@@ -97,7 +98,12 @@ class _MoreScreenState extends State<MoreScreen> {
                       Icons.person_outline,
                       color: Colors.grey[600],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigation.toScreen(
+                        context: context,
+                        screen: UserDetails(),
+                      );
+                    },
                   ),
                   SettingsTile(
                     title: 'settings'.tr(),

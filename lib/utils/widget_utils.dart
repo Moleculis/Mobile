@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,6 +76,22 @@ class WidgetUtils {
         );
       },
     );
+  }
+
+  static Widget backButton(BuildContext context) {
+    if (Platform.isAndroid) {
+      return IconButton(
+          icon: Icon(Icons.arrow_back),
+          padding: EdgeInsets.all(0),
+          alignment: Alignment.centerLeft,
+          onPressed: () => Navigator.pop(context));
+    } else {
+      return IconButton(
+          icon: Icon(CupertinoIcons.left_chevron),
+          padding: EdgeInsets.all(0),
+          alignment: Alignment.centerLeft,
+          onPressed: () => Navigator.pop(context));
+    }
   }
 
   static Widget appBar(BuildContext context, {
