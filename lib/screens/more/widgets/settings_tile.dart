@@ -18,18 +18,21 @@ class SettingsTile extends StatelessWidget {
       children: <Widget>[
         InkWell(
           onTap: onTap,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              ),
-              icon,
-            ],
+                icon,
+              ],
+            ),
           ),
         ),
         Divider(),

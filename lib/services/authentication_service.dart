@@ -15,6 +15,8 @@ class AuthenticationService {
 
   String get _registerEndpoint => _endpointBase + '/register';
 
+  String get _logOutEndpoint => _endpointBase + '/logout';
+
   Future<void> login(LoginRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _loginEndpoint,
@@ -34,6 +36,14 @@ class AuthenticationService {
       body: request.toMap(),
       authorized: false,
     );
+    return response['message'];
+  }
+
+  Future<String> logOut() async {
+    final Map<String, dynamic> response = await _httpHelper.post(
+        _logOutEndpoint
+    );
+    await _sharedPrefManager.clear();
     return response['message'];
   }
 }

@@ -48,3 +48,12 @@ class AuthenticationRegisterSuccess extends AuthenticationState {
   @override
   String toString() => 'AuthenticationRegisterSuccess { message: $message }';
 }
+
+class AuthenticationLogOutSuccess extends AuthenticationState {
+  final String message;
+
+  AuthenticationLogOutSuccess({@required this.message}) : super();
+
+  @override
+  String toString() => 'AuthenticationLogOutSuccess { message: $message }';
+}

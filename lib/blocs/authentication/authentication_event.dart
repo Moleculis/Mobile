@@ -26,3 +26,8 @@ class LoadInitialData extends AuthenticationEvent {
   @override
   List<Object> get props => null;
 }
+
+class LogOutEvent extends AuthenticationEvent {
+  @override
+  List<Object> get props => [];
+}

@@ -32,6 +32,8 @@ class AuthenticationBloc
       yield* _register(event.registerRequest);
     } else if (event is LoadInitialData) {
       yield* _loadInitialData();
+    } else if (event is LogOutEvent) {
+      yield* _logout();
     }
   }
 
@@ -80,6 +82,20 @@ class AuthenticationBloc
       );
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
+    }
+  }
+
+  Stream<AuthenticationState> _logout() async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      final String message = await _authenticationService.logOut();
+      yield AuthenticationLogOutSuccess(message: message);
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
+    } finally {
+      yield state.copyWith(
+        isLoading: false,
+      );
     }
   }
 }
