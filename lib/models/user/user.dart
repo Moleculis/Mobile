@@ -1,7 +1,9 @@
 import 'package:moleculis/models/contact/receiver_contact.dart';
 import 'package:moleculis/models/contact/sender_contact.dart';
+import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/event.dart';
 import 'package:moleculis/models/group/group.dart';
+import 'package:moleculis/models/requests/update_user_request.dart';
 
 class User {
   final String displayname;
@@ -66,6 +68,44 @@ class User {
       roles: List<String>.from(rolesDynamic),
       groups: groups,
       adminGroups: adminGroups,
+    );
+  }
+
+  User copyWith({
+    String displayname,
+    String fullname,
+    String gender,
+    List<Event> events,
+    List<SenderContact> contacts,
+    List<ReceiverContact> contactRequests,
+    String username,
+    String email,
+    List<String> roles,
+    List<Group> groups,
+    List<Group> adminGroups,
+  }) {
+    return User(
+      displayname: displayname ?? this.displayname,
+      fullname: fullname ?? this.fullname,
+      gender: gender ?? this.gender,
+      events: events ?? this.events,
+      contacts: contacts ?? this.contacts,
+      contactRequests: contactRequests ?? this.contactRequests,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      roles: roles ?? this.roles,
+      groups: groups ?? this.groups,
+      adminGroups: adminGroups ?? this.adminGroups,
+    );
+  }
+
+  User copyWithRequest(UpdateUserRequest request) {
+    return copyWith(
+        username: request.username,
+        email: request.email,
+        displayname: request.displayName,
+        fullname: request.fullName,
+        gender: request.gender.name
     );
   }
 }

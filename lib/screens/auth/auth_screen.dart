@@ -34,7 +34,7 @@ class _AuthScreenState extends State<AuthScreen>
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (BuildContext context, AuthenticationState state) {
-        if (state is AuthenticationLoginSuccess) {
+        if (state is AuthenticationSuccess) {
           Navigation.toScreenAndCleanBackStack(
               context: context, screen: HomeScreen());
         } else if (state is AuthenticationRegisterSuccess) {

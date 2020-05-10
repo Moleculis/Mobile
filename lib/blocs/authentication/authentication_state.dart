@@ -31,13 +31,13 @@ class AuthenticationFailure extends AuthenticationState {
   String toString() => 'AuthenticationFailure { error: $error }';
 }
 
-class AuthenticationLoginSuccess extends AuthenticationState {
+class AuthenticationSuccess extends AuthenticationState {
   final String message;
 
-  AuthenticationLoginSuccess({@required this.message}) : super();
+  AuthenticationSuccess({@required this.message}) : super();
 
   @override
-  String toString() => 'AuthenticationLoginSuccess { message: $message }';
+  String toString() => 'AuthenticationSuccess { message: $message }';
 }
 
 class AuthenticationRegisterSuccess extends AuthenticationState {

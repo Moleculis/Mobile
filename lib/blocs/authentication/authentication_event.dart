@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:moleculis/models/requests/register_request.dart';
+import 'package:moleculis/models/requests/update_user_request.dart';
 
 abstract class AuthenticationEvent extends Equatable {}
 
@@ -30,4 +31,13 @@ class LoadInitialData extends AuthenticationEvent {
 class LogOutEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [];
+}
+
+class UpdateUserEvent extends AuthenticationEvent {
+  final UpdateUserRequest request;
+
+  UpdateUserEvent(this.request);
+
+  @override
+  List<Object> get props => [request];
 }

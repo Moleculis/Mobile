@@ -5,6 +5,7 @@ import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
+import 'package:moleculis/models/requests/update_user_request.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/services/app_esceptions.dart';
 import 'package:moleculis/services/authentication_service.dart';
@@ -34,6 +35,8 @@ class AuthenticationBloc
       yield* _loadInitialData();
     } else if (event is LogOutEvent) {
       yield* _logout();
+    } else if (event is UpdateUserEvent) {
+      yield* _updateUser(event.request);
     }
   }
 
@@ -46,7 +49,7 @@ class AuthenticationBloc
           password: password,
         ),
       );
-      yield AuthenticationLoginSuccess(message: 'Logged in successfully');
+      yield AuthenticationSuccess(message: 'Logged in successfully');
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
     } finally {
@@ -96,6 +99,20 @@ class AuthenticationBloc
       yield state.copyWith(
         isLoading: false,
       );
+    }
+  }
+
+  Stream<AuthenticationState> _updateUser(UpdateUserRequest request) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      final String message = await _userService.updateUser(request);
+      yield AuthenticationSuccess(message: message);
+      yield state.copyWith(
+        isLoading: false,
+        currentUser: state.currentUser.copyWithRequest(request),
+      );
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
     }
   }
 }
