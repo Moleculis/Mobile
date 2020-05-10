@@ -29,5 +29,10 @@
   "full_name_short": "Full name is too short",
   "gender": "Gender",
   "male": "Male",
-  "female": "Female"
+  "female": "Female",
+  "events": "Events",
+  "groups": "Groups",
+  "more": "More",
+  "personal_info": "Personal information",
+  "version": "Version"
 }

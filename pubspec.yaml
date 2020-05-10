@@ -2,7 +2,7 @@ name: moleculis
 description: Moleculis flutter application
 
 
-version: 0.1.0+1
+version: 0.1.1+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -17,6 +17,7 @@ dependencies:
   equatable: ^1.1.1
   easy_localization: ^2.3.0
   google_fonts: ^1.1.0
+  package_info: ^0.4.0+17
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/common/colors.dart';
+import 'package:moleculis/screens/more/more_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> tabs = [
     Center(child: Text('Events screen'),),
     Center(child: Text('Groups screen'),),
-    Center(child: Text('More screen'),),
+    MoreScreen(),
   ];
 
   int currentTab = 0;
@@ -47,15 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
-            title: Text('Events'),
+            title: Text('events'.tr()),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            title: Text('Groups'),
+            title: Text('groups'.tr()),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.more),
-              title: Text('More')
+              title: Text('more'.tr())
           )
         ],
       ),
