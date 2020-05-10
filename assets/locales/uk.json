@@ -42,5 +42,7 @@
   "language": "Мова",
   "notifications": "Сповіщення",
   "security": "Безпека",
-  "use_fingerprint": "Використовувати відбиток пальця"
+  "use_fingerprint": "Використовувати відбиток пальця",
+  "edit_personal_info": "Редагувати особисту інформацію",
+  "save": "Зберігти"
 }

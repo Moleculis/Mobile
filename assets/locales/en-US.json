@@ -42,5 +42,7 @@
   "language": "Language",
   "notifications": "Notifications",
   "security": "Security",
-  "use_fingerprint": "Use fingerprint"
+  "use_fingerprint": "Use fingerprint",
+  "edit_personal_info": "Edit personal info",
+  "save": "Save"
 }

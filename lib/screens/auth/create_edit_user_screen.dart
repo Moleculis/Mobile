@@ -5,16 +5,21 @@ import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/requests/register_request.dart';
+import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/utils/validation.dart';
 import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/input.dart';
 
-class RegisterScreen extends StatefulWidget {
+class CreateEditUserScreen extends StatefulWidget {
+  final bool edit;
+
+  const CreateEditUserScreen({Key key, this.edit = false}) : super(key: key);
+
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _CreateEditUserScreenState createState() => _CreateEditUserScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen>
+class _CreateEditUserScreenState extends State<CreateEditUserScreen>
     with AutomaticKeepAliveClientMixin {
   AuthenticationBloc authenticationBloc;
 
@@ -46,6 +51,14 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void didChangeDependencies() {
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    if (widget.edit) {
+      final User currentUser = authenticationBloc.state.currentUser;
+      usernameController.text = currentUser.username;
+      emailController.text = currentUser.email;
+      displayNameController.text = currentUser.displayname;
+      fullNameController.text = currentUser.fullname;
+      currentGender = currentUser.gender.gender;
+    }
     super.didChangeDependencies();
   }
 
@@ -55,10 +68,10 @@ class _RegisterScreenState extends State<RegisterScreen>
       key: formKey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             left: 30,
             right: 30,
-            top: 40,
+            top: widget.edit ? 0 : 40,
           ),
           child: Column(
             children: <Widget>[
@@ -83,67 +96,69 @@ class _RegisterScreenState extends State<RegisterScreen>
                   title: 'username'.tr(),
                 ),
               ),
-              SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - 60,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Input(
-                    controller: passwordController,
-                    focusNode: passwordFocus,
-                    nextFocusNode: password2Focus,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (String value) {},
-                    maxLines: 1,
-                    validator: (String value) {
-                      value = value.trim();
-                      if (value.isEmpty) {
-                        return 'password_empty'.tr();
-                      }
-                      if (value.length < 5) {
-                        return 'password_short'.tr();
-                      }
-                      return null;
-                    },
-                    title: 'password'.tr(),
-                    obscureText: true,
+              if (!widget.edit)
+                SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Input(
+                      controller: passwordController,
+                      focusNode: passwordFocus,
+                      nextFocusNode: password2Focus,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (String value) {},
+                      maxLines: 1,
+                      validator: (String value) {
+                        value = value.trim();
+                        if (value.isEmpty) {
+                          return 'password_empty'.tr();
+                        }
+                        if (value.length < 5) {
+                          return 'password_short'.tr();
+                        }
+                        return null;
+                      },
+                      title: 'password'.tr(),
+                      obscureText: true,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - 60,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Input(
-                    controller: password2Controller,
-                    focusNode: password2Focus,
-                    nextFocusNode: emailFocus,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (String value) {},
-                    maxLines: 1,
-                    validator: (String value) {
-                      value = value.trim();
-                      if (value.isEmpty) {
-                        return 'password_empty'.tr();
-                      }
-                      if (value.length < 5) {
-                        return 'password_short'.tr();
-                      }
-                      if (passwordController.text != value) {
-                        return 'passwords_no_match'.tr();
-                      }
-                      return null;
-                    },
-                    title: 'password_again'.tr(),
-                    obscureText: true,
+              if (!widget.edit)
+                SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Input(
+                      controller: password2Controller,
+                      focusNode: password2Focus,
+                      nextFocusNode: emailFocus,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (String value) {},
+                      maxLines: 1,
+                      validator: (String value) {
+                        value = value.trim();
+                        if (value.isEmpty) {
+                          return 'password_empty'.tr();
+                        }
+                        if (value.length < 5) {
+                          return 'password_short'.tr();
+                        }
+                        if (passwordController.text != value) {
+                          return 'passwords_no_match'.tr();
+                        }
+                        return null;
+                      },
+                      title: 'password_again'.tr(),
+                      obscureText: true,
+                    ),
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Input(
@@ -249,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 padding: const EdgeInsets.only(bottom: 20),
                 child: GradientButton(
                   onPressed: register,
-                  text: 'register'.tr(),
+                  text: widget.edit ? 'save'.tr() : 'register'.tr(),
                 ),
               ),
             ],
@@ -267,15 +282,17 @@ class _RegisterScreenState extends State<RegisterScreen>
       displayNameFocus.unfocus();
       fullNameFocus.unfocus();
       emailFocus.unfocus();
-      final RegisterRequest registerRequest = RegisterRequest(
-        username: usernameController.text,
-        password: passwordController.text,
-        displayName: displayNameController.text,
-        fullName: fullNameController.text,
-        email: emailController.text,
-        gender: currentGender,
-      );
-      authenticationBloc.add(RegisterEvent(registerRequest));
+      if (widget.edit) {} else {
+        final RegisterRequest registerRequest = RegisterRequest(
+          username: usernameController.text,
+          password: passwordController.text,
+          displayName: displayNameController.text,
+          fullName: fullNameController.text,
+          email: emailController.text,
+          gender: currentGender,
+        );
+        authenticationBloc.add(RegisterEvent(registerRequest));
+      }
     }
   }
 }

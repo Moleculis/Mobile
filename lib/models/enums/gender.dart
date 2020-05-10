@@ -21,3 +21,15 @@ extension GenderName on Gender {
     return null;
   }
 }
+
+extension GenderExtension on String{
+  Gender get gender {
+    if (this == 'MALE') {
+      return Gender.male;
+    }
+    if (this == 'FEMALE') {
+      return Gender.female;
+    }
+    return null;
+  }
+}

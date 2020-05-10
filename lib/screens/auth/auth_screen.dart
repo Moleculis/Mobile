@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
+import 'package:moleculis/screens/auth/create_edit_user_screen.dart';
 import 'package:moleculis/screens/auth/login_screen.dart';
-import 'package:moleculis/screens/auth/register_screen.dart';
 import 'package:moleculis/screens/home/home_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
@@ -78,7 +78,7 @@ class _AuthScreenState extends State<AuthScreen>
                                 controller: authTabsController,
                                 children: [
                                   LoginScreen(),
-                                  RegisterScreen(),
+                                  CreateEditUserScreen(),
                                 ],
                               ),
                               Positioned(
