@@ -6,8 +6,10 @@ import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/screens/auth/auth_screen.dart';
-import 'package:moleculis/screens/more/widgets/settings_tile.dart';
+import 'package:moleculis/screens/more/widgets/more_tile.dart';
+import 'package:moleculis/screens/settings/settings_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
+import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
 import 'package:package_info/package_info.dart';
 
@@ -72,7 +74,13 @@ class _MoreScreenState extends State<MoreScreen> {
                         color: Colors.grey[600],
                       ),
                       onPressed: () {
-                        authenticationBloc.add(LogOutEvent());
+                        WidgetUtils.showSimpleDialog(
+                          context: context,
+                          title: 'log_out_confirm'.tr(),
+                          onYes: () {
+                            authenticationBloc.add(LogOutEvent());
+                          },
+                        );
                       },
                     ),
                   );
@@ -97,7 +105,11 @@ class _MoreScreenState extends State<MoreScreen> {
                       Icons.settings,
                       color: Colors.grey[600],
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      await Navigation.toScreen(
+                          context: context, screen: SettingsScreen());
+                      setState(() {});
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, left: 20),

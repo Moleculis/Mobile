@@ -35,5 +35,12 @@
   "more": "Більше",
   "personal_info": "Персональна інформація",
   "version": "Версія",
-  "settings": "Налаштування"
+  "settings": "Налаштування",
+  "cancel": "Cancel",
+  "log_out_confirm": "Ви впевнені що хочете вийти?",
+  "general": "Загальні",
+  "language": "Мова",
+  "notifications": "Сповіщення",
+  "security": "Безпека",
+  "use_fingerprint": "Використовувати відбиток пальця"
 }

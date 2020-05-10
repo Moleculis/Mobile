@@ -35,5 +35,12 @@
   "more": "More",
   "personal_info": "Personal information",
   "version": "Version",
-  "settings": "Settings"
+  "settings": "Settings",
+  "cancel": "Cancel",
+  "log_out_confirm": "Are you sure you want to logout?",
+  "general": "General",
+  "language": "Language",
+  "notifications": "Notifications",
+  "security": "Security",
+  "use_fingerprint": "Use fingerprint"
 }

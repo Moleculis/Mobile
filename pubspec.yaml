@@ -2,7 +2,7 @@ name: moleculis
 description: Moleculis flutter application
 
 
-version: 0.1.1+2
+version: 0.1.2+3
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -18,10 +18,21 @@ dependencies:
   easy_localization: ^2.3.0
   google_fonts: ^1.1.0
   package_info: ^0.4.0+17
+  auto_size_text: ^2.1.0
+  settings_ui: ^0.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/img/launcher/icon.png"
+  image_path_android: "assets/img/launcher/icon.png"
+  adaptive_icon_background: "assets/img/launcher/background.png"
+  adaptive_icon_foreground: "assets/img/launcher/foreground.png"
 
 flutter:
   uses-material-design: true
@@ -29,3 +40,4 @@ flutter:
   assets:
     - assets/locales/
     - assets/img/
+    - assets/img/launcher/

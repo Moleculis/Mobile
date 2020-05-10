@@ -4,18 +4,27 @@ import 'package:moleculis/utils/locale_utils.dart';
 import 'package:moleculis/widgets/locale_widget.dart';
 
 class LanguagesPopup extends StatelessWidget {
+  final Widget child;
+  final Color backgroundColor;
+  final bool showIcon;
   final BuildContext context;
 
-  const LanguagesPopup({Key key, @required this.context}) : super(key: key);
+  const LanguagesPopup({
+    Key key,
+    this.child,
+    this.backgroundColor,
+    this.showIcon = true, this.context,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
       onSelected: (int index) {
-        this.context.locale = LocaleUtils.localeItems[index].locale;
+        (this.context ?? context).locale =
+            LocaleUtils.localeItems[index].locale;
       },
       itemBuilder: (context) => LocaleUtils.localeItems.map(
-        (LocaleItem localeItem) {
+            (LocaleItem localeItem) {
           final int index = LocaleUtils.localeItems.indexOf(localeItem);
           return PopupMenuItem(
             value: index,
@@ -25,10 +34,14 @@ class LanguagesPopup extends StatelessWidget {
           );
         },
       ).toList(),
-      icon: LocaleWidget(
+      icon: showIcon
+          ? LocaleWidget(
         localeItem: LocaleUtils.currentLocaleItem(context),
         showLanguageName: false,
-      ),
+      )
+          : null,
+      child: child,
+      color: backgroundColor,
     );
   }
 }

@@ -84,9 +84,7 @@ class _AuthScreenState extends State<AuthScreen>
                               Positioned(
                                 right: 0,
                                 top: 0,
-                                child: LanguagesPopup(
-                                  context: context,
-                                ),
+                                child: LanguagesPopup(context: context,),
                               ),
                             ],
                           ),
