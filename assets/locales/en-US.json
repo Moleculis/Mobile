@@ -8,5 +8,12 @@
   "invalid_request": "Invalid Request",
   "unauthorised": "Unauthorised",
   "invalid_input": "Invalid Input",
-  "login": "Login"
+  "login": "Login",
+  "register": "Register",
+  "username": "Username",
+  "username_short": "Username is too short",
+  "username_empty": "Username can't be empty",
+  "password": "Password",
+  "password_short": "Password is too short",
+  "password_empty": "Password can't be empty"
 }

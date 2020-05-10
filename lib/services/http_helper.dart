@@ -9,41 +9,56 @@ import 'package:moleculis/storage/shared_pref_manager.dart';
 
 class HttpHelper {
   HttpHelper._internal({String locale}) {
-    this.locale = locale == 'uk' ? 'ua' : locale;
-    httpClient.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => trustSelfSigned);
-    ioClient = IOClient(httpClient);
+    this._locale = locale == 'uk' ? 'ua' : locale;
+    _httpClient.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => _trustSelfSigned);
+    _ioClient = IOClient(_httpClient);
   }
 
   static HttpHelper _instance;
 
   factory HttpHelper({String locale}) {
     if (_instance == null ||
-        (_instance != null && locale != null && _instance.locale != locale)) {
+        (_instance != null && locale != null && _instance._locale != locale)) {
       _instance = HttpHelper._internal(locale: locale);
     }
     return _instance;
   }
 
-  SharedPrefManager _prefs = SharedPrefManager();
-  HttpClient httpClient = HttpClient();
-  IOClient ioClient;
-  String locale;
-  bool trustSelfSigned = true;
-
   final String _baseUrl = "http://10.0.2.2:8080";
+
+  SharedPrefManager _prefs = SharedPrefManager();
+  HttpClient _httpClient = HttpClient();
+  IOClient _ioClient;
+  String _locale;
+
+  String get locale => _locale;
+  bool _trustSelfSigned = true;
 
   Map<String, String> _postHeaders = {
     'accept': 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
   };
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Map<String, String> get _authTokenHeader {
+    final String accessToken = _prefs.getAccessToken();
+    return {HttpHeaders.authorizationHeader: accessToken};
+  }
+
+  Map<String, String> get _localizationHeader =>
+      {'Accept-Language': _instance.locale};
+
+  Future<Map<String, dynamic>> get(String endpoint,
+      {bool localized = true}) async {
     var responseJson;
     try {
-      final response = await ioClient.get(
+      final getHeaders = _authTokenHeader;
+      if (localized) {
+        getHeaders.addAll(_localizationHeader);
+      }
+      final response = await _ioClient.get(
         _baseUrl + endpoint,
-        headers: _getAuthTokenHeader(),
+        headers: _authTokenHeader,
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -52,11 +67,11 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, dynamic>> post(
-    String endpoint, {
+  Future<Map<String, dynamic>> post(String endpoint, {
     Map<String, String> headers,
-        Map<String, dynamic> body,
+    Map<String, dynamic> body,
     authorized = true,
+    bool localized = true,
   }) async {
     var responseJson;
     Map<String, String> postHeaders = _postHeaders;
@@ -64,38 +79,13 @@ class HttpHelper {
       postHeaders.addAll(headers);
     }
     if (authorized) {
-      postHeaders.addAll(_getAuthTokenHeader());
+      postHeaders.addAll(_authTokenHeader);
+    }
+    if (localized) {
+      postHeaders.addAll(_localizationHeader);
     }
     try {
-      print('Locale: $locale');
-      final response = await ioClient.post(
-        _baseUrl + endpoint,
-        headers: postHeaders..addAll({'Accept-Language': locale}),
-        body: json.encode(body),
-      );
-      responseJson = _returnResponse(response);
-    } on SocketException {
-      throw FetchDataException('no_internet'.tr());
-    }
-    return responseJson;
-  }
-
-  Future<Map<String, dynamic>> put(
-    String endpoint, {
-    Map<String, String> headers,
-        Map<String, dynamic> body,
-    authorized = true,
-  }) async {
-    var responseJson;
-    Map<String, String> postHeaders = _postHeaders;
-    if (headers != null) {
-      postHeaders.addAll(headers);
-    }
-    if (authorized) {
-      postHeaders.addAll(_getAuthTokenHeader());
-    }
-    try {
-      final response = await ioClient.put(
+      final response = await _ioClient.post(
         _baseUrl + endpoint,
         headers: postHeaders,
         body: json.encode(body),
@@ -107,12 +97,28 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, dynamic>> delete(String endpoint) async {
+  Future<Map<String, dynamic>> put(String endpoint, {
+    Map<String, String> headers,
+    Map<String, dynamic> body,
+    authorized = true,
+    bool localized = true,
+  }) async {
     var responseJson;
+    Map<String, String> putHeaders = _postHeaders;
+    if (headers != null) {
+      putHeaders.addAll(headers);
+    }
+    if (authorized) {
+      putHeaders.addAll(_authTokenHeader);
+    }
+    if (localized) {
+      putHeaders.addAll(_localizationHeader);
+    }
     try {
-      final response = await ioClient.delete(
+      final response = await _ioClient.put(
         _baseUrl + endpoint,
-        headers: _getAuthTokenHeader(),
+        headers: putHeaders..addAll({'Accept-Language': _instance.locale}),
+        body: json.encode(body),
       );
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -121,9 +127,23 @@ class HttpHelper {
     return responseJson;
   }
 
-  Map<String, String> _getAuthTokenHeader() {
-    final String accessToken = _prefs.getAccessToken();
-    return {HttpHeaders.authorizationHeader: accessToken};
+  Future<Map<String, dynamic>> delete(String endpoint,
+      {bool localized = true}) async {
+    var responseJson;
+    try {
+      final deleteHeaders = _authTokenHeader;
+      if (localized) {
+        deleteHeaders.addAll(_localizationHeader);
+      }
+      final response = await _ioClient.delete(
+        _baseUrl + endpoint,
+        headers: deleteHeaders,
+      );
+      responseJson = _returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('no_internet'.tr());
+    }
+    return responseJson;
   }
 
   Map<String, dynamic> _returnResponse(Response response) {

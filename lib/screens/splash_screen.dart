@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moleculis/screens/auth/auth_screen.dart';
 import 'package:moleculis/screens/home/home_screen.dart';
-import 'package:moleculis/screens/login/login_screen.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/navigation.dart';
 
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context: context, screen: HomeScreen());
       } else {
         Navigation.toScreenAndCleanBackStack(
-            context: context, screen: LoginScreen());
+            context: context, screen: AuthScreen());
       }
     });
     super.initState();

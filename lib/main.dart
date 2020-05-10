@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
+import 'package:moleculis/common/colors.dart';
 import 'package:moleculis/screens/error_screen.dart';
 import 'package:moleculis/screens/splash_screen.dart';
 import 'package:moleculis/services/authentication_service.dart';
@@ -41,7 +42,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     easyLocalization = EasyLocalization.of(context);
-    print('Locale: ${easyLocalization.locale.languageCode}');
     final HttpHelper httpHelper = HttpHelper(
         locale: easyLocalization.locale.languageCode);
     authenticationBloc = AuthenticationBloc(
@@ -60,15 +60,15 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           cupertinoOverrideTheme:
           CupertinoThemeData(primaryColor: Colors.black),
-          scaffoldBackgroundColor: Colors.white,
-          accentColor: Color.fromRGBO(238, 165, 65, 1),
+          scaffoldBackgroundColor: backgroundColor,
+          accentColor: accentColor,
           textTheme: GoogleFonts.firaSansTextTheme(
             Theme
                 .of(context)
                 .textTheme,
           ),
           appBarTheme: AppBarTheme(
-            color: Colors.white,
+            color: backgroundColor,
             elevation: 0,
             iconTheme: IconThemeData(color: Colors.black),
             actionsIconTheme: IconThemeData(color: Colors.black),
