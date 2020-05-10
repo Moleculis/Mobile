@@ -6,11 +6,10 @@ import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/screens/auth/login_screen.dart';
 import 'package:moleculis/screens/auth/register_screen.dart';
 import 'package:moleculis/screens/home/home_screen.dart';
-import 'package:moleculis/utils/locale_utils.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
+import 'package:moleculis/widgets/languages_popup.dart';
 import 'package:moleculis/widgets/loading_widget.dart';
-import 'package:moleculis/widgets/locale_widget.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -35,9 +34,12 @@ class _AuthScreenState extends State<AuthScreen>
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (BuildContext context, AuthenticationState state) {
-        if (state is AuthenticationSuccess) {
+        if (state is AuthenticationLoginSuccess) {
           Navigation.toScreenAndCleanBackStack(
               context: context, screen: HomeScreen());
+        } else if (state is AuthenticationRegisterSuccess) {
+          authTabsController.animateTo(0);
+          WidgetUtils.showSuccessSnackbar(scaffoldKey, state.message);
         } else if (state is AuthenticationFailure) {
           WidgetUtils.showErrorSnackbar(scaffoldKey, state.error);
         }
@@ -70,43 +72,26 @@ class _AuthScreenState extends State<AuthScreen>
                           ],
                         ),
                         Expanded(
-                          child: TabBarView(
-                            controller: authTabsController,
-                            children: [
-                              LoginScreen(),
-                              RegisterScreen(),
+                          child: Stack(
+                            children: <Widget>[
+                              TabBarView(
+                                controller: authTabsController,
+                                children: [
+                                  LoginScreen(),
+                                  RegisterScreen(),
+                                ],
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: LanguagesPopup(
+                                  context: context,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ],
-                    ),
-                    Positioned(
-                      left: 10,
-                      bottom: 0,
-                      child: PopupMenuButton<int>(
-                        onSelected: (int index) {
-                          context.locale =
-                              LocaleUtils.localeItems[index].locale;
-                        },
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 0,
-                            child: LocaleWidget(
-                              localeItem: LocaleUtils.localeItems[0],
-                            ),
-                          ),
-                          PopupMenuItem(
-                            value: 1,
-                            child: LocaleWidget(
-                              localeItem: LocaleUtils.localeItems[1],
-                            ),
-                          ),
-                        ],
-                        icon: LocaleWidget(
-                          localeItem: LocaleUtils.currentLocaleItem(context),
-                          showLanguageName: false,
-                        ),
-                      ),
                     ),
                     if (state.isLoading) LoadingWidget(),
                   ],

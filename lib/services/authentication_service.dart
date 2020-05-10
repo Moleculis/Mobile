@@ -1,4 +1,5 @@
 import 'package:moleculis/models/requests/login_request.dart';
+import 'package:moleculis/models/requests/register_request.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/jwt.dart';
@@ -12,6 +13,8 @@ class AuthenticationService {
 
   String get _loginEndpoint => _endpointBase + '/login';
 
+  String get _registerEndpoint => _endpointBase + '/register';
+
   Future<void> login(LoginRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _loginEndpoint,
@@ -23,5 +26,14 @@ class AuthenticationService {
     final int exp = jwt['exp'] as int;
 
     await _sharedPrefManager.saveAccessToken(response['token'], exp * 1000);
+  }
+
+  Future<String> register(RegisterRequest request) async {
+    final Map<String, dynamic> response = await _httpHelper.post(
+      _registerEndpoint,
+      body: request.toMap(),
+      authorized: false,
+    );
+    return response['message'];
   }
 }

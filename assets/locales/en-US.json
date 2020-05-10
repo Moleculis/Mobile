@@ -15,5 +15,19 @@
   "username_empty": "Username can't be empty",
   "password": "Password",
   "password_short": "Password is too short",
-  "password_empty": "Password can't be empty"
+  "password_empty": "Password can't be empty",
+  "password_again": "Password again",
+  "passwords_no_match": "Password do not match",
+  "display_name": "Display name",
+  "display_name_long": "Display name is too long",
+  "display_name_short": "Display name is too short",
+  "email": "Email",
+  "email_empty": "Email can't be empty",
+  "email_wrong": "Wrong email address",
+  "full_name": "Full name",
+  "full_name_long": "Full name is too long",
+  "full_name_short": "Full name is too short",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female"
 }

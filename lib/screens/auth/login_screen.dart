@@ -96,9 +96,12 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                 ),
               ),
-              GradientButton(
-                onPressed: login,
-                text: 'login'.tr(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: GradientButton(
+                  onPressed: login,
+                  text: 'login'.tr(),
+                ),
               ),
             ],
           ),
