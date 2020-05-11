@@ -9,6 +9,7 @@ import 'package:moleculis/screens/auth/create_edit_user_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
+import 'package:moleculis/widgets/info_item.dart';
 
 class UserDetails extends StatefulWidget {
   final UserSmall userSmall;
@@ -38,7 +39,7 @@ class _UserDetailsState extends State<UserDetails> {
       appBar: WidgetUtils.appBar(context,
           title: isProfile
               ? 'personal_info'.tr().toLowerCase()
-              : widget.userSmall.username,
+              : widget.userSmall.displayName,
           actions: [
             if (isProfile)
               IconButton(
@@ -78,10 +79,10 @@ class _UserDetailsState extends State<UserDetails> {
                     content:
                     isProfile ? currentUser.email : widget.userSmall.email),
                 infoItem(
-                    title: 'display_name'.tr(),
+                    title: 'username'.tr(),
                     content: isProfile
-                        ? currentUser.displayname
-                        : widget.userSmall.displayName),
+                        ? currentUser.username
+                        : widget.userSmall.username),
                 infoItem(
                   title: 'gender'.tr(),
                   content:
@@ -100,15 +101,9 @@ class _UserDetailsState extends State<UserDetails> {
   Widget infoItem({String title, String content}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(color: Colors.grey),
-          ),
-          Text('\t$content'),
-        ],
+      child: InfoItem(
+        title: title,
+        content: content,
       ),
     );
   }

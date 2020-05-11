@@ -61,5 +61,9 @@
   "remove_contact_confirm": "Ви впевнені що хочете видалити цей контакт?",
   "accept_contact_confirm": "Підтвердити {} запит?",
   "others_events": "Події інших",
-  "event_details": "Деталі події"
+  "event_details": "Деталі події",
+  "description": "Опис",
+  "date": "Дата",
+  "location": "Місце проведення",
+  "participants": "Учасники"
 }

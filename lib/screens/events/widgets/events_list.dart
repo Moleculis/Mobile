@@ -41,6 +41,7 @@ class _EventsListState extends State<EventsList>
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           return EventItem(
+            owned: !widget.others,
             event: events[index],
           );
         },

@@ -8,8 +8,10 @@ import 'package:moleculis/widgets/simple_tile.dart';
 
 class EventItem extends StatelessWidget {
   final Event event;
+  final bool owned;
 
-  const EventItem({Key key, @required this.event}) : super(key: key);
+  const EventItem({Key key, @required this.event, this.owned})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class EventItem extends StatelessWidget {
           screen: BlocProvider(
             create: (BuildContext c) =>
                 BlocProvider.of<EventsBloc>(context),
-            child: EventDetailsScreen(eventId: event.id,),
+            child: EventDetailsScreen(eventId: event.id, owned: owned,),
           ),
         );
       },
