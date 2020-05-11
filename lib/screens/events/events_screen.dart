@@ -40,56 +40,52 @@ class _EventsScreenState extends State<EventsScreen> {
             widget.showErrorSnackBar(state.error);
           }
         },
-        child: Scaffold(
-          appBar:
-              WidgetUtils.appBar(context, title: 'events'.tr().toLowerCase()),
-          body: BlocBuilder<EventsBloc, EventsState>(
-              bloc: eventsBloc,
-              builder: (BuildContext context, EventsState eventsState) {
-                if (eventsState.isLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return DefaultTabController(
-                  length: 2,
-                  child: SafeArea(
-                    child: Column(
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: WidgetUtils.appBar(
+              context,
+              title: 'events'.tr().toLowerCase(),
+              bottom: TabBar(
+                tabs: <Widget>[
+                  Tab(
+                    child: Text(
+                      'yours'.tr(),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'others_events'.tr(),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: BlocBuilder<EventsBloc, EventsState>(
+                bloc: eventsBloc,
+                builder: (BuildContext context, EventsState eventsState) {
+                  if (eventsState.isLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return SafeArea(
+                    child: TabBarView(
                       children: <Widget>[
-                        TabBar(
-                          tabs: <Widget>[
-                            Tab(
-                              child: Text(
-                                'yours'.tr(),
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                'others_events'.tr(),
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ],
+                        EventsList(
+                          events: eventsState.events,
                         ),
-                        Expanded(
-                          child: TabBarView(
-                            children: <Widget>[
-                              EventsList(
-                                events: eventsState.events,
-                              ),
-                              EventsList(
-                                events: eventsState.othersEvents,
-                                others: true,
-                              ),
-                            ],
-                          ),
+                        EventsList(
+                          events: eventsState.othersEvents,
+                          others: true,
                         ),
                       ],
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ),
       ),
     );

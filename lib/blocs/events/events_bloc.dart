@@ -45,4 +45,19 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       yield EventsFailure(error: e.toString());
     }
   }
+
+  Event getEventById(int id) {
+    for (Event event in state.events) {
+      if (event.id == id) {
+        return event;
+      }
+    }
+    for (Event event in state.othersEvents) {
+      if (event.id == id) {
+        return event;
+      }
+    }
+
+    return null;
+  }
 }

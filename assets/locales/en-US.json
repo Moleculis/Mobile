@@ -60,5 +60,6 @@
   "sent_requests": "Sent requests",
   "remove_contact_confirm": "Are you sure you want to remove this contact?",
   "accept_contact_confirm": "Accept {} contact request?",
-  "others_events": "Others events"
+  "others_events": "Others events",
+  "event_details": "Event details"
 }
