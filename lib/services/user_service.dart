@@ -11,6 +11,9 @@ class UserService {
 
   String get _currentUserEndpoint => _endpointBase + '/current';
 
+  String _deleteContactEndpoint(int id) =>
+      _endpointBase + '/delete_contact/$id';
+
   Future<User> getCurrentUser() async {
     final Map<String, dynamic> response =
     await _httpHelper.get(_currentUserEndpoint);
@@ -21,6 +24,13 @@ class UserService {
     final Map<String, dynamic> response = await _httpHelper.put(
       _currentUserEndpoint,
       body: request.toMap(),
+    );
+    return response['message'];
+  }
+
+  Future<String> deleteContact(int id) async {
+    final Map<String, dynamic> response = await _httpHelper.delete(
+      _deleteContactEndpoint(id),
     );
     return response['message'];
   }

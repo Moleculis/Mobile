@@ -41,3 +41,12 @@ class UpdateUserEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [request];
 }
+
+class RemoveContactEvent extends AuthenticationEvent {
+  final int id;
+
+  RemoveContactEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

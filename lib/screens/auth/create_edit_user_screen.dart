@@ -97,15 +97,17 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                         ),
                         child: Column(
                           children: <Widget>[
-                            if(widget.edit)
+                            if (widget.edit)
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 20.0),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20),
                                 child: Toolbar(
-                                    title: 'edit_personal_info'.tr(),
-                                    backButton: true,
-                                    onImagePicked: (File image) {
-                                      pickedImage = image;
-                                    }),
+                                  title: 'edit_personal_info'.tr(),
+                                  backButton: true,
+                                  onImagePicked: (File image) {
+                                    pickedImage = image;
+                                  },
+                                ),
                               ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 20),
@@ -259,7 +261,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text('gender'.tr(),
-                                      style: Theme
+                                      style:
+                                      Theme
                                           .of(context)
                                           .textTheme
                                           .caption),
@@ -273,8 +276,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                       child: Row(
                                         children: <Widget>[
                                           Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
                                             child: Radio<Gender>(
                                               groupValue: currentGender,
                                               value: gender,
@@ -297,8 +300,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                               padding: const EdgeInsets.only(bottom: 20),
                               child: GradientButton(
                                 onPressed: register,
-                                text: widget.edit ? 'save'.tr() : 'register'
-                                    .tr(),
+                                text:
+                                widget.edit ? 'save'.tr() : 'register'.tr(),
                               ),
                             ),
                           ],

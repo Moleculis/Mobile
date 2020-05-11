@@ -1,5 +1,4 @@
-import 'package:moleculis/models/contact/receiver_contact.dart';
-import 'package:moleculis/models/contact/sender_contact.dart';
+import 'package:moleculis/models/contact/contact.dart';
 import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/event.dart';
 import 'package:moleculis/models/group/group.dart';
@@ -10,8 +9,8 @@ class User {
   final String fullname;
   final String gender;
   final List<Event> events;
-  final List<SenderContact> contacts;
-  final List<ReceiverContact> contactRequests;
+  final List<Contact> contacts;
+  final List<Contact> contactRequests;
   final String username;
   final String email;
   final List<String> roles;
@@ -38,13 +37,13 @@ class User {
         eventsDynamic.map((i) => Event.fromMap(i)).toList();
 
     final List<dynamic> senderContactsDynamic = map['contacts'] as List;
-    final List<SenderContact> senderContacts =
-        senderContactsDynamic.map((i) => SenderContact.fromMap(i)).toList();
+    final List<Contact> senderContacts =
+    senderContactsDynamic.map((i) => Contact.fromMap(i)).toList();
 
     final List<dynamic> receiverContactsDynamic =
         map['contactRequests'] as List;
-    final List<ReceiverContact> receiverContacts =
-        receiverContactsDynamic.map((i) => ReceiverContact.fromMap(i)).toList();
+    final List<Contact> receiverContacts =
+    receiverContactsDynamic.map((i) => Contact.fromMap(i)).toList();
 
     final List<dynamic> rolesDynamic = map['roles'] as List;
 
@@ -76,8 +75,8 @@ class User {
     String fullname,
     String gender,
     List<Event> events,
-    List<SenderContact> contacts,
-    List<ReceiverContact> contactRequests,
+    List<Contact> contacts,
+    List<Contact> contactRequests,
     String username,
     String email,
     List<String> roles,

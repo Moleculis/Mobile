@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
+import 'package:moleculis/models/contact/contact.dart';
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
@@ -37,6 +38,8 @@ class AuthenticationBloc
       yield* _logout();
     } else if (event is UpdateUserEvent) {
       yield* _updateUser(event.request);
+    } else if (event is RemoveContactEvent) {
+      yield* _removeContact(event.id);
     }
   }
 
@@ -110,6 +113,40 @@ class AuthenticationBloc
       yield state.copyWith(
         isLoading: false,
         currentUser: state.currentUser.copyWithRequest(request),
+      );
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
+    }
+  }
+
+  Stream<AuthenticationState> _removeContact(int id) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      await _userService.deleteContact(id);
+      final List<Contact> contacts = state.currentUser.contacts;
+      final List<Contact> contactRequests = state.currentUser.contactRequests;
+      bool found = false;
+      for (Contact contact in contacts) {
+        if (contact.id == id) {
+          contacts.remove(contact);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        for (Contact contact in contactRequests) {
+          if (contact.id == id) {
+            contacts.remove(contact);
+            break;
+          }
+        }
+      }
+      yield state.copyWith(
+        isLoading: false,
+        currentUser: state.currentUser.copyWith(
+          contacts: contacts,
+          contactRequests: contactRequests,
+        ),
       );
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());

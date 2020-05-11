@@ -49,7 +49,7 @@ class _ToolbarState extends State<Toolbar> {
                 Expanded(
                   child: AutoSizeText(
                     widget.title,
-                    maxLines: 1,
+                    maxLines: 2,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
