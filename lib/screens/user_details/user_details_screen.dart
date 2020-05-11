@@ -37,10 +37,6 @@ class _UserDetailsState extends State<UserDetails> {
                 await Navigation.toScreen(
                   context: context,
                   screen: Scaffold(
-                    appBar: WidgetUtils.appBar(
-                      context,
-                      title: 'edit_personal_info'.tr().toLowerCase(),
-                    ),
                     body: CreateEditUserScreen(
                       edit: true,
                     ),

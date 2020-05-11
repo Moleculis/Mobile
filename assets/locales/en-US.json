@@ -44,5 +44,15 @@
   "security": "Security",
   "use_fingerprint": "Use fingerprint",
   "edit_personal_info": "Edit personal info",
-  "save": "Save"
+  "save": "Save",
+  "gallery": "Gallery",
+  "camera": "Camera",
+  "contact": {
+    "zero": "Contacts",
+    "one": "Contact",
+    "two": "Contacts",
+    "few": "Contacts",
+    "many": "Contacts",
+    "other": "Contacts"
+  }
 }

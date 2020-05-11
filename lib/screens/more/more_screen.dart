@@ -6,6 +6,7 @@ import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/screens/auth/auth_screen.dart';
+import 'package:moleculis/screens/contacts/contacts_screen.dart';
 import 'package:moleculis/screens/more/widgets/more_tile.dart';
 import 'package:moleculis/screens/settings/settings_screen.dart';
 import 'package:moleculis/screens/user_details/user_details_screen.dart';
@@ -103,6 +104,17 @@ class _MoreScreenState extends State<MoreScreen> {
                         context: context,
                         screen: UserDetails(),
                       );
+                    },
+                  ),
+                  SettingsTile(
+                    title: 'contact'.plural(2),
+                    icon: Icon(
+                      Icons.contacts,
+                      color: Colors.grey[600],
+                    ),
+                    onTap: () async {
+                      Navigation.toScreen(
+                          context: context, screen: ContactsScreen());
                     },
                   ),
                   SettingsTile(

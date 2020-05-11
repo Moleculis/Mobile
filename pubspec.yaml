@@ -20,6 +20,7 @@ dependencies:
   package_info: ^0.4.0+17
   auto_size_text: ^2.1.0
   settings_ui: ^0.2.0
+  image_picker: ^0.6.6+1
 
 dev_dependencies:
   flutter_test:
