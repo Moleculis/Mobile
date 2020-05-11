@@ -39,41 +39,43 @@ class _ContactsListState extends State<ContactsList>
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          if (widget.sentRequests != null && widget.sentRequests.isNotEmpty) {
-            return CustomExpansionTile(
-              title: Text('sent_requests'.tr()),
-              content: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: ContactItem(
-                      onRemove: deleteContact,
-                      contact: widget.sentRequests[index],
-                    ),
-                  );
-                },
-                itemCount: widget.sentRequests.length,
-              ),
-            );
+    return RefreshIndicator(
+      onRefresh: () async => authenticationBloc.add(LoadInitialData()),
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          if (index == 0) {
+            if (widget.sentRequests != null && widget.sentRequests.isNotEmpty) {
+              return CustomExpansionTile(
+                title: Text('sent_requests'.tr()),
+                content: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: ContactItem(
+                        onRemove: deleteContact,
+                        contact: widget.sentRequests[index],
+                      ),
+                    );
+                  },
+                  itemCount: widget.sentRequests.length,
+                ),
+              );
+            }
+            return Container();
           }
-          return Container();
-        }
-        final Contact contact = widget.contacts[index - 1];
-        return ContactItem(
-          contact: contact,
-          onRemove: deleteContact,
-          onAccept:
-          widget.isReceived ? (int id) => acceptContact(contact) : null,
-          isReceived: widget.isReceived,
-        );
-      },
-      itemCount: widget.contacts.length + 1,
-      shrinkWrap: true,
+          final Contact contact = widget.contacts[index - 1];
+          return ContactItem(
+            contact: contact,
+            onRemove: deleteContact,
+            onAccept:
+            widget.isReceived ? (int id) => acceptContact(contact) : null,
+            isReceived: widget.isReceived,
+          );
+        },
+        itemCount: widget.contacts.length + 1,
+      ),
     );
   }
 

@@ -18,11 +18,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
   AuthenticationBloc authenticationBloc;
   User currentUser;
 
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
+
   @override
   void didChangeDependencies() {
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     authenticationBloc.add(LoadInitialData());
-
     super.didChangeDependencies();
   }
 
@@ -34,28 +36,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
         appBar: WidgetUtils.appBar(
           context,
           title: 'contact'.plural(2).toLowerCase(),
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(
-                child: Text(
-                  'yours'.tr(),
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'requests'.tr(),
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
-          ),
         ),
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             bloc: authenticationBloc,
             builder: (BuildContext context, AuthenticationState state) {
               if (state.isLoading) {
-                return Center(child: CircularProgressIndicator(),);
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               }
               currentUser = state.currentUser;
               final List<Contact> contacts = [];
@@ -75,20 +63,47 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   contactRequests.add(contact);
                 }
               }
-              return TabBarView(
-                children: <Widget>[
-                  ContactsList(
-                    contacts: contacts,
-                    sentRequests: sentRequests,
-                  ),
-                  ContactsList(
-                    isReceived: true,
-                    contacts: contactRequests,
-                  ),
-                ],
+              return SizedBox(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height - 104,
+                child: Column(
+                  children: <Widget>[
+                    TabBar(
+                      tabs: <Widget>[
+                        Tab(
+                          child: Text(
+                            'yours'.tr(),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        Tab(
+                          child: Text(
+                            'requests'.tr(),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: <Widget>[
+                          ContactsList(
+                            contacts: contacts,
+                            sentRequests: sentRequests,
+                          ),
+                          ContactsList(
+                            isReceived: true,
+                            contacts: contactRequests,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
-            }
-        ),
+            }),
       ),
     );
   }
