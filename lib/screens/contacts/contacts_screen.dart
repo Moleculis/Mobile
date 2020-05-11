@@ -60,11 +60,19 @@ class _ContactsScreenState extends State<ContactsScreen> {
               currentUser = state.currentUser;
               final List<Contact> contacts = [];
               final List<Contact> sentRequests = [];
+              final List<Contact> contactRequests = [];
               for (Contact contact in currentUser.contacts) {
                 if (contact.accepted) {
                   contacts.add(contact);
                 } else {
                   sentRequests.add(contact);
+                }
+              }
+              for (Contact contact in currentUser.contactRequests) {
+                if (contact.accepted) {
+                  contacts.add(contact);
+                } else {
+                  contactRequests.add(contact);
                 }
               }
               return TabBarView(
@@ -75,7 +83,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   ),
                   ContactsList(
                     isReceived: true,
-                    contacts: currentUser.contactRequests,
+                    contacts: contactRequests,
                   ),
                 ],
               );

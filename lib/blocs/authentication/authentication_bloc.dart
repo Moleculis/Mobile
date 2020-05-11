@@ -34,12 +34,16 @@ class AuthenticationBloc
       yield* _register(event.registerRequest);
     } else if (event is LoadInitialData) {
       yield* _loadInitialData();
+    } else if (event is UpdateCurrentUser) {
+      yield* _updateCurrentUser();
     } else if (event is LogOutEvent) {
       yield* _logout();
     } else if (event is UpdateUserEvent) {
       yield* _updateUser(event.request);
     } else if (event is RemoveContactEvent) {
       yield* _removeContact(event.id);
+    } else if (event is AcceptContactEvent) {
+      yield* _acceptContact(event.id);
     }
   }
 
@@ -91,6 +95,18 @@ class AuthenticationBloc
     }
   }
 
+  Stream<AuthenticationState> _updateCurrentUser() async* {
+    try {
+      final User user = await _userService.getCurrentUser();
+      yield state.copyWith(
+        currentUser: user,
+        isLoading: false,
+      );
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
+    }
+  }
+
   Stream<AuthenticationState> _logout() async* {
     try {
       yield state.copyWith(isLoading: true);
@@ -136,7 +152,7 @@ class AuthenticationBloc
       if (!found) {
         for (Contact contact in contactRequests) {
           if (contact.id == id) {
-            contacts.remove(contact);
+            contactRequests.remove(contact);
             break;
           }
         }
@@ -148,6 +164,16 @@ class AuthenticationBloc
           contactRequests: contactRequests,
         ),
       );
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
+    }
+  }
+
+  Stream<AuthenticationState> _acceptContact(int id) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      await _userService.acceptContact(id);
+      yield* _updateCurrentUser();
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
     }

@@ -63,9 +63,12 @@ class _ContactsListState extends State<ContactsList>
           }
           return Container();
         }
+        final Contact contact = widget.contacts[index - 1];
         return ContactItem(
-          contact: widget.contacts[index - 1],
+          contact: contact,
           onRemove: deleteContact,
+          onAccept:
+          widget.isReceived ? (int id) => acceptContact(contact) : null,
           isReceived: widget.isReceived,
         );
       },
@@ -76,10 +79,21 @@ class _ContactsListState extends State<ContactsList>
 
   void deleteContact(int id) {
     WidgetUtils.showSimpleDialog(
-        context: context,
-        title: 'remove_contact_confirm'.tr(),
-        onYes: () {
-          authenticationBloc.add(RemoveContactEvent(id));
-        });
+      context: context,
+      title: 'remove_contact_confirm'.tr(),
+      onYes: () {
+        authenticationBloc.add(RemoveContactEvent(id));
+      },
+    );
+  }
+
+  void acceptContact(Contact contact) {
+    WidgetUtils.showSimpleDialog(
+      context: context,
+      title: 'accept_contact_confirm'.tr(args: [contact.user.username]),
+      onYes: () {
+        authenticationBloc.add(AcceptContactEvent(contact.id));
+      },
+    );
   }
 }

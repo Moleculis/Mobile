@@ -58,5 +58,6 @@
   "yours": "Ваші",
   "requests": "Запити",
   "sent_requests": "Відправлені запити",
-  "remove_contact_confirm": "Ви впевнені що хочете видалити цей контакт?"
+  "remove_contact_confirm": "Ви впевнені що хочете видалити цей контакт?",
+  "accept_contact_confirm": "Підтвердити {} запит?"
 }

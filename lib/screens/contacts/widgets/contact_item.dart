@@ -24,7 +24,7 @@ class ContactItem extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          if (isReceived)
+          if (isReceived && !contact.accepted)
             GestureDetector(
               onTap: () => onAccept(contact.id),
               child: Padding(

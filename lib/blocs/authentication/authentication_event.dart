@@ -50,3 +50,17 @@ class RemoveContactEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [id];
 }
+
+class AcceptContactEvent extends AuthenticationEvent {
+  final int id;
+
+  AcceptContactEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
+class UpdateCurrentUser extends AuthenticationEvent {
+  @override
+  List<Object> get props => null;
+}
