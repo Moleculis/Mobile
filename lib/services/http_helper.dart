@@ -52,7 +52,8 @@ class HttpHelper {
       {bool localized = true}) async {
     var responseJson;
     try {
-      final getHeaders = _authTokenHeader;
+      final Map<String, String> getHeaders = {};
+      getHeaders.addAll(_authTokenHeader);
       if (localized) {
         getHeaders.addAll(_localizationHeader);
       }
@@ -74,7 +75,8 @@ class HttpHelper {
     bool localized = true,
   }) async {
     var responseJson;
-    Map<String, String> postHeaders = _postHeaders;
+    final Map<String, String> postHeaders = {};
+    postHeaders.addAll(_postHeaders);
     if (headers != null) {
       postHeaders.addAll(headers);
     }
@@ -104,7 +106,8 @@ class HttpHelper {
     bool localized = true,
   }) async {
     var responseJson;
-    Map<String, String> putHeaders = _postHeaders;
+    final Map<String, String> putHeaders = {};
+    putHeaders.addAll(_postHeaders);
     if (headers != null) {
       putHeaders.addAll(headers);
     }
@@ -131,7 +134,8 @@ class HttpHelper {
       {bool localized = true}) async {
     var responseJson;
     try {
-      final deleteHeaders = _authTokenHeader;
+      final Map<String, String> deleteHeaders = {};
+      deleteHeaders.addAll(_authTokenHeader);
       if (localized) {
         deleteHeaders.addAll(_localizationHeader);
       }
