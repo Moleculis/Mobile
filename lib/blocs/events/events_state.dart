@@ -50,3 +50,12 @@ class EventsFailure extends EventsState {
   @override
   String toString() => 'EventsFailure { error: $error }';
 }
+
+class EventsSuccess extends EventsState {
+  final String message;
+
+  EventsSuccess({@required this.message}) : super();
+
+  @override
+  String toString() => 'EventsSuccess { error: $message }';
+}

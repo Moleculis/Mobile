@@ -120,7 +120,7 @@ class HttpHelper {
     try {
       final response = await _ioClient.put(
         _baseUrl + endpoint,
-        headers: putHeaders..addAll({'Accept-Language': _instance.locale}),
+        headers: putHeaders,
         body: json.encode(body),
       );
       responseJson = _returnResponse(response);

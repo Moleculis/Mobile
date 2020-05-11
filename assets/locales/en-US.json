@@ -64,6 +64,13 @@
   "event_details": "Event details",
   "description": "Description",
   "date": "Date",
+  "time": "Time",
   "location": "Location",
-  "participants": "Participants"
+  "participants": "Participants",
+  "edit_event": "Edit event details",
+  "title": "Title",
+  "title_empty": "Title can't be empty",
+  "title_short": "Title is too short",
+  "location_empty": "Location can't be empty",
+  "location_short": "Location is too short"
 }

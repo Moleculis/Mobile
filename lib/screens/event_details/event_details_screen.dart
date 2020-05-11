@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/events/events_bloc.dart';
 import 'package:moleculis/blocs/events/events_state.dart';
 import 'package:moleculis/models/event.dart';
-import 'package:moleculis/screens/events/widgets/users_list.dart';
+import 'package:moleculis/screens/create_edit_event/create_edit_event_screen.dart';
+import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/utils/format.dart';
+import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
 import 'package:moleculis/widgets/info_item.dart';
@@ -44,7 +46,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           if (widget.owned)
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () {
+                Navigation.toScreen(
+                  context: context,
+                  screen: BlocProvider(
+                    create: (BuildContext context) => eventsBloc,
+                    child: CreateEditEventScreen(eventId: widget.eventId,),
+                  ),
+                );
+              },
             ),
         ],
       ),
@@ -62,7 +72,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     child: BigTile(
                       title: event.title,
                       subtitle:
-                      'Created: ${FormatUtils.formatDate(event.dateCreated)}',
+                      'Created: ${FormatUtils.formatDateAndTime(
+                          event.dateCreated)}',
                     ),
                   ),
                   Padding(
@@ -76,7 +87,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: InfoItem(
                       title: 'date'.tr(),
-                      content: FormatUtils.formatDate(event.date),
+                      content: FormatUtils.formatDateAndTime(event.date),
                     ),
                   ),
                   Padding(
@@ -88,7 +99,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ),
                   InfoItem(
                     title: 'participants'.tr(),
-                    contentWidget: UsersList(users: event.users,),
+                    contentWidget: UsersList(
+                      users: event.users,
+                    ),
                   ),
                 ],
               ),
