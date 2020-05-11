@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+typedef ShowSnackBar = void Function(String);
+
 class WidgetUtils {
-  static void showErrorSnackbar(GlobalKey<ScaffoldState> scaffoldKey, String error) {
+  static void showErrorSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
+      String error) {
     scaffoldKey.currentState.showSnackBar(
       SnackBar(
         content: Text(error),
@@ -17,11 +20,12 @@ class WidgetUtils {
     );
   }
 
-  static void showSuccessSnackbar(GlobalKey<ScaffoldState> scaffoldKey, String error,
+  static void showSuccessSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
+      String message,
       {Duration duration}) {
     scaffoldKey.currentState.showSnackBar(
       SnackBar(
-        content: Text(error),
+        content: Text(message),
         duration: duration ?? Duration(milliseconds: 4000),
         backgroundColor: Colors.green,
       ),

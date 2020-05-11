@@ -1,6 +1,5 @@
 import 'package:moleculis/models/contact/contact.dart';
 import 'package:moleculis/models/enums/gender.dart';
-import 'package:moleculis/models/event.dart';
 import 'package:moleculis/models/group/group.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
 
@@ -8,7 +7,6 @@ class User {
   final String displayname;
   final String fullname;
   final String gender;
-  final List<Event> events;
   final List<Contact> contacts;
   final List<Contact> contactRequests;
   final String username;
@@ -21,7 +19,6 @@ class User {
     this.displayname,
     this.fullname,
     this.gender,
-    this.events,
     this.contacts,
     this.contactRequests,
     this.username,
@@ -32,10 +29,6 @@ class User {
   });
 
   factory User.fromMap(Map<String, dynamic> map) {
-    final List<dynamic> eventsDynamic = map['events'] as List;
-    final List<Event> events =
-        eventsDynamic.map((i) => Event.fromMap(i)).toList();
-
     final List<dynamic> senderContactsDynamic = map['contacts'] as List;
     final List<Contact> senderContacts =
     senderContactsDynamic.map((i) => Contact.fromMap(i)).toList();
@@ -59,7 +52,6 @@ class User {
       displayname: map['displayname'] as String,
       fullname: map['fullname'] as String,
       gender: map['gender'] as String,
-      events: events,
       contacts: senderContacts,
       contactRequests: receiverContacts,
       username: map['username'] as String,
@@ -74,7 +66,6 @@ class User {
     String displayname,
     String fullname,
     String gender,
-    List<Event> events,
     List<Contact> contacts,
     List<Contact> contactRequests,
     String username,
@@ -87,7 +78,6 @@ class User {
       displayname: displayname ?? this.displayname,
       fullname: fullname ?? this.fullname,
       gender: gender ?? this.gender,
-      events: events ?? this.events,
       contacts: contacts ?? this.contacts,
       contactRequests: contactRequests ?? this.contactRequests,
       username: username ?? this.username,

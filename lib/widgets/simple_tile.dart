@@ -28,7 +28,8 @@ class SimpleTile extends StatelessWidget {
       contentPadding: contentPadding,
       title: Text(title),
       subtitle: subtitleWidget == null
-          ? subtitle != null ? Text(subtitle, maxLines: 1) : null
+          ? subtitle != null ? Text(
+        subtitle, maxLines: 1, overflow: TextOverflow.ellipsis,) : null
           : subtitleWidget,
       leading: CircleAvatar(
         backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty

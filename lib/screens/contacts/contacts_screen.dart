@@ -63,45 +63,39 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   contactRequests.add(contact);
                 }
               }
-              return SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height - 104,
-                child: Column(
-                  children: <Widget>[
-                    TabBar(
-                      tabs: <Widget>[
-                        Tab(
-                          child: Text(
-                            'yours'.tr(),
-                            style: TextStyle(color: Colors.black),
-                          ),
+              return Column(
+                children: <Widget>[
+                  TabBar(
+                    tabs: <Widget>[
+                      Tab(
+                        child: Text(
+                          'yours'.tr(),
+                          style: TextStyle(color: Colors.black),
                         ),
-                        Tab(
-                          child: Text(
-                            'requests'.tr(),
-                            style: TextStyle(color: Colors.black),
-                          ),
+                      ),
+                      Tab(
+                        child: Text(
+                          'requests'.tr(),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: <Widget>[
+                        ContactsList(
+                          contacts: contacts,
+                          sentRequests: sentRequests,
+                        ),
+                        ContactsList(
+                          isReceived: true,
+                          contacts: contactRequests,
                         ),
                       ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: <Widget>[
-                          ContactsList(
-                            contacts: contacts,
-                            sentRequests: sentRequests,
-                          ),
-                          ContactsList(
-                            isReceived: true,
-                            contacts: contactRequests,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               );
             }),
       ),

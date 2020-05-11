@@ -5,6 +5,7 @@ import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/common/colors.dart';
+import 'package:moleculis/screens/events/events_screen.dart';
 import 'package:moleculis/screens/more/more_screen.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
@@ -16,16 +17,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AuthenticationBloc authenticationBloc;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
-  List<Widget> tabs = [
-    Center(
-      child: Text('Events screen'),
-    ),
-    Center(
-      child: Text('Groups screen'),
-    ),
-    MoreScreen(),
-  ];
 
   int currentTab = 0;
 
@@ -49,7 +40,15 @@ class _HomeScreenState extends State<HomeScreen> {
         key: scaffoldKey,
         body: IndexedStack(
           index: currentTab,
-          children: tabs,
+          children: [
+            EventsScreen(
+              showErrorSnackBar: showErrorSnackBar,
+            ),
+            Center(
+              child: Text('Groups screen'),
+            ),
+            MoreScreen(),
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: backgroundColor,
@@ -76,5 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void showSuccessSnackBar(String message) {
+    WidgetUtils.showSuccessSnackbar(scaffoldKey, message);
+  }
+
+  void showErrorSnackBar(String error) {
+    WidgetUtils.showErrorSnackbar(scaffoldKey, error);
   }
 }
