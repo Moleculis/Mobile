@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moleculis/models/contact/contact.dart';
+import 'package:moleculis/screens/user_details/user_details_screen.dart';
+import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/widgets/simple_tile.dart';
 
 class ContactItem extends StatelessWidget {
@@ -19,6 +21,10 @@ class ContactItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleTile(
+      onTap: () {
+        Navigation.toScreen(
+            context: context, screen: UserDetails(userSmall: contact.user,));
+      },
       title: contact.user.displayName,
       subtitle: contact.user.username,
       trailing: Row(
