@@ -5,21 +5,26 @@ import 'package:moleculis/models/group/group.dart';
 class GroupsState {
   final bool isLoading;
   final List<Group> groups;
+  final List<Group> otherGroups;
 
   GroupsState({
     this.isLoading = false,
     this.groups = const [],
+    this.otherGroups = const [],
   });
 
   GroupsState copyWith({
     bool isLoading,
     List<Group> groups,
+    List<Group> otherGroups,
   }) {
     return GroupsState(
       isLoading: isLoading ?? this.isLoading,
       groups: groups ?? this.groups,
+      otherGroups: otherGroups ?? this.otherGroups,
     );
   }
+
 }
 
 class GroupsFailure extends GroupsState {

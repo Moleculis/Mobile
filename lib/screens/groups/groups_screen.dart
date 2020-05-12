@@ -1,8 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_event.dart';
+import 'package:moleculis/blocs/groups/groups_state.dart';
+import 'package:moleculis/screens/groups/widgets/group_list.dart';
 import 'package:moleculis/services/groups_service.dart';
 import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/widget_utils.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -21,6 +26,57 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BlocProvider<GroupsBloc>(
+      create: (BuildContext context) => groupsBloc,
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: WidgetUtils.appBar(context,
+              title: 'groups'.tr().toLowerCase(),
+              bottom: TabBar(
+                tabs: <Widget>[
+                  Tab(
+                    child: Text(
+                      'yours'.tr(),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'other_groups'.tr(),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+
+                  },
+                ),
+              ]),
+          body: BlocBuilder<GroupsBloc, GroupsState>(
+            bloc: groupsBloc,
+            builder: (BuildContext context, GroupsState groupsState) {
+              if (groupsState.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return SafeArea(
+                child: TabBarView(
+                  children: <Widget>[
+                    GroupsList(groups: groupsState.groups,),
+                    GroupsList(groups: groupsState.otherGroups,),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
