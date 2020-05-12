@@ -48,7 +48,7 @@ class HttpHelper {
   Map<String, String> get _localizationHeader =>
       {'Accept-Language': _instance.locale};
 
-  Future<Map<String, dynamic>> get(String endpoint,
+  Future<dynamic> get(String endpoint,
       {bool localized = true}) async {
     var responseJson;
     try {
@@ -68,7 +68,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, dynamic>> post(String endpoint, {
+  Future<dynamic> post(String endpoint, {
     Map<String, String> headers,
     Map<String, dynamic> body,
     authorized = true,
@@ -99,7 +99,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, dynamic>> put(String endpoint, {
+  Future<dynamic> put(String endpoint, {
     Map<String, String> headers,
     Map<String, dynamic> body,
     authorized = true,
@@ -130,7 +130,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<Map<String, dynamic>> delete(String endpoint,
+  Future<dynamic> delete(String endpoint,
       {bool localized = true}) async {
     var responseJson;
     try {
@@ -150,7 +150,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Map<String, dynamic> _returnResponse(Response response) {
+  dynamic _returnResponse(Response response) {
     if (response.statusCode == 200) {
       return json.decode(response.body.toString());
     }

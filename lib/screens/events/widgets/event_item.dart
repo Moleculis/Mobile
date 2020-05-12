@@ -15,14 +15,15 @@ class EventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final eventsBloc = BlocProvider.of<EventsBloc>(context);
     return SimpleTile(
       onTap: () {
         Navigation.toScreen(
           context: context,
-          screen: BlocProvider(
-            create: (BuildContext c) =>
-                BlocProvider.of<EventsBloc>(context),
-            child: EventDetailsScreen(eventId: event.id, owned: owned,),
+          screen: EventDetailsScreen(
+            eventId: event.id,
+            owned: owned,
+            eventsBloc: eventsBloc,
           ),
         );
       },

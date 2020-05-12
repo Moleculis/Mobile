@@ -16,11 +16,12 @@ import 'package:moleculis/widgets/info_item.dart';
 class EventDetailsScreen extends StatefulWidget {
   final int eventId;
   final bool owned;
+  final EventsBloc eventsBloc;
 
   const EventDetailsScreen({
     Key key,
     @required this.eventId,
-    this.owned,
+    this.owned, this.eventsBloc,
   }) : super(key: key);
 
   @override
@@ -32,7 +33,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   @override
   void initState() {
-    eventsBloc = BlocProvider.of<EventsBloc>(context);
+    eventsBloc = widget.eventsBloc;
     super.initState();
   }
 
@@ -46,12 +47,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           if (widget.owned)
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigation.toScreen(
+              onPressed: () async {
+                await Navigation.toScreen(
                   context: context,
-                  screen: BlocProvider(
-                    create: (BuildContext context) => eventsBloc,
-                    child: CreateEditEventScreen(eventId: widget.eventId,),
+                  screen: CreateEditEventScreen(
+                    eventId: widget.eventId,
+                    eventsBloc: eventsBloc,
                   ),
                 );
               },
@@ -60,6 +61,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: BlocBuilder<EventsBloc, EventsState>(
+          bloc: eventsBloc,
           builder: (BuildContext context, EventsState state) {
             final Event event = eventsBloc.getEventById(widget.eventId);
             return Padding(
@@ -72,7 +74,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     child: BigTile(
                       title: event.title,
                       subtitle:
-                      'Created: ${FormatUtils.formatDateAndTime(
+                      '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
                           event.dateCreated)}',
                     ),
                   ),

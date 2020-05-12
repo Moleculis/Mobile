@@ -11,6 +11,8 @@ class UserService {
 
   String get _currentUserEndpoint => _endpointBase + '/current';
 
+  String get _usersEndpoint => _endpointBase + '/';
+
   String _deleteContactEndpoint(int id) =>
       _endpointBase + '/delete_contact/$id';
 
@@ -43,5 +45,12 @@ class UserService {
       _acceptContactEndpoint(id),
     );
     return response['message'];
+  }
+
+  Future<List<User>> getUsers() async {
+    final List<dynamic> response =
+    await _httpHelper.get(_usersEndpoint);
+    final List<User> users = response.map((e) => User.fromMap(e)).toList();
+    return users;
   }
 }

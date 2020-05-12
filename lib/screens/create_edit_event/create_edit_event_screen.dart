@@ -9,6 +9,9 @@ import 'package:moleculis/blocs/events/events_event.dart';
 import 'package:moleculis/blocs/events/events_state.dart';
 import 'package:moleculis/models/event.dart';
 import 'package:moleculis/models/requests/create_update_event_request.dart';
+import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/models/user/user_small.dart';
+import 'package:moleculis/screens/create_edit_event/widgets/users_search.dart';
 import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/info_item.dart';
@@ -19,8 +22,10 @@ import 'package:moleculis/widgets/toolbar.dart';
 
 class CreateEditEventScreen extends StatefulWidget {
   final int eventId;
+  final EventsBloc eventsBloc;
 
-  const CreateEditEventScreen({Key key, this.eventId}) : super(key: key);
+  const CreateEditEventScreen({Key key, this.eventId, this.eventsBloc})
+      : super(key: key);
 
   @override
   _CreateEditEventScreenState createState() => _CreateEditEventScreenState();
@@ -47,7 +52,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
 
   @override
   void initState() {
-    eventsBloc = BlocProvider.of<EventsBloc>(context);
+    eventsBloc = widget.eventsBloc;
     if (widget.eventId != null) {
       event = eventsBloc.getEventById(widget.eventId);
       titleController.text = event.title;
@@ -167,12 +172,24 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: InfoItem(
                                   title: 'participants'.tr(),
-                                  contentWidget: UsersList(
-                                    editing: true,
-                                    onStateChane: () {
-                                      setState(() {});
-                                    },
-                                    users: event.users,
+                                  contentWidget: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      UsersList(
+                                        editing: true,
+                                        onStateChane: () {
+                                          setState(() {});
+                                        },
+                                        users: event.users,
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        child: RaisedButton(
+                                          child: Text('+'),
+                                          onPressed: onPickUsersTapped,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -195,6 +212,18 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
             }),
       ),
     );
+  }
+
+  Future<void> onPickUsersTapped() async {
+    final User resultUser = await showSearch(
+        context: context,
+        delegate: UserSearch(
+            excludeUsername: event.users.map((e) => e.username).toList()));
+    if (resultUser != null) {
+      setState(() {
+        event.users.add(UserSmall.fromUser(resultUser));
+      });
+    }
   }
 
   Future<void> selectDate(BuildContext context) async {

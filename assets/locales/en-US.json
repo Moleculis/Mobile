@@ -72,5 +72,7 @@
   "title_empty": "Title can't be empty",
   "title_short": "Title is too short",
   "location_empty": "Location can't be empty",
-  "location_short": "Location is too short"
+  "location_short": "Location is too short",
+  "no_res_found": "No results found",
+  "created": "Created"
 }

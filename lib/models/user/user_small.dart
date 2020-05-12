@@ -1,3 +1,5 @@
+import 'package:moleculis/models/user/user.dart';
+
 class UserSmall {
   final String displayName;
   final String fullName;
@@ -6,8 +8,7 @@ class UserSmall {
   final String gender;
   final List<String> roles;
 
-  UserSmall(
-      {this.displayName, this.fullName, this.username, this.email, this.roles, this.gender});
+  UserSmall({this.displayName, this.fullName, this.username, this.email, this.roles, this.gender});
 
   factory UserSmall.fromMap(Map<String, dynamic> map) {
     final List<dynamic> rolesDynamic = map['roles'] as List;
@@ -19,6 +20,17 @@ class UserSmall {
       email: map['email'] as String,
       gender: map['gender'] as String,
       roles: List<String>.from(rolesDynamic),
+    );
+  }
+
+  factory UserSmall.fromUser(User user){
+    return UserSmall(
+      displayName: user.displayname,
+      fullName: user.fullname,
+      username: user.username,
+      email: user.email,
+      gender: user.gender,
+      roles: user.roles,
     );
   }
 }
