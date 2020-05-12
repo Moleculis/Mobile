@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/events/events_bloc.dart';
 import 'package:moleculis/blocs/events/events_event.dart';
 import 'package:moleculis/blocs/events/events_state.dart';
+import 'package:moleculis/screens/create_edit_event/create_edit_event_screen.dart';
 import 'package:moleculis/screens/events/widgets/events_list.dart';
 import 'package:moleculis/services/events_service.dart';
 import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
 class EventsScreen extends StatefulWidget {
@@ -43,26 +45,37 @@ class _EventsScreenState extends State<EventsScreen> {
         child: DefaultTabController(
           length: 2,
           child: Scaffold(
-            appBar: WidgetUtils.appBar(
-              context,
-              title: 'events'.tr().toLowerCase(),
-              bottom: TabBar(
-                tabs: <Widget>[
-                  Tab(
-                    child: Text(
-                      'yours'.tr(),
-                      style: TextStyle(color: Colors.black),
+            appBar: WidgetUtils.appBar(context,
+                title: 'events'.tr().toLowerCase(),
+                bottom: TabBar(
+                  tabs: <Widget>[
+                    Tab(
+                      child: Text(
+                        'yours'.tr(),
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'others_events'.tr(),
-                      style: TextStyle(color: Colors.black),
+                    Tab(
+                      child: Text(
+                        'others_events'.tr(),
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
+                  ],
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      Navigation.toScreen(
+                        context: context,
+                        screen: CreateEditEventScreen(
+                          eventsBloc: eventsBloc,
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
-            ),
+                ]),
             body: BlocBuilder<EventsBloc, EventsState>(
               bloc: eventsBloc,
               builder: (BuildContext context, EventsState eventsState) {

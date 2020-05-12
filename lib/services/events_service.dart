@@ -6,6 +6,8 @@ class EventsService {
   final HttpHelper _httpHelper;
   final String _endpointBase = '/events';
 
+  String get _createEventEndpoint => _endpointBase + '/';
+
   String _getEventsPageEndpoint(int page) => _endpointBase + '/page/$page';
 
   String _getOthersEventsPageEndpoint(int page) =>
@@ -29,6 +31,14 @@ class EventsService {
       CreateUpdateEventRequest request) async {
     final response = await _httpHelper.put(
       _updateEventEndpoint(eventId),
+      body: request.toMap(),
+    );
+    return response['message'];
+  }
+
+  Future<String> createEvent(CreateUpdateEventRequest request) async {
+    final response = await _httpHelper.post(
+      _createEventEndpoint,
       body: request.toMap(),
     );
     return response['message'];

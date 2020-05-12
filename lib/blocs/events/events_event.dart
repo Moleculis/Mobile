@@ -19,3 +19,13 @@ class UpdateEvent extends EventsEvent {
   @override
   List<Object> get props => [eventId, request, users];
 }
+
+class CreateEvent extends EventsEvent {
+  final CreateUpdateEventRequest request;
+  final List<UserSmall> users;
+
+  CreateEvent(this.request, this.users);
+
+  @override
+  List<Object> get props => [request, users];
+}

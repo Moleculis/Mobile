@@ -74,5 +74,6 @@
   "location_empty": "Location can't be empty",
   "location_short": "Location is too short",
   "no_res_found": "No results found",
-  "created": "Created"
+  "created": "Created",
+  "create_event": "Create event"
 }

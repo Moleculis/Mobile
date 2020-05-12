@@ -34,6 +34,7 @@ class CreateEditEventScreen extends StatefulWidget {
 class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
   EventsBloc eventsBloc;
   Event event;
+  User currentUser;
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
@@ -50,9 +51,16 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
 
   File pickedImage;
 
+  final List<UserSmall> newUsers = [];
+
   @override
   void initState() {
     eventsBloc = widget.eventsBloc;
+    currentUser =
+        BlocProvider
+            .of<AuthenticationBloc>(context)
+            .state
+            .currentUser;
     if (widget.eventId != null) {
       event = eventsBloc.getEventById(widget.eventId);
       titleController.text = event.title;
@@ -93,7 +101,10 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Toolbar(
-                                  title: 'edit_event'.tr(),
+                                  title: (event != null
+                                      ? 'edit_event'
+                                      : 'create_event')
+                                      .tr(),
                                   backButton: true,
                                   onImagePicked: (File image) {
                                     pickedImage = image;
@@ -180,7 +191,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
                                         onStateChane: () {
                                           setState(() {});
                                         },
-                                        users: event.users,
+                                        users: event?.users ?? newUsers,
                                       ),
                                       Container(
                                         width: double.infinity,
@@ -216,12 +227,16 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
 
   Future<void> onPickUsersTapped() async {
     final User resultUser = await showSearch(
-        context: context,
-        delegate: UserSearch(
-            excludeUsername: event.users.map((e) => e.username).toList()));
+      context: context,
+      delegate: UserSearch(
+        excludeUsername: event != null
+            ? event.users.map((e) => e.username).toList()
+            : [currentUser.username],
+      ),
+    );
     if (resultUser != null) {
       setState(() {
-        event.users.add(UserSmall.fromUser(resultUser));
+        (event?.users ?? newUsers).add(UserSmall.fromUser(resultUser));
       });
     }
   }
@@ -264,6 +279,12 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
         date: date,
       );
       if (event == null) {
+        eventsBloc.add(
+          CreateEvent(
+            request,
+            newUsers,
+          ),
+        );
       } else {
         eventsBloc.add(
           UpdateEvent(
@@ -271,12 +292,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
             request,
             event.users
               ..where(
-                (element) =>
-                    element.username !=
-                    BlocProvider.of<AuthenticationBloc>(context)
-                        .state
-                        .currentUser
-                        .username,
+                    (element) => element.username != currentUser.username,
               ),
           ),
         );

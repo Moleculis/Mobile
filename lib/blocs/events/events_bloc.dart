@@ -24,6 +24,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       yield* _loadInitialData();
     } else if (event is UpdateEvent) {
       yield* _updateEvent(event.eventId, event.request, event.users);
+    } else if (event is CreateEvent) {
+      yield* _createEvent(event.request, event.users);
     }
   }
 
@@ -60,6 +62,28 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       final String message = await _eventsService.updateEvent(eventId, request);
       yield* _updateLocalEventById(eventId, request, users);
       final EventsState normalState = state;
+      yield EventsSuccess(message: message);
+      yield normalState;
+    } on AppException catch (e) {
+      yield EventsFailure(error: e.toString());
+    }
+  }
+
+  Stream<EventsState> _createEvent(CreateUpdateEventRequest request,
+      List<UserSmall> users,) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      final List<String> userNames = users.map((e) => e.username).toList();
+      request = request.copyWith(users: userNames);
+      final String message = await _eventsService.createEvent(request);
+
+      final EventsState normalState = state.copyWith(
+        events: state.events
+          ..add(
+            Event().copyWithRequest(request, users: users),
+          ),
+        isLoading: false,
+      );
       yield EventsSuccess(message: message);
       yield normalState;
     } on AppException catch (e) {
