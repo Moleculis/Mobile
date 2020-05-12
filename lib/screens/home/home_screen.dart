@@ -6,6 +6,7 @@ import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/common/colors.dart';
 import 'package:moleculis/screens/events/events_screen.dart';
+import 'package:moleculis/screens/groups/groups_screen.dart';
 import 'package:moleculis/screens/more/more_screen.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
@@ -44,9 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             EventsScreen(
               showErrorSnackBar: showErrorSnackBar,
             ),
-            Center(
-              child: Text('Groups screen'),
-            ),
+            GroupsScreen(),
             MoreScreen(),
           ],
         ),

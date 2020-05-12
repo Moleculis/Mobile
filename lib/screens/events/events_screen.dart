@@ -25,10 +25,10 @@ class _EventsScreenState extends State<EventsScreen> {
   EventsBloc eventsBloc;
 
   @override
-  void initState() {
+  void didChangeDependencies() {
     eventsBloc = EventsBloc(eventsService: EventsService(HttpHelper()));
     eventsBloc.add(LoadEvents());
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/events/events_bloc.dart';
 import 'package:moleculis/models/event.dart';
 import 'package:moleculis/screens/event_details/event_details_screen.dart';
+import 'package:moleculis/utils/format.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/widgets/simple_tile.dart';
 
@@ -29,6 +30,12 @@ class EventItem extends StatelessWidget {
       },
       title: event.title,
       subtitle: event.description,
+      trailing: Text(
+        FormatUtils.formatDateAndTime(event.date),
+        style: TextStyle(
+          color: DateTime.now().isAfter(event.date) ? Colors.red : Colors.green,
+        ),
+      ),
     );
   }
 }
