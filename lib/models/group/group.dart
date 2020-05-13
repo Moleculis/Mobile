@@ -1,3 +1,4 @@
+import 'package:moleculis/models/requests/create_update_group_request.dart';
 import 'package:moleculis/models/user/user_small.dart';
 
 class Group {
@@ -11,15 +12,27 @@ class Group {
   factory Group.fromMap(Map<String, dynamic> map) {
     final List<dynamic> usersDynamic = map['users'] as List;
     final List<UserSmall> users =
-        usersDynamic.map((i) => UserSmall.fromMap(i)).toList();
+    usersDynamic.map((i) => UserSmall.fromMap(i)).toList();
 
     final List<dynamic> adminsDynamic = map['admins'] as List;
     final List<UserSmall> admins =
-        adminsDynamic.map((i) => UserSmall.fromMap(i)).toList();
+    adminsDynamic.map((i) => UserSmall.fromMap(i)).toList();
 
     return Group(
       title: map['title'] as String,
       description: map['description'] as String,
+      users: users,
+      admins: admins,
+    );
+  }
+
+  factory Group.fromRequest(CreateUpdateGroupRequest request, {
+    List<UserSmall> users,
+    List<UserSmall> admins,
+  }) {
+    return Group(
+      title: request.title,
+      description: request.description,
       users: users,
       admins: admins,
     );

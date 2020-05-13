@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_event.dart';
 import 'package:moleculis/blocs/groups/groups_state.dart';
+import 'package:moleculis/screens/create_edit_group/create_edit_group_screen.dart';
 import 'package:moleculis/screens/groups/widgets/group_list.dart';
 import 'package:moleculis/services/groups_service.dart';
 import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
 class GroupsScreen extends StatefulWidget {
@@ -53,7 +55,12 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-
+                    Navigation.toScreen(
+                      context: context,
+                      screen: CreateEditGroupScreen(
+                        groupsBloc: groupsBloc,
+                      ),
+                    );
                   },
                 ),
               ]),
@@ -68,8 +75,12 @@ class _GroupsScreenState extends State<GroupsScreen> {
               return SafeArea(
                 child: TabBarView(
                   children: <Widget>[
-                    GroupsList(groups: groupsState.groups,),
-                    GroupsList(groups: groupsState.otherGroups,),
+                    GroupsList(
+                      groups: groupsState.groups,
+                    ),
+                    GroupsList(
+                      groups: groupsState.otherGroups,
+                    ),
                   ],
                 ),
               );

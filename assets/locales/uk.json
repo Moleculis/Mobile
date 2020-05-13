@@ -76,5 +76,8 @@
   "no_res_found": "Жодного результату знайдено",
   "created": "Створено",
   "create_event": "Створити подію",
-  "other_groups": "Інші групи"
+  "other_groups": "Інші групи",
+  "create_group": "Створення групи",
+  "edit_group": "Змінити групу",
+  "admins": "Адміни"
 }

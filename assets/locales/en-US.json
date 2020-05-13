@@ -76,5 +76,8 @@
   "no_res_found": "No results found",
   "created": "Created",
   "create_event": "Create event",
-  "other_groups": "Other groups"
+  "other_groups": "Other groups",
+  "create_group": "Create group",
+  "edit_group": "Edit group",
+  "admins": "Admins"
 }
