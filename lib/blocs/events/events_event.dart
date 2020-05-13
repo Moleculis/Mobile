@@ -29,3 +29,12 @@ class CreateEvent extends EventsEvent {
   @override
   List<Object> get props => [request, users];
 }
+
+class LeaveEvent extends EventsEvent {
+  final int eventId;
+
+  LeaveEvent(this.eventId);
+
+  @override
+  List<Object> get props => [eventId];
+}

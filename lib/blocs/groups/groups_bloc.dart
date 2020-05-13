@@ -24,6 +24,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       yield* _loadInitialData();
     } else if (event is CreateGroupEvent) {
       yield* _createGroup(event.request, event.users, event.admins);
+    } else if (event is UpdateGroupEvent) {
+      yield* _updateGroup(
+          event.request, event.users, event.admins, event.groupId);
     }
   }
 
@@ -57,11 +60,33 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
 
       final String message = await _groupsService.createGroup(request);
 
-      final GroupsState normalState = state.copyWith(
-        groups: state.groups
-          ..add(
-            Group.fromRequest(request, users: users, admins: admins),
-          ),
+      yield GroupsSuccess(message: message);
+      yield* _loadInitialData();
+    } on AppException catch (e) {
+      yield GroupsFailure(error: e.toString());
+    }
+  }
+
+  Stream<GroupsState> _updateGroup(CreateUpdateGroupRequest request,
+      List<UserSmall> users, List<UserSmall> admins, int groupId) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      final List<String> userNames = users.map((e) => e.username).toList();
+      final List<String> adminNames = admins.map((e) => e.username).toList();
+      request = request.copyWith(users: userNames, admins: adminNames);
+
+      final String message = await _groupsService.updateGroup(request, groupId);
+      Group newGroup = getGroupById(groupId);
+      newGroup = newGroup.copyWithRequest(request, users, admins);
+      final List<Group> newGroups = state.groups;
+      for (int i = 0; i < newGroups.length; ++i) {
+        final group = newGroups[i];
+        if (group.id == newGroup.id) {
+          newGroups[i] = newGroup;
+        }
+      }
+      final normalState = state.copyWith(
+        groups: newGroups,
         isLoading: false,
       );
       yield GroupsSuccess(message: message);
@@ -69,5 +94,19 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     } on AppException catch (e) {
       yield GroupsFailure(error: e.toString());
     }
+  }
+
+  Group getGroupById(int groupId) {
+    for (Group group in state.groups) {
+      if (group.id == groupId) {
+        return group;
+      }
+    }
+    for (Group group in state.otherGroups) {
+      if (group.id == groupId) {
+        return group;
+      }
+    }
+    return null;
   }
 }

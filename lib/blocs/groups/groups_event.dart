@@ -19,3 +19,15 @@ class CreateGroupEvent extends GroupsEvent {
   @override
   List<Object> get props => [request, users, admins];
 }
+
+class UpdateGroupEvent extends GroupsEvent {
+  final int groupId;
+  final CreateUpdateGroupRequest request;
+  final List<UserSmall> users;
+  final List<UserSmall> admins;
+
+  UpdateGroupEvent(this.request, this.users, this.admins, this.groupId);
+
+  @override
+  List<Object> get props => [request, users, admins, groupId];
+}

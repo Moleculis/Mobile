@@ -15,6 +15,8 @@ class EventsService {
 
   String _updateEventEndpoint(int eventId) => _endpointBase + '/$eventId';
 
+  String _leaveEventEndpoint(int eventId) => _endpointBase + '/leave/$eventId';
+
   EventsService(this._httpHelper);
 
   Future<Page> getEventsPage(int page) async {
@@ -40,6 +42,13 @@ class EventsService {
     final response = await _httpHelper.post(
       _createEventEndpoint,
       body: request.toMap(),
+    );
+    return response['message'];
+  }
+
+  Future<String> leaveEvent(int eventId) async {
+    final response = await _httpHelper.post(
+      _leaveEventEndpoint(eventId),
     );
     return response['message'];
   }

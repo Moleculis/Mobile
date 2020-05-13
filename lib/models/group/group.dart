@@ -2,12 +2,13 @@ import 'package:moleculis/models/requests/create_update_group_request.dart';
 import 'package:moleculis/models/user/user_small.dart';
 
 class Group {
+  final int id;
   final String title;
   final String description;
   final List<UserSmall> users;
   final List<UserSmall> admins;
 
-  Group({this.title, this.description, this.users, this.admins});
+  Group({this.id, this.title, this.description, this.users, this.admins});
 
   factory Group.fromMap(Map<String, dynamic> map) {
     final List<dynamic> usersDynamic = map['users'] as List;
@@ -19,6 +20,7 @@ class Group {
     adminsDynamic.map((i) => UserSmall.fromMap(i)).toList();
 
     return Group(
+      id: map['id'] as int,
       title: map['title'] as String,
       description: map['description'] as String,
       users: users,
@@ -26,15 +28,31 @@ class Group {
     );
   }
 
-  factory Group.fromRequest(CreateUpdateGroupRequest request, {
-    List<UserSmall> users,
-    List<UserSmall> admins,
-  }) {
-    return Group(
+
+  Group copyWithRequest(CreateUpdateGroupRequest request,
+      List<UserSmall> users,
+      List<UserSmall> admins,) {
+    return copyWith(
       title: request.title,
       description: request.description,
       users: users,
       admins: admins,
+    );
+  }
+
+  Group copyWith({
+    int id,
+    String title,
+    String description,
+    List<UserSmall> users,
+    List<UserSmall> admins,
+  }) {
+    return Group(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      users: users ?? this.users,
+      admins: admins ?? this.admins,
     );
   }
 }

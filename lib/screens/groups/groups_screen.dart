@@ -76,10 +76,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 child: TabBarView(
                   children: <Widget>[
                     GroupsList(
-                      groups: groupsState.groups,
+
                     ),
                     GroupsList(
-                      groups: groupsState.otherGroups,
+                      isOther: true,
                     ),
                   ],
                 ),

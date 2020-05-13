@@ -2,44 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_event.dart';
-import 'package:moleculis/models/group/group.dart';
+import 'package:moleculis/blocs/groups/groups_state.dart';
 import 'package:moleculis/screens/groups/widgets/group_item.dart';
 
-class GroupsList extends StatefulWidget {
-  final List<Group> groups;
+class GroupsList extends StatelessWidget {
 
-  const GroupsList({Key key, @required this.groups}) : super(key: key);
+  final bool isOther;
 
-  @override
-  _GroupsListState createState() => _GroupsListState();
-}
-
-class _GroupsListState extends State<GroupsList>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  GroupsBloc groupsBloc;
-  List<Group> groups;
-
-  @override
-  void initState() {
-    groupsBloc = BlocProvider.of<GroupsBloc>(context);
-    groups = widget.groups;
-    super.initState();
-  }
+  const GroupsList({Key key, this.isOther = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final groupsBloc = BlocProvider.of<GroupsBloc>(context);
     return RefreshIndicator(
       onRefresh: () async => groupsBloc.add(LoadGroups()),
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return GroupItem(
-            group: groups[index],
-          );
-        },
-        itemCount: groups.length,
+      child: BlocBuilder<GroupsBloc, GroupsState>(
+          bloc: groupsBloc,
+          builder: (BuildContext context, GroupsState state) {
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return GroupItem(
+                  group: isOther ? state.otherGroups[index] : state
+                      .groups[index],
+                );
+              },
+              itemCount: isOther ? state.otherGroups.length : state.groups
+                  .length,
+            );
+          }
       ),
     );
   }

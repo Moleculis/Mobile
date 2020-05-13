@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/events/events_bloc.dart';
+import 'package:moleculis/blocs/events/events_event.dart';
 import 'package:moleculis/blocs/events/events_state.dart';
 import 'package:moleculis/models/event.dart';
 import 'package:moleculis/screens/create_edit_event/create_edit_event_screen.dart';
@@ -21,7 +22,8 @@ class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({
     Key key,
     @required this.eventId,
-    this.owned, this.eventsBloc,
+    this.owned,
+    this.eventsBloc,
   }) : super(key: key);
 
   @override
@@ -39,76 +41,106 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: WidgetUtils.appBar(
-        context,
-        title: 'event_details'.tr().toLowerCase(),
-        actions: [
-          if (widget.owned)
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () async {
-                await Navigation.toScreen(
-                  context: context,
-                  screen: CreateEditEventScreen(
-                    eventId: widget.eventId,
-                    eventsBloc: eventsBloc,
-                  ),
-                );
-              },
-            ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: BlocBuilder<EventsBloc, EventsState>(
-          bloc: eventsBloc,
-          builder: (BuildContext context, EventsState state) {
-            final Event event = eventsBloc.getEventById(widget.eventId);
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: BigTile(
-                      title: event.title,
-                      subtitle:
-                      '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
-                          event.dateCreated)}',
+    return BlocListener(
+      bloc: widget.eventsBloc,
+      listener: (BuildContext context, state) {
+        if (state is EventsSuccess) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: WidgetUtils.appBar(
+          context,
+          title: 'event_details'.tr().toLowerCase(),
+          actions: [
+            if (widget.owned)
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () async {
+                  await Navigation.toScreen(
+                    context: context,
+                    screen: CreateEditEventScreen(
+                      eventId: widget.eventId,
+                      eventsBloc: eventsBloc,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: InfoItem(
-                      title: 'description'.tr(),
-                      content: event.description,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: InfoItem(
-                      title: 'date'.tr(),
-                      content: FormatUtils.formatDateAndTime(event.date),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: InfoItem(
-                      title: 'location'.tr(),
-                      content: event.location,
-                    ),
-                  ),
-                  InfoItem(
-                    title: 'participants'.tr(),
-                    contentWidget: UsersList(
-                      users: event.users,
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
+          ],
+        ),
+        body: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: BlocBuilder<EventsBloc, EventsState>(
+                bloc: eventsBloc,
+                builder: (BuildContext context, EventsState state) {
+                  final Event event = eventsBloc.getEventById(widget.eventId);
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: BigTile(
+                            title: event.title,
+                            subtitle:
+                            '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
+                                event.dateCreated)}',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InfoItem(
+                            title: 'description'.tr(),
+                            content: event.description,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InfoItem(
+                            title: 'date'.tr(),
+                            content: FormatUtils.formatDateAndTime(event.date),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InfoItem(
+                            title: 'location'.tr(),
+                            content: event.location,
+                          ),
+                        ),
+                        InfoItem(
+                          title: 'participants'.tr(),
+                          contentWidget: UsersList(
+                            users: event.users,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    eventsBloc.add(LeaveEvent(widget.eventId));
+                  },
+                  child: Text(
+                    'leave_event'.tr(),
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

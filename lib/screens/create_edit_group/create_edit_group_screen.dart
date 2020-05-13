@@ -57,7 +57,9 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
     currentUser =
         BlocProvider.of<AuthenticationBloc>(context).state.currentUser;
     if (widget.groupId != null) {
-      group = groupsBloc.state.groups[widget.groupId];
+      group = groupsBloc.getGroupById(widget.groupId);
+      titleController.text = group.title;
+      descriptionController.text = group.description;
     }
     super.initState();
   }
@@ -166,6 +168,7 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
                                     children: <Widget>[
                                       UsersList(
                                         editing: true,
+                                        showCurrentUser: true,
                                         onStateChane: () {
                                           setState(() {});
                                         },
@@ -209,8 +212,13 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
     if (group != null) {
       excludeUsers = (isAdmins ? group.admins : group.users)
           .map((e) => e.username)
-          .toList()
-            ..remove(currentUser.username);
+          .toList();
+      excludeUsers.addAll((isAdmins ? group.users : group.admins)
+          .map((e) => e.username)
+          .toList());
+      if (!excludeUsers.contains(currentUser.username)) {
+        excludeUsers.add(currentUser.username);
+      }
     } else {
       excludeUsers = [currentUser.username];
     }
@@ -241,7 +249,10 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
       newAdmins.add(UserSmall.fromUser(currentUser));
       if (group == null) {
         groupsBloc.add(CreateGroupEvent(request, newUsers, newAdmins));
-      } else {}
+      } else {
+        groupsBloc.add(
+            UpdateGroupEvent(request, group.users, group.admins, group.id));
+      }
     }
   }
 }

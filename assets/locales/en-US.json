@@ -79,5 +79,7 @@
   "other_groups": "Other groups",
   "create_group": "Create group",
   "edit_group": "Edit group",
-  "admins": "Admins"
+  "admins": "Admins",
+  "group_details": "Group details",
+  "leave_event": "Leave event"
 }

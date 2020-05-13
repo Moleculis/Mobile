@@ -79,5 +79,7 @@
   "other_groups": "Інші групи",
   "create_group": "Створення групи",
   "edit_group": "Змінити групу",
-  "admins": "Адміни"
+  "admins": "Адміни",
+  "group_details": "Деталі групи",
+  "leave_event": "Покинути подію"
 }

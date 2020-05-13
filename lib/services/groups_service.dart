@@ -14,6 +14,8 @@ class GroupsService {
   String _getOtherGroupsPageEndpoint(int page) =>
       _endpointBase + '/other/page/$page';
 
+  String _updateGroupendpoint(int groupId) => _endpointBase + '/$groupId';
+
   GroupsService(this._httpHelper);
 
   Future<Page> getGroupsPage(int page) async {
@@ -29,6 +31,15 @@ class GroupsService {
   Future<String> createGroup(CreateUpdateGroupRequest request) async {
     final response = await _httpHelper.post(
       _createGroupEndpoint,
+      body: request.toMap(),
+    );
+    return response['message'];
+  }
+
+  Future<String> updateGroup(CreateUpdateGroupRequest request,
+      int groupId) async {
+    final response = await _httpHelper.put(
+      _updateGroupendpoint(groupId),
       body: request.toMap(),
     );
     return response['message'];

@@ -9,17 +9,18 @@ import 'package:moleculis/widgets/simple_tile.dart';
 class UsersList extends StatelessWidget {
   final List<UserSmall> users;
   final bool editing;
+  final bool showCurrentUser;
   final VoidCallback onStateChane;
 
   const UsersList({
     Key key,
     @required this.users,
-    this.editing = false, this.onStateChane,
+    this.editing = false, this.onStateChane, this.showCurrentUser = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<UserSmall> participants = users
+    final List<UserSmall> participants = !showCurrentUser ? users
         .where(
           (element) =>
               element.username !=
@@ -27,7 +28,7 @@ class UsersList extends StatelessWidget {
                   .state
                   .currentUser
                   .username,
-    ).toList();
+    ).toList() : users;
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,

@@ -26,6 +26,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       yield* _updateEvent(event.eventId, event.request, event.users);
     } else if (event is CreateEvent) {
       yield* _createEvent(event.request, event.users);
+    } else if (event is LeaveEvent) {
+      yield* _leaveEvent(event.eventId);
     }
   }
 
@@ -77,15 +79,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       request = request.copyWith(users: userNames);
       final String message = await _eventsService.createEvent(request);
 
-      final EventsState normalState = state.copyWith(
-        events: state.events
-          ..add(
-            Event().copyWithRequest(request, users: users),
-          ),
-        isLoading: false,
-      );
       yield EventsSuccess(message: message);
-      yield normalState;
+      yield* _loadInitialData();
     } on AppException catch (e) {
       yield EventsFailure(error: e.toString());
     }
@@ -103,6 +98,25 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       isLoading: false,
       events: newEvents,
     );
+  }
+
+  Stream<EventsState> _leaveEvent(int id) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+
+      final String message = await _eventsService.leaveEvent(id);
+      final normalState = state;
+      final Event event =
+      state.events.firstWhere((element) => element.id == id);
+
+      yield EventsSuccess(message: message);
+      yield normalState.copyWith(
+        events: state.events..removeWhere((element) => element.id == id),
+        othersEvents: state.othersEvents..add(event),
+      );
+    } on AppException catch (e) {
+      yield EventsFailure(error: e.toString());
+    }
   }
 
   Event getEventById(int id) {
