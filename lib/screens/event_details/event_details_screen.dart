@@ -86,7 +86,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             title: event.title,
                             subtitle:
                             '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
-                                event.dateCreated)}',
+                              event.dateCreated,
+                              context,
+                            )}',
                           ),
                         ),
                         Padding(
@@ -100,7 +102,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: InfoItem(
                             title: 'date'.tr(),
-                            content: FormatUtils.formatDateAndTime(event.date),
+                            content: FormatUtils.formatDateAndTime(
+                              event.date,
+                              context,
+                            ),
                           ),
                         ),
                         Padding(

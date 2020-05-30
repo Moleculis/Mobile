@@ -31,7 +31,7 @@ class EventItem extends StatelessWidget {
       title: event.title,
       subtitle: event.description,
       trailing: Text(
-        FormatUtils.formatDateAndTime(event.date),
+        FormatUtils.formatDateAndTime(event.date, context),
         style: TextStyle(
           color: DateTime.now().isAfter(event.date) ? Colors.red : Colors.green,
         ),

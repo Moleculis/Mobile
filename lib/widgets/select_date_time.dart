@@ -44,7 +44,7 @@ class _SelectDateTimeState extends State<SelectDateTime> {
             child: Text(
               widget.isTime
                   ? FormatUtils.formatTime(widget.selectedDate)
-                  : FormatUtils.formatDate(widget.selectedDate),
+                  : FormatUtils.formatDate(widget.selectedDate, context),
             ),
           ),
         ),

@@ -9,10 +9,19 @@ class LocaleUtils {
     localeItems[1].locale,
   ];
 
+  static final List<String> localesLanguageCodes = ['en', 'uk'];
+
   static final List<LocaleItem> localeItems = [
     LocaleItem(
-        locale: Locale('en', 'US'), name: 'English', imageAsset: Img.usFlag),
-    LocaleItem(locale: Locale('uk'), name: 'Ukrainian', imageAsset: Img.uaFlag),
+      locale: Locale(LanguageCodes.en.text, 'US'),
+      name: 'English',
+      imageAsset: Img.usFlag,
+    ),
+    LocaleItem(
+      locale: Locale(LanguageCodes.uk.text),
+      name: 'Ukrainian',
+      imageAsset: Img.uaFlag,
+    ),
   ];
 
   static LocaleItem currentLocaleItem(BuildContext context) {
@@ -23,6 +32,23 @@ class LocaleUtils {
   static LocaleItem localeFlag(Locale locale) {
     return localeItems.firstWhere(
             (element) => element.locale.languageCode == locale.languageCode);
+  }
+}
+
+enum LanguageCodes {
+  en,
+  uk,
+}
+
+extension LanguageCodesExtension on LanguageCodes {
+  String get text {
+    switch (this) {
+      case LanguageCodes.en:
+        return 'en';
+      case LanguageCodes.uk:
+        return 'uk';
+    }
+    return null;
   }
 }
 
