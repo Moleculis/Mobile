@@ -81,5 +81,11 @@
   "edit_group": "Edit group",
   "admins": "Admins",
   "group_details": "Group details",
-  "leave_event": "Leave event"
+  "leave_event": "Leave event",
+  "no_events": "No events",
+  "no_groups": "No groups",
+  "choose_language": "choose language",
+  "no_contacts": "No contacts",
+  "no_contact_requests": "No requests",
+  "refresh": "Refresh"
 }

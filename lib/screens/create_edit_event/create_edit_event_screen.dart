@@ -75,7 +75,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<EventsBloc, EventsState>(
-      bloc: eventsBloc,
+      cubit: eventsBloc,
       listener: (BuildContext context, EventsState state) {
         if (state is EventsSuccess) {
           Navigator.pop(context);
@@ -83,7 +83,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
       },
       child: Scaffold(
         body: BlocBuilder<EventsBloc, EventsState>(
-            bloc: eventsBloc,
+            cubit: eventsBloc,
             builder: (BuildContext context, EventsState eventsState) {
               return SafeArea(
                 child: Form(

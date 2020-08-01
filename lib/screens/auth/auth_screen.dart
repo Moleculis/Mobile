@@ -47,7 +47,7 @@ class _AuthScreenState extends State<AuthScreen>
       child: Scaffold(
         key: scaffoldKey,
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            bloc: authenticationBloc,
+            cubit: authenticationBloc,
             builder: (BuildContext context, AuthenticationState state) {
               return SafeArea(
                 child: Stack(

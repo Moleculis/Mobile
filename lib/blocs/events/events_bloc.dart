@@ -13,10 +13,9 @@ import 'package:moleculis/services/events_service.dart';
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final EventsService _eventsService;
 
-  EventsBloc({EventsService eventsService}) : _eventsService = eventsService;
-
-  @override
-  EventsState get initialState => EventsState();
+  EventsBloc({EventsService eventsService})
+      : _eventsService = eventsService,
+        super(EventsState());
 
   @override
   Stream<EventsState> mapEventToState(EventsEvent event) async* {
@@ -54,9 +53,11 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     }
   }
 
-  Stream<EventsState> _updateEvent(int eventId,
-      CreateUpdateEventRequest request,
-      List<UserSmall> users,) async* {
+  Stream<EventsState> _updateEvent(
+    int eventId,
+    CreateUpdateEventRequest request,
+    List<UserSmall> users,
+  ) async* {
     try {
       yield state.copyWith(isLoading: true);
       final List<String> userNames = users.map((e) => e.username).toList();
@@ -71,8 +72,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     }
   }
 
-  Stream<EventsState> _createEvent(CreateUpdateEventRequest request,
-      List<UserSmall> users,) async* {
+  Stream<EventsState> _createEvent(
+    CreateUpdateEventRequest request,
+    List<UserSmall> users,
+  ) async* {
     try {
       yield state.copyWith(isLoading: true);
       final List<String> userNames = users.map((e) => e.username).toList();
@@ -86,8 +89,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     }
   }
 
-  Stream<EventsState> _updateLocalEventById(int id,
-      CreateUpdateEventRequest request, List<UserSmall> users) async* {
+  Stream<EventsState> _updateLocalEventById(
+      int id, CreateUpdateEventRequest request, List<UserSmall> users) async* {
     final List<Event> newEvents = state.events;
     for (int i = 0; i < newEvents.length; ++i) {
       if (newEvents[i].id == id) {

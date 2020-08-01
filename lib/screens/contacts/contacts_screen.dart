@@ -38,7 +38,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
           title: 'contact'.plural(2).toLowerCase(),
         ),
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            bloc: authenticationBloc,
+            cubit: authenticationBloc,
             builder: (BuildContext context, AuthenticationState state) {
               if (state.isLoading) {
                 return Center(

@@ -36,7 +36,7 @@ class _EventsScreenState extends State<EventsScreen> {
     return BlocProvider(
       create: (BuildContext context) => eventsBloc,
       child: BlocListener<EventsBloc, EventsState>(
-        bloc: eventsBloc,
+        cubit: eventsBloc,
         listener: (BuildContext context, EventsState state) {
           if (state is EventsFailure) {
             widget.showErrorSnackBar(state.error);
@@ -77,7 +77,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                 ]),
             body: BlocBuilder<EventsBloc, EventsState>(
-              bloc: eventsBloc,
+              cubit: eventsBloc,
               builder: (BuildContext context, EventsState eventsState) {
                 if (eventsState.isLoading) {
                   return Center(

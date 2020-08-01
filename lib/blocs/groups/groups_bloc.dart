@@ -13,10 +13,9 @@ import 'package:moleculis/services/groups_service.dart';
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   final GroupsService _groupsService;
 
-  GroupsBloc({GroupsService groupsService}) : _groupsService = groupsService;
-
-  @override
-  GroupsState get initialState => GroupsState();
+  GroupsBloc({GroupsService groupsService})
+      : _groupsService = groupsService,
+        super(GroupsState());
 
   @override
   Stream<GroupsState> mapEventToState(GroupsEvent event) async* {
@@ -40,7 +39,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
           groupsPage.content.map((e) => Group.fromMap(e)).toList();
 
       final List<Group> otherGroups =
-      otherGroupsPage.content.map((e) => Group.fromMap(e)).toList();
+          otherGroupsPage.content.map((e) => Group.fromMap(e)).toList();
 
       yield state.copyWith(
           isLoading: false, groups: groups, otherGroups: otherGroups);
@@ -49,9 +48,11 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     }
   }
 
-  Stream<GroupsState> _createGroup(CreateUpdateGroupRequest request,
-      List<UserSmall> users,
-      List<UserSmall> admins,) async* {
+  Stream<GroupsState> _createGroup(
+    CreateUpdateGroupRequest request,
+    List<UserSmall> users,
+    List<UserSmall> admins,
+  ) async* {
     try {
       yield state.copyWith(isLoading: true);
       final List<String> userNames = users.map((e) => e.username).toList();

@@ -7,6 +7,7 @@ import 'package:moleculis/models/contact/contact.dart';
 import 'package:moleculis/screens/contacts/widgets/contact_item.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/custom_expansion_tile.dart';
+import 'package:moleculis/widgets/list_refresh.dart';
 
 class ContactsList extends StatefulWidget {
   final List<Contact> contacts;
@@ -39,8 +40,12 @@ class _ContactsListState extends State<ContactsList>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
+    return ListRefresh(
       onRefresh: () async => authenticationBloc.add(LoadInitialData()),
+      isNoItems:
+          widget.contacts.isEmpty && (widget.sentRequests?.isEmpty ?? true),
+      noItemsText:
+          widget.isReceived ? 'no_contact_requests'.tr() : 'no_contacts'.tr(),
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {

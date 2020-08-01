@@ -81,7 +81,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
         }
       },
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          bloc: authenticationBloc,
+          cubit: authenticationBloc,
           builder: (BuildContext context, AuthenticationState authState) {
             return SafeArea(
               child: Stack(

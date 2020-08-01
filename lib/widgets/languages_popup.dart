@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:moleculis/utils/locale_utils.dart';
@@ -19,21 +21,22 @@ class LanguagesPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: Platform.isAndroid,
       onSelected: (int index) {
         (this.context ?? context).locale =
             LocaleUtils.localeItems[index].locale;
       },
       itemBuilder: (context) => LocaleUtils.localeItems.map(
-            (LocaleItem localeItem) {
+        (LocaleItem localeItem) {
           final int index = LocaleUtils.localeItems.indexOf(localeItem);
           return PopupMenuItem(
             value: index,
             child: LocaleWidget(
               localeItem: localeItem,
-            ),
-          );
-        },
-      ).toList(),
+                ),
+              );
+            },
+          ).toList(),
       icon: showIcon
           ? LocaleWidget(
         localeItem: LocaleUtils.currentLocaleItem(context),

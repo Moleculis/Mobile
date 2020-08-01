@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
-      bloc: authenticationBloc,
+      cubit: authenticationBloc,
       listener: (BuildContext context, AuthenticationState state) {
         if (state is AuthenticationFailure) {
           WidgetUtils.showErrorSnackbar(scaffoldKey, state.error);

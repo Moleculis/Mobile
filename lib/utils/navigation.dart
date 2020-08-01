@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Navigation {
-  static dynamic toScreen({
+  static Future<dynamic> toScreen({
     @required BuildContext context,
     @required Widget screen,
   }) async {
@@ -13,7 +13,7 @@ class Navigation {
     );
   }
 
-  static dynamic toScreenAndCleanBackStack({
+  static Future<dynamic> toScreenAndCleanBackStack({
     @required BuildContext context,
     @required Widget screen,
   }) async {

@@ -72,7 +72,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: BlocBuilder<GroupsBloc, GroupsState>(
-          bloc: groupsBloc,
+          cubit: groupsBloc,
           builder: (BuildContext context, GroupsState state) {
             final Group group = groupsBloc.getGroupById(widget.groupId);
             return Padding(

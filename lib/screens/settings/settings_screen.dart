@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moleculis/common/colors.dart';
+import 'package:moleculis/screens/settings/choose_language_screen.dart';
 import 'package:moleculis/utils/locale_utils.dart';
+import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/languages_popup.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -45,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'general'.tr(),
                 style:
-                    TextStyle(color: accentColor, fontWeight: FontWeight.bold),
+                TextStyle(color: accentColor, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
@@ -56,6 +60,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: 'language'.tr(),
                     subtitle: LocaleUtils.currentLocaleItem(context).name,
                     leading: Icon(Icons.language),
+                    onTap: () async {
+                      if (Platform.isIOS) {
+                        final int index = await Navigation.toScreen(
+                          context: context,
+                          screen: ChooseLanguageScreen(),
+                        );
+                        if (index != null) {
+                          (this.context ?? context).locale =
+                              LocaleUtils.localeItems[index].locale;
+                        }
+                      }
+                    },
                   ),
                 ),
               ),
@@ -77,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'security'.tr(),
                 style:
-                    TextStyle(color: accentColor, fontWeight: FontWeight.bold),
+                TextStyle(color: accentColor, fontWeight: FontWeight.bold),
               ),
               SettingsTile.switchTile(
                 title: 'use_fingerprint'.tr(),

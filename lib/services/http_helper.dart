@@ -11,7 +11,7 @@ class HttpHelper {
   HttpHelper._internal({String locale}) {
     this._locale = locale == 'uk' ? 'ua' : locale;
     _httpClient.badCertificateCallback =
-    ((X509Certificate cert, String host, int port) => _trustSelfSigned);
+        ((X509Certificate cert, String host, int port) => _trustSelfSigned);
     _ioClient = IOClient(_httpClient);
   }
 
@@ -25,7 +25,8 @@ class HttpHelper {
     return _instance;
   }
 
-  final String _baseUrl = "http://10.0.2.2:8080";
+  final String _baseUrl =
+      "http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:8080";
 
   SharedPrefManager _prefs = SharedPrefManager();
   HttpClient _httpClient = HttpClient();
@@ -48,8 +49,7 @@ class HttpHelper {
   Map<String, String> get _localizationHeader =>
       {'Accept-Language': _instance.locale};
 
-  Future<dynamic> get(String endpoint,
-      {bool localized = true}) async {
+  Future<dynamic> get(String endpoint, {bool localized = true}) async {
     var responseJson;
     try {
       final Map<String, String> getHeaders = {};
@@ -130,8 +130,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<dynamic> delete(String endpoint,
-      {bool localized = true}) async {
+  Future<dynamic> delete(String endpoint, {bool localized = true}) async {
     var responseJson;
     try {
       final Map<String, String> deleteHeaders = {};

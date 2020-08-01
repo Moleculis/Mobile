@@ -65,7 +65,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 ),
               ]),
           body: BlocBuilder<GroupsBloc, GroupsState>(
-            bloc: groupsBloc,
+            cubit: groupsBloc,
             builder: (BuildContext context, GroupsState groupsState) {
               if (groupsState.isLoading) {
                 return Center(
@@ -75,9 +75,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
               return SafeArea(
                 child: TabBarView(
                   children: <Widget>[
-                    GroupsList(
-
-                    ),
+                    GroupsList(),
                     GroupsList(
                       isOther: true,
                     ),

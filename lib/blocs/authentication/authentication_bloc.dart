@@ -20,10 +20,8 @@ class AuthenticationBloc
   AuthenticationBloc(
       {AuthenticationService authenticationService, UserService userService})
       : _authenticationService = authenticationService,
-        _userService = userService;
-
-  @override
-  AuthenticationState get initialState => AuthenticationState();
+        _userService = userService,
+        super(AuthenticationState());
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -71,7 +69,7 @@ class AuthenticationBloc
     try {
       yield state.copyWith(isLoading: true);
       final String message =
-      await _authenticationService.register(registerRequest);
+          await _authenticationService.register(registerRequest);
       yield AuthenticationRegisterSuccess(message: message);
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
