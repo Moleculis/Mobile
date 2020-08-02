@@ -18,6 +18,7 @@ import 'package:moleculis/widgets/info_item.dart';
 import 'package:moleculis/widgets/input.dart';
 import 'package:moleculis/widgets/loading_widget.dart';
 import 'package:moleculis/widgets/select_date_time.dart';
+import 'package:moleculis/widgets/simple_button.dart';
 import 'package:moleculis/widgets/toolbar.dart';
 
 class CreateEditEventScreen extends StatefulWidget {
@@ -57,10 +58,7 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
   void initState() {
     eventsBloc = widget.eventsBloc;
     currentUser =
-        BlocProvider
-            .of<AuthenticationBloc>(context)
-            .state
-            .currentUser;
+        BlocProvider.of<AuthenticationBloc>(context).state.currentUser;
     if (widget.eventId != null) {
       event = eventsBloc.getEventById(widget.eventId);
       titleController.text = event.title;
@@ -195,8 +193,8 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
                                       ),
                                       Container(
                                         width: double.infinity,
-                                        child: RaisedButton(
-                                          child: Text('+'),
+                                        child: SimpleButton(
+                                          text: '+',
                                           onPressed: onPickUsersTapped,
                                         ),
                                       ),

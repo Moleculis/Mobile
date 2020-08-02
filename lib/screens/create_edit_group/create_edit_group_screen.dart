@@ -17,6 +17,7 @@ import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/info_item.dart';
 import 'package:moleculis/widgets/input.dart';
 import 'package:moleculis/widgets/loading_widget.dart';
+import 'package:moleculis/widgets/simple_button.dart';
 import 'package:moleculis/widgets/toolbar.dart';
 
 class CreateEditGroupScreen extends StatefulWidget {
@@ -150,8 +151,8 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
                                       ),
                                       Container(
                                         width: double.infinity,
-                                        child: RaisedButton(
-                                          child: Text('+'),
+                                        child: SimpleButton(
+                                          text: '+',
                                           onPressed: onPickUsersTapped,
                                         ),
                                       ),
@@ -176,8 +177,8 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
                                       ),
                                       Container(
                                         width: double.infinity,
-                                        child: RaisedButton(
-                                          child: Text('+'),
+                                        child: SimpleButton(
+                                          text: '+',
                                           onPressed: () =>
                                               onPickUsersTapped(isAdmins: true),
                                         ),
