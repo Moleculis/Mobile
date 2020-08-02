@@ -84,10 +84,9 @@ class AuthenticationBloc
     try {
       yield state.copyWith(isLoading: true);
       final User user = await _userService.getCurrentUser();
+      final List<User> otherUsers = await _userService.getOtherUsers();
       yield state.copyWith(
-        isLoading: false,
-        currentUser: user,
-      );
+          isLoading: false, currentUser: user, otherUsers: otherUsers);
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
     }

@@ -7,6 +7,7 @@ import 'package:moleculis/blocs/authentication/authentication_state.dart';
 import 'package:moleculis/models/contact/contact.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/screens/contacts/widgets/contacts_list.dart';
+import 'package:moleculis/screens/contacts/widgets/users_list.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
   User currentUser;
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
-  GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void didChangeDependencies() {
@@ -31,7 +32,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: WidgetUtils.appBar(
           context,
@@ -79,6 +80,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
+                      Tab(
+                        child: Text(
+                          'others'.tr(),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
                     ],
                   ),
                   Expanded(
@@ -92,6 +99,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           isReceived: true,
                           contacts: contactRequests,
                         ),
+                        UsersList(users: state.otherUsers),
                       ],
                     ),
                   ),

@@ -57,6 +57,7 @@
   },
   "yours": "Yours",
   "requests": "Requests",
+  "others": "Others",
   "sent_requests": "Sent requests",
   "remove_contact_confirm": "Are you sure you want to remove this contact?",
   "accept_contact_confirm": "Accept {} contact request?",
@@ -87,5 +88,6 @@
   "choose_language": "choose language",
   "no_contacts": "No contacts",
   "no_contact_requests": "No requests",
-  "refresh": "Refresh"
+  "refresh": "Refresh",
+  "no_other_users": "No other users"
 }

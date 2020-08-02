@@ -57,6 +57,7 @@
   },
   "yours": "Ващі",
   "requests": "Запити",
+  "others": "Інщі",
   "sent_requests": "Відправлені запити",
   "remove_contact_confirm": "Ви впевнені що хочете видалити цей контакт?",
   "accept_contact_confirm": "Підтвердити {} запит?",
@@ -87,5 +88,6 @@
   "choose_language": "виберіть мову",
   "no_contacts": "Жодного контакту",
   "no_contact_requests": "Жодного запиту",
-  "refresh": "Обновити"
+  "refresh": "Обновити",
+  "no_other_users": "Жодного іншого користувача"
 }

@@ -13,6 +13,8 @@ class UserService {
 
   String get _usersEndpoint => _endpointBase + '/';
 
+  String get _otherUsersEndpoint => _endpointBase + '/other';
+
   String _deleteContactEndpoint(int id) =>
       _endpointBase + '/delete_contact/$id';
 
@@ -21,7 +23,7 @@ class UserService {
 
   Future<User> getCurrentUser() async {
     final Map<String, dynamic> response =
-    await _httpHelper.get(_currentUserEndpoint);
+        await _httpHelper.get(_currentUserEndpoint);
     return User.fromMap(response);
   }
 
@@ -48,8 +50,13 @@ class UserService {
   }
 
   Future<List<User>> getUsers() async {
-    final List<dynamic> response =
-    await _httpHelper.get(_usersEndpoint);
+    final List<dynamic> response = await _httpHelper.get(_usersEndpoint);
+    final List<User> users = response.map((e) => User.fromMap(e)).toList();
+    return users;
+  }
+
+  Future<List<User>> getOtherUsers() async {
+    final List<dynamic> response = await _httpHelper.get(_otherUsersEndpoint);
     final List<User> users = response.map((e) => User.fromMap(e)).toList();
     return users;
   }

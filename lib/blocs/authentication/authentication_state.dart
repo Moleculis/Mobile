@@ -5,19 +5,23 @@ import 'package:moleculis/models/user/user.dart';
 class AuthenticationState {
   final bool isLoading;
   final User currentUser;
+  final List<User> otherUsers;
 
   AuthenticationState({
     this.isLoading = false,
     this.currentUser,
+    this.otherUsers,
   });
 
   AuthenticationState copyWith({
     bool isLoading,
     User currentUser,
+    List<User> otherUsers,
   }) {
     return AuthenticationState(
       isLoading: isLoading ?? this.isLoading,
       currentUser: currentUser ?? this.currentUser,
+      otherUsers: otherUsers ?? this.otherUsers,
     );
   }
 }
