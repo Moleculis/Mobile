@@ -32,8 +32,6 @@ class AuthenticationBloc
       yield* _register(event.registerRequest);
     } else if (event is LoadInitialData) {
       yield* _loadInitialData();
-    } else if (event is UpdateCurrentUser) {
-      yield* _updateCurrentUser();
     } else if (event is LogOutEvent) {
       yield* _logout();
     } else if (event is UpdateUserEvent) {
@@ -42,6 +40,8 @@ class AuthenticationBloc
       yield* _removeContact(event.id);
     } else if (event is AcceptContactEvent) {
       yield* _acceptContact(event.id);
+    } else if (event is SendContactRequestEvent) {
+      yield* _sendContactRequest(event.username);
     }
   }
 
@@ -87,18 +87,6 @@ class AuthenticationBloc
       final List<User> otherUsers = await _userService.getOtherUsers();
       yield state.copyWith(
           isLoading: false, currentUser: user, otherUsers: otherUsers);
-    } on AppException catch (e) {
-      yield AuthenticationFailure(error: e.toString());
-    }
-  }
-
-  Stream<AuthenticationState> _updateCurrentUser() async* {
-    try {
-      final User user = await _userService.getCurrentUser();
-      yield state.copyWith(
-        currentUser: user,
-        isLoading: false,
-      );
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
     }
@@ -170,7 +158,17 @@ class AuthenticationBloc
     try {
       yield state.copyWith(isLoading: true);
       await _userService.acceptContact(id);
-      yield* _updateCurrentUser();
+      yield* _loadInitialData();
+    } on AppException catch (e) {
+      yield AuthenticationFailure(error: e.toString());
+    }
+  }
+
+  Stream<AuthenticationState> _sendContactRequest(String username) async* {
+    try {
+      yield state.copyWith(isLoading: true);
+      await _userService.sendContactRequest(username);
+      yield* _loadInitialData();
     } on AppException catch (e) {
       yield AuthenticationFailure(error: e.toString());
     }

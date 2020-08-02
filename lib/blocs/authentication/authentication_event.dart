@@ -60,7 +60,11 @@ class AcceptContactEvent extends AuthenticationEvent {
   List<Object> get props => [id];
 }
 
-class UpdateCurrentUser extends AuthenticationEvent {
+class SendContactRequestEvent extends AuthenticationEvent {
+  final String username;
+
+  SendContactRequestEvent(this.username);
+
   @override
   List<Object> get props => null;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
+import 'package:moleculis/blocs/authentication/authentication_event.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/screens/user_details/user_details_screen.dart';
@@ -35,7 +36,7 @@ class UserItem extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              //ToDO send contact request
+              authBloc.add(SendContactRequestEvent(user.username));
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 10),
