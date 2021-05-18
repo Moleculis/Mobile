@@ -57,7 +57,7 @@ class ErrorScreen extends StatelessWidget {
 
   Widget _getStackTraceWidget() {
     if (showStacktrace) {
-      List<String> stackTrace = details.stack.toString().split("\n");
+      final List<String> stackTrace = details.stack.toString().split('\n');
       return SizedBox(
         height: 200.0,
         child: FlexibleScrollbar(
@@ -68,7 +68,7 @@ class ErrorScreen extends StatelessWidget {
             padding: EdgeInsets.all(8.0),
             itemCount: stackTrace.length,
             itemBuilder: (BuildContext context, int index) {
-              String line = stackTrace[index];
+              final String line = stackTrace[index];
               if (line?.isNotEmpty == true) {
                 return Text(line);
               } else {

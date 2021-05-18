@@ -28,7 +28,8 @@ class SharedPrefManager {
     bool isAuthenticated = false;
     if (getAccessToken() != 'Bearer null') {
       final int expirationDate = prefs.getInt(accessTokenExpirationDateKey);
-      int expireIn = expirationDate - DateTime.now().millisecondsSinceEpoch;
+      final int expireIn =
+          expirationDate - DateTime.now().millisecondsSinceEpoch;
 
       if (expireIn > 0) {
         isAuthenticated = true;

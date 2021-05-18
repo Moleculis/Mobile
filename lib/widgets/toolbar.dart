@@ -33,7 +33,9 @@ class Toolbar extends StatefulWidget {
 }
 
 class _ToolbarState extends State<Toolbar> {
-  File _image;
+  final ImagePicker imagePicker = ImagePicker();
+
+  File pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -59,71 +61,17 @@ class _ToolbarState extends State<Toolbar> {
         ),
         if (widget.onImagePicked != null)
           if (widget.imageFile != null)
-            _pickedImage(widget.imageFile)
+            imageView(widget.imageFile)
           else
-            _image == null ? _emptyImage() : _pickedImage(_image),
+            pickedImage == null ? emptyImage : imageView(pickedImage),
         if (widget.actions != null)
           ...widget?.actions?.map((Widget action) => action)?.toList(),
       ],
     );
   }
 
-  Future addImage() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return SafeArea(
-          child: Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.camera),
-                  title: Text(
-                    'camera'.tr(),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    File image =
-                        await ImagePicker.pickImage(source: ImageSource.camera);
-                    if (image != null) {
-                      setState(() {
-                        _image = image;
-                      });
-
-                      widget.onImagePicked(image);
-                    }
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text(
-                    'gallery'.tr(),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    File image = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    if (image != null) {
-                      setState(() {
-                        _image = image;
-                      });
-
-                      widget.onImagePicked(image);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _emptyImage() {
-    bool toShowCameraIcon =
+  Widget get emptyImage {
+    final bool toShowCameraIcon =
         widget.initialImageUrl == null || widget.initialImageUrl.isEmpty;
     return GestureDetector(
       onTap: () {
@@ -142,7 +90,7 @@ class _ToolbarState extends State<Toolbar> {
     );
   }
 
-  Widget _pickedImage(File imageFile) {
+  Widget imageView(File imageFile) {
     return GestureDetector(
       onTap: () {
         addImage();
@@ -153,5 +101,55 @@ class _ToolbarState extends State<Toolbar> {
         radius: 50,
       ),
     );
+  }
+
+  Future<void> addImage() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.camera),
+                  title: Text(
+                    'camera'.tr(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await pickImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.image),
+                  title: Text(
+                    'gallery'.tr(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await pickImage(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    final PickedFile image = await imagePicker.getImage(source: source);
+    if (image != null) {
+      final imageFile = File(image.path);
+      setState(() {
+        pickedImage = imageFile;
+      });
+
+      widget.onImagePicked(imageFile);
+    }
   }
 }

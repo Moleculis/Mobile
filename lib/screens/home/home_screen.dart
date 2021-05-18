@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   AuthenticationBloc authenticationBloc;
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   int currentTab = 0;
 
@@ -31,14 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
-      cubit: authenticationBloc,
+      bloc: authenticationBloc,
       listener: (BuildContext context, AuthenticationState state) {
         if (state is AuthenticationFailure) {
-          WidgetUtils.showErrorSnackbar(scaffoldKey, state.error);
+          WidgetUtils.showErrorSnackbar(context, error: state.error);
         }
       },
       child: Scaffold(
-        key: scaffoldKey,
         body: IndexedStack(
           index: currentTab,
           children: [
@@ -62,14 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.event),
-              title: Text('events'.tr()),
+              label: 'events'.tr(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.group),
-              title: Text('groups'.tr()),
+              label: 'groups'.tr(),
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.more), title: Text('more'.tr()))
+              icon: Icon(Icons.more),
+              label: 'more'.tr(),
+            )
           ],
         ),
       ),
@@ -77,10 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void showSuccessSnackBar(String message) {
-    WidgetUtils.showSuccessSnackbar(scaffoldKey, message);
+    WidgetUtils.showSuccessSnackbar(context, message: message);
   }
 
   void showErrorSnackBar(String error) {
-    WidgetUtils.showErrorSnackbar(scaffoldKey, error);
+    WidgetUtils.showErrorSnackbar(context, error: error);
   }
 }

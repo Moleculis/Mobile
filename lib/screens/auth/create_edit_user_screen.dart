@@ -72,6 +72,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (BuildContext context, AuthenticationState state) {
         if (widget.edit) {
@@ -81,7 +82,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
         }
       },
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          cubit: authenticationBloc,
+          bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState authState) {
             return SafeArea(
               child: Stack(

@@ -34,6 +34,7 @@ class _UsersListState extends State<UsersList>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListRefresh(
       onRefresh: () async => authenticationBloc.add(LoadInitialData()),
       isNoItems: widget.users?.isEmpty,

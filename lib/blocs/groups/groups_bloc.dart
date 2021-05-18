@@ -98,12 +98,12 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Group getGroupById(int groupId) {
-    for (Group group in state.groups) {
+    for (final group in state.groups) {
       if (group.id == groupId) {
         return group;
       }
     }
-    for (Group group in state.otherGroups) {
+    for (final group in state.otherGroups) {
       if (group.id == groupId) {
         return group;
       }

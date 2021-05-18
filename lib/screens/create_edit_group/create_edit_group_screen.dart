@@ -68,7 +68,7 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<GroupsBloc, GroupsState>(
-      cubit: groupsBloc,
+      bloc: groupsBloc,
       listener: (BuildContext context, GroupsState state) {
         if (state is GroupsSuccess) {
           Navigator.pop(context);
@@ -76,7 +76,7 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
       },
       child: Scaffold(
         body: BlocBuilder<GroupsBloc, GroupsState>(
-            cubit: groupsBloc,
+            bloc: groupsBloc,
             builder: (BuildContext context, GroupsState eventsState) {
               return SafeArea(
                 child: Form(

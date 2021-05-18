@@ -13,13 +13,15 @@ class SimpleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: Text(
         text,
         style: TextStyle(color: Colors.white, fontSize: 24),
       ),
       onPressed: onPressed,
-      color: accentColorDark,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(accentColorDark),
+      ),
     );
   }
 }

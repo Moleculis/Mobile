@@ -16,7 +16,7 @@ class GroupsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final groupsBloc = BlocProvider.of<GroupsBloc>(context);
     return BlocBuilder<GroupsBloc, GroupsState>(
-        cubit: groupsBloc,
+        bloc: groupsBloc,
         builder: (BuildContext context, GroupsState state) {
           return ListRefresh(
             onRefresh: () async => groupsBloc.add(LoadGroups()),

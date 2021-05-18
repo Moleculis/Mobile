@@ -123,12 +123,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   }
 
   Event getEventById(int id) {
-    for (Event event in state.events) {
+    for (final event in state.events) {
       if (event.id == id) {
         return event;
       }
     }
-    for (Event event in state.othersEvents) {
+    for (final event in state.othersEvents) {
       if (event.id == id) {
         return event;
       }

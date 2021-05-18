@@ -42,7 +42,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: widget.eventsBloc,
+      bloc: widget.eventsBloc,
       listener: (BuildContext context, state) {
         if (state is EventsSuccess) {
           Navigator.pop(context);
@@ -72,7 +72,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           children: <Widget>[
             SingleChildScrollView(
               child: BlocBuilder<EventsBloc, EventsState>(
-                cubit: eventsBloc,
+                bloc: eventsBloc,
                 builder: (BuildContext context, EventsState state) {
                   final Event event = eventsBloc.getEventById(widget.eventId);
                   return Padding(

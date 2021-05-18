@@ -38,6 +38,7 @@ class _EventsListState extends State<EventsList>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListRefresh(
       onRefresh: () async => eventsBloc.add(LoadEvents()),
       isNoItems: events.isEmpty,

@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
       key: formKey,
       child: SingleChildScrollView(

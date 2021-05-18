@@ -10,9 +10,11 @@ import 'package:google_fonts/google_fonts.dart';
 typedef ShowSnackBar = void Function(String);
 
 class WidgetUtils {
-  static void showErrorSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
-      String error) {
-    scaffoldKey.currentState.showSnackBar(
+  static void showErrorSnackbar(
+    BuildContext context, {
+    @required String error,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(error),
         backgroundColor: Colors.red,
@@ -20,10 +22,12 @@ class WidgetUtils {
     );
   }
 
-  static void showSuccessSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
-      String message,
-      {Duration duration}) {
-    scaffoldKey.currentState.showSnackBar(
+  static void showSuccessSnackbar(
+    BuildContext context, {
+    @required String message,
+    Duration duration,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         duration: duration ?? Duration(milliseconds: 4000),
@@ -32,8 +36,11 @@ class WidgetUtils {
     );
   }
 
-  static void showSnackbar(GlobalKey<ScaffoldState> scaffoldKey, String text) {
-    scaffoldKey.currentState.showSnackBar(
+  static void showSnackbar(
+    BuildContext context, {
+    @required String text,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(text)),
     );
   }
@@ -52,7 +59,7 @@ class WidgetUtils {
         return AlertDialog(
           title: Text(title),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 if (onYes != null) {
@@ -64,7 +71,7 @@ class WidgetUtils {
                 style: TextStyle(color: Colors.red),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 if (onNo != null) {
@@ -85,20 +92,23 @@ class WidgetUtils {
   static Widget backButton(BuildContext context) {
     if (Platform.isAndroid) {
       return IconButton(
-          icon: Icon(Icons.arrow_back),
-          padding: EdgeInsets.all(0),
-          alignment: Alignment.centerLeft,
-          onPressed: () => Navigator.pop(context));
+        icon: Icon(Icons.arrow_back),
+        padding: EdgeInsets.all(0),
+        alignment: Alignment.centerLeft,
+        onPressed: () => Navigator.pop(context),
+      );
     } else {
       return IconButton(
-          icon: Icon(CupertinoIcons.left_chevron),
-          padding: EdgeInsets.all(0),
-          alignment: Alignment.centerLeft,
-          onPressed: () => Navigator.pop(context));
+        icon: Icon(CupertinoIcons.left_chevron),
+        padding: EdgeInsets.all(0),
+        alignment: Alignment.centerLeft,
+        onPressed: () => Navigator.pop(context),
+      );
     }
   }
 
-  static Widget appBar(BuildContext context, {
+  static Widget appBar(
+    BuildContext context, {
     String title,
     List<Widget> actions,
     Color backgroundColor,
@@ -124,9 +134,7 @@ class WidgetUtils {
             ),
           ),
           backgroundColor:
-          backgroundColor ?? Theme
-              .of(context)
-              .scaffoldBackgroundColor,
+              backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
           brightness: Brightness.light,
           centerTitle: false,
           actions: actions,

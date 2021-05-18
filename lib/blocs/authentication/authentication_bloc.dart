@@ -127,7 +127,7 @@ class AuthenticationBloc
       final List<Contact> contacts = state.currentUser.contacts;
       final List<Contact> contactRequests = state.currentUser.contactRequests;
       bool found = false;
-      for (Contact contact in contacts) {
+      for (final contact in contacts) {
         if (contact.id == id) {
           contacts.remove(contact);
           found = true;
@@ -135,7 +135,7 @@ class AuthenticationBloc
         }
       }
       if (!found) {
-        for (Contact contact in contactRequests) {
+        for (final contact in contactRequests) {
           if (contact.id == id) {
             contactRequests.remove(contact);
             break;

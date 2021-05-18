@@ -65,7 +65,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 ),
               ]),
           body: BlocBuilder<GroupsBloc, GroupsState>(
-            cubit: groupsBloc,
+            bloc: groupsBloc,
             builder: (BuildContext context, GroupsState groupsState) {
               if (groupsState.isLoading) {
                 return Center(

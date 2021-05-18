@@ -28,15 +28,15 @@ class HttpHelper {
   final String _baseUrl =
       "http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:8080";
 
-  SharedPrefManager _prefs = SharedPrefManager();
-  HttpClient _httpClient = HttpClient();
+  final SharedPrefManager _prefs = SharedPrefManager();
+  final HttpClient _httpClient = HttpClient();
   IOClient _ioClient;
   String _locale;
 
   String get locale => _locale;
-  bool _trustSelfSigned = true;
+  final bool _trustSelfSigned = true;
 
-  Map<String, String> _postHeaders = {
+  final Map<String, String> _postHeaders = {
     'accept': 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
   };
@@ -58,7 +58,7 @@ class HttpHelper {
         getHeaders.addAll(_localizationHeader);
       }
       final response = await _ioClient.get(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: _authTokenHeader,
       );
       responseJson = _returnResponse(response);
@@ -88,7 +88,7 @@ class HttpHelper {
     }
     try {
       final response = await _ioClient.post(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: postHeaders,
         body: json.encode(body),
       );
@@ -119,7 +119,7 @@ class HttpHelper {
     }
     try {
       final response = await _ioClient.put(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: putHeaders,
         body: json.encode(body),
       );
@@ -139,7 +139,7 @@ class HttpHelper {
         deleteHeaders.addAll(_localizationHeader);
       }
       final response = await _ioClient.delete(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: deleteHeaders,
       );
       responseJson = _returnResponse(response);

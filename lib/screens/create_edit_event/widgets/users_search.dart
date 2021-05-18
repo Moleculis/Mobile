@@ -50,11 +50,11 @@ class UserSearch extends SearchDelegate<User> {
               child: CircularProgressIndicator(),
             );
           }
-          List<User> filteredResults = snapshot.data
+          final List<User> filteredResults = snapshot.data
               .where((element) => !excludeUsername.contains(element.username))
               .toList();
 
-          List<User> searchResults = filteredResults.where((User user) {
+          final List<User> searchResults = filteredResults.where((User user) {
             return '${user.displayname} '
                     '${user.fullname} '
                     '${user.email} '
@@ -71,7 +71,7 @@ class UserSearch extends SearchDelegate<User> {
             padding: const EdgeInsets.all(30),
             itemCount: searchResults.length,
             itemBuilder: (BuildContext context, int index) {
-              User user = searchResults[index];
+              final user = searchResults[index];
               return SimpleTile(
                 title: user.displayname,
                 subtitle: user.username,

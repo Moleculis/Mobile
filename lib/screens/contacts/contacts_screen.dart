@@ -39,7 +39,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
           title: 'contact'.plural(2).toLowerCase(),
         ),
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            cubit: authenticationBloc,
+            bloc: authenticationBloc,
             builder: (BuildContext context, AuthenticationState state) {
               if (state.isLoading) {
                 return Center(
@@ -50,14 +50,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
               final List<Contact> contacts = [];
               final List<Contact> sentRequests = [];
               final List<Contact> contactRequests = [];
-              for (Contact contact in currentUser.contacts) {
+              for (final contact in currentUser.contacts) {
                 if (contact.accepted) {
                   contacts.add(contact);
                 } else {
                   sentRequests.add(contact);
                 }
               }
-              for (Contact contact in currentUser.contactRequests) {
+              for (final contact in currentUser.contactRequests) {
                 if (contact.accepted) {
                   contacts.add(contact);
                 } else {

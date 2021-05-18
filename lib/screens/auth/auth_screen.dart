@@ -21,8 +21,6 @@ class _AuthScreenState extends State<AuthScreen>
   AuthenticationBloc authenticationBloc;
   TabController authTabsController;
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
   @override
   void didChangeDependencies() {
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
@@ -39,15 +37,14 @@ class _AuthScreenState extends State<AuthScreen>
               context: context, screen: HomeScreen());
         } else if (state is AuthenticationRegisterSuccess) {
           authTabsController.animateTo(0);
-          WidgetUtils.showSuccessSnackbar(scaffoldKey, state.message);
+          WidgetUtils.showSuccessSnackbar(context, message: state.message);
         } else if (state is AuthenticationFailure) {
-          WidgetUtils.showErrorSnackbar(scaffoldKey, state.error);
+          WidgetUtils.showErrorSnackbar(context, error: state.error);
         }
       },
       child: Scaffold(
-        key: scaffoldKey,
         body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            cubit: authenticationBloc,
+            bloc: authenticationBloc,
             builder: (BuildContext context, AuthenticationState state) {
               return SafeArea(
                 child: Stack(

@@ -7,7 +7,6 @@ import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_state.dart';
 import 'package:moleculis/models/group/group.dart';
 import 'package:moleculis/models/user/user.dart';
-import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/screens/create_edit_group/create_edit_group_screen.dart';
 import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/utils/navigation.dart';
@@ -44,7 +43,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
     final User currentUser =
         BlocProvider.of<AuthenticationBloc>(context).state.currentUser;
     bool isAdmin = false;
-    for (UserSmall user in group.admins) {
+    for (final user in group.admins) {
       if (user.username == currentUser.username) {
         isAdmin = true;
         break;
@@ -72,7 +71,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: BlocBuilder<GroupsBloc, GroupsState>(
-          cubit: groupsBloc,
+          bloc: groupsBloc,
           builder: (BuildContext context, GroupsState state) {
             final Group group = groupsBloc.getGroupById(widget.groupId);
             return Padding(

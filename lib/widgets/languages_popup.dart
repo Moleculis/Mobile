@@ -15,7 +15,8 @@ class LanguagesPopup extends StatelessWidget {
     Key key,
     this.child,
     this.backgroundColor,
-    this.showIcon = true, this.context,
+    this.showIcon = true,
+    this.context,
   }) : super(key: key);
 
   @override
@@ -23,8 +24,8 @@ class LanguagesPopup extends StatelessWidget {
     return PopupMenuButton<int>(
       enabled: Platform.isAndroid,
       onSelected: (int index) {
-        (this.context ?? context).locale =
-            LocaleUtils.localeItems[index].locale;
+        (this.context ?? context)
+            .setLocale(LocaleUtils.localeItems[index].locale);
       },
       itemBuilder: (context) => LocaleUtils.localeItems.map(
         (LocaleItem localeItem) {
@@ -33,15 +34,15 @@ class LanguagesPopup extends StatelessWidget {
             value: index,
             child: LocaleWidget(
               localeItem: localeItem,
-                ),
-              );
-            },
-          ).toList(),
+            ),
+          );
+        },
+      ).toList(),
       icon: showIcon
           ? LocaleWidget(
-        localeItem: LocaleUtils.currentLocaleItem(context),
-        showLanguageName: false,
-      )
+              localeItem: LocaleUtils.currentLocaleItem(context),
+              showLanguageName: false,
+            )
           : null,
       child: child,
       color: backgroundColor,

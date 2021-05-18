@@ -60,7 +60,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 top: 20,
               ),
               child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                cubit: authenticationBloc,
+                bloc: authenticationBloc,
                 builder: (BuildContext context, AuthenticationState state) {
                   if (state.currentUser == null) {
                     return Container(
