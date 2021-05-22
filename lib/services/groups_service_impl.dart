@@ -1,9 +1,11 @@
 import 'package:moleculis/models/page.dart';
 import 'package:moleculis/models/requests/create_update_group_request.dart';
+import 'package:moleculis/services/apis/groups_service.dart';
 import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/locator.dart';
 
-class GroupsService {
-  final HttpHelper _httpHelper;
+class GroupsServiceImpl implements GroupsService {
+  final HttpHelper _httpHelper = locator<HttpHelper>();
 
   String get _endpointBase => '/groups';
 
@@ -14,21 +16,22 @@ class GroupsService {
   String _getOtherGroupsPageEndpoint(int page) =>
       _endpointBase + '/other/page/$page';
 
-  String _updateGroupendpoint(int groupId) => _endpointBase + '/$groupId';
+  String _updateGroupEndpoint(int? groupId) => _endpointBase + '/$groupId';
 
-  GroupsService(this._httpHelper);
-
+  @override
   Future<Page> getGroupsPage(int page) async {
     final response = await _httpHelper.get(_getGroupsPageEndpoint(page));
     return Page.fromMap(response);
   }
 
+  @override
   Future<Page> getOtherGroupsPage(int page) async {
     final response = await _httpHelper.get(_getOtherGroupsPageEndpoint(page));
     return Page.fromMap(response);
   }
 
-  Future<String> createGroup(CreateUpdateGroupRequest request) async {
+  @override
+  Future<String?> createGroup(CreateUpdateGroupRequest request) async {
     final response = await _httpHelper.post(
       _createGroupEndpoint,
       body: request.toMap(),
@@ -36,10 +39,13 @@ class GroupsService {
     return response['message'];
   }
 
-  Future<String> updateGroup(CreateUpdateGroupRequest request,
-      int groupId) async {
+  @override
+  Future<String?> updateGroup(
+    int groupId,
+    CreateUpdateGroupRequest request,
+  ) async {
     final response = await _httpHelper.put(
-      _updateGroupendpoint(groupId),
+      _updateGroupEndpoint(groupId),
       body: request.toMap(),
     );
     return response['message'];

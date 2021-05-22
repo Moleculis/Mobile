@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class SettingsTile extends StatelessWidget {
   final String title;
   final Widget icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const SettingsTile({
-    Key key,
-    this.title,
-    this.icon,
+    Key? key,
+    required this.title,
+    required this.icon,
     this.onTap,
   }) : super(key: key);
 
@@ -22,7 +22,7 @@ class SettingsTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
+              children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Text(

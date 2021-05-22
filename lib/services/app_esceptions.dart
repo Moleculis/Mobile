@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 
 class AppException implements Exception {
-  final _message;
-  final _prefix;
+  final String? _message;
+  final String? _prefix;
 
   AppException([this._message, this._prefix]);
 
@@ -12,7 +12,7 @@ class AppException implements Exception {
 }
 
 class FetchDataException extends AppException {
-  FetchDataException([String message])
+  FetchDataException([String? message])
       : super(message, '${'communication_error'.tr()}: ');
 }
 
@@ -26,6 +26,6 @@ class UnauthorisedException extends AppException {
 }
 
 class InvalidInputException extends AppException {
-  InvalidInputException([String message])
+  InvalidInputException([String? message])
       : super(message, '${'invalid_input'.tr()}: ');
 }

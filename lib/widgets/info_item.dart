@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class InfoItem extends StatelessWidget {
-  final String title;
-  final String content;
-  final Widget contentWidget;
+  final String? title;
+  final String? content;
+  final Widget? contentWidget;
 
   const InfoItem({
-    Key key,
+    Key? key,
     this.title,
     this.content,
     this.contentWidget,
@@ -20,7 +20,7 @@ class InfoItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 5),
           child: Text(
-            title,
+            title!,
             style: TextStyle(color: Colors.grey),
           ),
         ),

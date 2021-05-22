@@ -3,8 +3,8 @@ class LoginRequest {
   final String password;
 
   LoginRequest({
-    this.username,
-    this.password,
+    required this.username,
+    required this.password,
   });
 
   Map<String, dynamic> toMap() {

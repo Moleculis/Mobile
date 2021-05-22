@@ -5,7 +5,7 @@ import 'package:moleculis/utils/locale_utils.dart';
 class FormatUtils {
 
   static String dateFormatString(BuildContext context) {
-    String dateFormatString;
+    late final String dateFormatString;
     final String languageCode = context.locale.languageCode;
     if (languageCode == LanguageCodes.en.text) {
       dateFormatString = 'MM-dd-yyyy';

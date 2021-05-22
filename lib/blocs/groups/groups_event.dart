@@ -6,7 +6,7 @@ abstract class GroupsEvent extends Equatable {}
 
 class LoadGroups extends GroupsEvent {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class CreateGroupEvent extends GroupsEvent {
@@ -23,11 +23,11 @@ class CreateGroupEvent extends GroupsEvent {
 class UpdateGroupEvent extends GroupsEvent {
   final int groupId;
   final CreateUpdateGroupRequest request;
-  final List<UserSmall> users;
-  final List<UserSmall> admins;
+  final List<UserSmall>? users;
+  final List<UserSmall>? admins;
 
   UpdateGroupEvent(this.request, this.users, this.admins, this.groupId);
 
   @override
-  List<Object> get props => [request, users, admins, groupId];
+  List<Object?> get props => [request, users, admins, groupId];
 }

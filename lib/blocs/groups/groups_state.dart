@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:moleculis/models/group/group.dart';
+import 'package:moleculis/models/group.dart';
 
 @immutable
 class GroupsState {
@@ -14,9 +14,9 @@ class GroupsState {
   });
 
   GroupsState copyWith({
-    bool isLoading,
-    List<Group> groups,
-    List<Group> otherGroups,
+    bool? isLoading,
+    List<Group>? groups,
+    List<Group>? otherGroups,
   }) {
     return GroupsState(
       isLoading: isLoading ?? this.isLoading,
@@ -30,16 +30,16 @@ class GroupsState {
 class GroupsFailure extends GroupsState {
   final String error;
 
-  GroupsFailure({@required this.error}) : super();
+  GroupsFailure({required this.error}) : super();
 
   @override
   String toString() => 'GroupsFailure { error: $error }';
 }
 
 class GroupsSuccess extends GroupsState {
-  final String message;
+  final String? message;
 
-  GroupsSuccess({@required this.message}) : super();
+  GroupsSuccess({required this.message}) : super();
 
   @override
   String toString() => 'GroupsSuccess { error: $message }';

@@ -11,8 +11,11 @@ class EventItem extends StatelessWidget {
   final Event event;
   final bool owned;
 
-  const EventItem({Key key, @required this.event, this.owned})
-      : super(key: key);
+  const EventItem({
+    Key? key,
+    required this.event,
+    required this.owned,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

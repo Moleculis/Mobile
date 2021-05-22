@@ -1,15 +1,15 @@
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
+import 'package:moleculis/services/apis/auth_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/jwt.dart';
+import 'package:moleculis/utils/locator.dart';
 
-class AuthenticationService {
-  final HttpHelper _httpHelper;
+class AuthServiceImpl implements AuthService {
+  final HttpHelper _httpHelper = locator<HttpHelper>();
   final SharedPrefManager _sharedPrefManager = SharedPrefManager();
   final String _endpointBase = '/users';
-
-  AuthenticationService(this._httpHelper);
 
   String get _loginEndpoint => _endpointBase + '/login';
 
@@ -17,6 +17,7 @@ class AuthenticationService {
 
   String get _logOutEndpoint => _endpointBase + '/logout';
 
+  @override
   Future<void> login(LoginRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _loginEndpoint,
@@ -30,7 +31,8 @@ class AuthenticationService {
     await _sharedPrefManager.saveAccessToken(response['token'], exp * 1000);
   }
 
-  Future<String> register(RegisterRequest request) async {
+  @override
+  Future<String?> register(RegisterRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _registerEndpoint,
       body: request.toMap(),
@@ -39,10 +41,10 @@ class AuthenticationService {
     return response['message'];
   }
 
-  Future<String> logOut() async {
-    final Map<String, dynamic> response = await _httpHelper.post(
-        _logOutEndpoint
-    );
+  @override
+  Future<String?> logOut() async {
+    final Map<String, dynamic> response =
+        await _httpHelper.post(_logOutEndpoint);
     await _sharedPrefManager.clear();
     return response['message'];
   }

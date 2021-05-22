@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_state.dart';
-import 'package:moleculis/models/group/group.dart';
+import 'package:moleculis/models/group.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/screens/create_edit_group/create_edit_group_screen.dart';
 import 'package:moleculis/screens/event_details/widgets/users_list.dart';
@@ -19,9 +19,9 @@ class GroupDetailsScreen extends StatefulWidget {
   final GroupsBloc groupsBloc;
 
   const GroupDetailsScreen({
-    Key key,
-    @required this.groupId,
-    this.groupsBloc,
+    Key? key,
+    required this.groupId,
+    required this.groupsBloc,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class GroupDetailsScreen extends StatefulWidget {
 }
 
 class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
-  GroupsBloc groupsBloc;
+  late final GroupsBloc groupsBloc;
 
   @override
   void initState() {
@@ -39,9 +39,9 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Group group = groupsBloc.getGroupById(widget.groupId);
+    final Group group = groupsBloc.getGroupById(widget.groupId)!;
     final User currentUser =
-        BlocProvider.of<AuthenticationBloc>(context).state.currentUser;
+        BlocProvider.of<AuthBloc>(context).state.currentUser!;
     bool isAdmin = false;
     for (final user in group.admins) {
       if (user.username == currentUser.username) {
@@ -73,7 +73,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
         child: BlocBuilder<GroupsBloc, GroupsState>(
           bloc: groupsBloc,
           builder: (BuildContext context, GroupsState state) {
-            final Group group = groupsBloc.getGroupById(widget.groupId);
+            final Group group = groupsBloc.getGroupById(widget.groupId)!;
             return Padding(
               padding: const EdgeInsets.all(20),
               child: Column(

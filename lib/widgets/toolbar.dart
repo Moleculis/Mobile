@@ -10,16 +10,16 @@ import 'package:moleculis/utils/widget_utils.dart';
 
 class Toolbar extends StatefulWidget {
   final String title;
-  final String initialImageUrl;
-  final Function(File) onImagePicked;
+  final String? initialImageUrl;
+  final ValueChanged<File>? onImagePicked;
   final bool backButton;
-  final String cardId;
-  final File imageFile;
-  final List<Widget> actions;
+  final String? cardId;
+  final File? imageFile;
+  final List<Widget>? actions;
 
   const Toolbar({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.onImagePicked,
     this.initialImageUrl,
     this.backButton = false,
@@ -35,7 +35,7 @@ class Toolbar extends StatefulWidget {
 class _ToolbarState extends State<Toolbar> {
   final ImagePicker imagePicker = ImagePicker();
 
-  File pickedImage;
+  File? pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +61,18 @@ class _ToolbarState extends State<Toolbar> {
         ),
         if (widget.onImagePicked != null)
           if (widget.imageFile != null)
-            imageView(widget.imageFile)
+            imageView(widget.imageFile!)
           else
-            pickedImage == null ? emptyImage : imageView(pickedImage),
+            pickedImage == null ? emptyImage : imageView(pickedImage!),
         if (widget.actions != null)
-          ...widget?.actions?.map((Widget action) => action)?.toList(),
+          ...widget.actions!.map((Widget action) => action).toList(),
       ],
     );
   }
 
   Widget get emptyImage {
     final bool toShowCameraIcon =
-        widget.initialImageUrl == null || widget.initialImageUrl.isEmpty;
+        widget.initialImageUrl == null || widget.initialImageUrl!.isEmpty;
     return GestureDetector(
       onTap: () {
         addImage();
@@ -81,7 +81,7 @@ class _ToolbarState extends State<Toolbar> {
         backgroundColor: Theme.of(context).accentColor,
         backgroundImage: widget.initialImageUrl == null
             ? null
-            : NetworkImage(widget.initialImageUrl),
+            : NetworkImage(widget.initialImageUrl!),
         radius: 50,
         child: toShowCameraIcon
             ? Icon(Icons.camera_enhance, color: Colors.grey[600], size: 28.0)
@@ -142,14 +142,14 @@ class _ToolbarState extends State<Toolbar> {
   }
 
   Future<void> pickImage(ImageSource source) async {
-    final PickedFile image = await imagePicker.getImage(source: source);
+    final PickedFile? image = await imagePicker.getImage(source: source);
     if (image != null) {
       final imageFile = File(image.path);
       setState(() {
         pickedImage = imageFile;
       });
 
-      widget.onImagePicked(imageFile);
+      widget.onImagePicked!(imageFile);
     }
   }
 }

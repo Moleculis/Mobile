@@ -11,7 +11,7 @@ class EventsList extends StatefulWidget {
   final List<Event> events;
   final bool others;
 
-  const EventsList({Key key, @required this.events, this.others = false})
+  const EventsList({Key? key, required this.events, this.others = false})
       : super(key: key);
 
   @override
@@ -23,15 +23,15 @@ class _EventsListState extends State<EventsList>
   @override
   bool get wantKeepAlive => true;
 
-  List<Event> events;
+  late final List<Event> events;
 
-  EventsBloc eventsBloc;
+  late final EventsBloc eventsBloc;
 
   @override
   void initState() {
     eventsBloc = BlocProvider.of<EventsBloc>(context);
     events = widget.events
-        .where((Event event) => widget.others ? !event.private : true)
+        .where((Event event) => widget.others ? !event.private! : true)
         .toList();
     super.initState();
   }

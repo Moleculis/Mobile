@@ -1,3 +1,4 @@
+import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/user/user.dart';
 
 class UserSmall {
@@ -5,10 +6,17 @@ class UserSmall {
   final String fullName;
   final String username;
   final String email;
-  final String gender;
+  final Gender gender;
   final List<String> roles;
 
-  UserSmall({this.displayName, this.fullName, this.username, this.email, this.roles, this.gender});
+  UserSmall({
+    required this.displayName,
+    required this.fullName,
+    required this.username,
+    required this.email,
+    required this.roles,
+    required this.gender,
+  });
 
   factory UserSmall.fromMap(Map<String, dynamic> map) {
     final List<dynamic> rolesDynamic = map['roles'] as List;
@@ -18,12 +26,12 @@ class UserSmall {
       fullName: map['fullname'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
-      gender: map['gender'] as String,
+      gender: genderFromString(map['gender']),
       roles: List<String>.from(rolesDynamic),
     );
   }
 
-  factory UserSmall.fromUser(User user){
+  factory UserSmall.fromUser(User user) {
     return UserSmall(
       displayName: user.displayname,
       fullName: user.fullname,

@@ -1,11 +1,11 @@
 import 'package:moleculis/models/enums/gender.dart';
 
 class UpdateUserRequest {
-  final String displayName;
-  final String fullName;
-  final Gender gender;
-  final String username;
-  final String email;
+  final String? displayName;
+  final String? fullName;
+  final Gender? gender;
+  final String? username;
+  final String? email;
 
   UpdateUserRequest({
     this.displayName,
@@ -19,7 +19,7 @@ class UpdateUserRequest {
     return {
       'displayname': this.displayName,
       'fullname': this.fullName,
-      'gender': this.gender.name,
+      'gender': this.gender?.name,
       'username': this.username,
       'email': this.email,
     };

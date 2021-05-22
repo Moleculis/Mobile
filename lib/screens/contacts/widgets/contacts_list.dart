@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_event.dart';
-import 'package:moleculis/models/contact/contact.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
+import 'package:moleculis/models/contact.dart';
 import 'package:moleculis/screens/contacts/widgets/contact_item.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/custom_expansion_tile.dart';
@@ -11,12 +11,12 @@ import 'package:moleculis/widgets/list_refresh.dart';
 
 class ContactsList extends StatefulWidget {
   final List<Contact> contacts;
-  final List<Contact> sentRequests;
+  final List<Contact>? sentRequests;
   final bool isReceived;
 
   const ContactsList({
-    Key key,
-    this.contacts,
+    Key? key,
+    required this.contacts,
     this.sentRequests,
     this.isReceived = false,
   }) : super(key: key);
@@ -30,11 +30,11 @@ class _ContactsListState extends State<ContactsList>
   @override
   bool get wantKeepAlive => true;
 
-  AuthenticationBloc authenticationBloc;
+  late final AuthBloc authBloc;
 
   @override
   void didChangeDependencies() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    authBloc = BlocProvider.of<AuthBloc>(context);
     super.didChangeDependencies();
   }
 
@@ -42,7 +42,7 @@ class _ContactsListState extends State<ContactsList>
   Widget build(BuildContext context) {
     super.build(context);
     return ListRefresh(
-      onRefresh: () async => authenticationBloc.add(LoadInitialData()),
+      onRefresh: () async => authBloc.add(ReloadUserEvent()),
       isNoItems:
           widget.contacts.isEmpty && (widget.sentRequests?.isEmpty ?? true),
       noItemsText:
@@ -50,7 +50,8 @@ class _ContactsListState extends State<ContactsList>
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            if (widget.sentRequests != null && widget.sentRequests.isNotEmpty) {
+            if (widget.sentRequests != null &&
+                widget.sentRequests!.isNotEmpty) {
               return CustomExpansionTile(
                 title: Text('sent_requests'.tr()),
                 content: ListView.builder(
@@ -61,11 +62,11 @@ class _ContactsListState extends State<ContactsList>
                       padding: const EdgeInsets.only(left: 20),
                       child: ContactItem(
                         onRemove: deleteContact,
-                        contact: widget.sentRequests[index],
+                        contact: widget.sentRequests![index],
                       ),
                     );
                   },
-                  itemCount: widget.sentRequests.length,
+                  itemCount: widget.sentRequests!.length,
                 ),
               );
             }
@@ -90,7 +91,7 @@ class _ContactsListState extends State<ContactsList>
       context: context,
       title: 'remove_contact_confirm'.tr(),
       onYes: () {
-        authenticationBloc.add(RemoveContactEvent(id));
+        authBloc.add(RemoveContactEvent(id));
       },
     );
   }
@@ -100,7 +101,7 @@ class _ContactsListState extends State<ContactsList>
       context: context,
       title: 'accept_contact_confirm'.tr(args: [contact.user.username]),
       onYes: () {
-        authenticationBloc.add(AcceptContactEvent(contact.id));
+        authBloc.add(AcceptContactEvent(contact.id));
       },
     );
   }

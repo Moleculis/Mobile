@@ -12,7 +12,7 @@ typedef ShowSnackBar = void Function(String);
 class WidgetUtils {
   static void showErrorSnackbar(
     BuildContext context, {
-    @required String error,
+    required String error,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -24,8 +24,8 @@ class WidgetUtils {
 
   static void showSuccessSnackbar(
     BuildContext context, {
-    @required String message,
-    Duration duration,
+    required String message,
+    Duration? duration,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -38,7 +38,7 @@ class WidgetUtils {
 
   static void showSnackbar(
     BuildContext context, {
-    @required String text,
+    required String text,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(text)),
@@ -46,12 +46,12 @@ class WidgetUtils {
   }
 
   static void showSimpleDialog({
-    BuildContext context,
+    required BuildContext context,
     String title = '',
-    VoidCallback onYes,
-    VoidCallback onNo,
+    VoidCallback? onYes,
+    VoidCallback? onNo,
     String confirmText = 'Ok',
-    String cancelText,
+    String? cancelText,
   }) {
     showDialog(
       context: context,
@@ -107,12 +107,12 @@ class WidgetUtils {
     }
   }
 
-  static Widget appBar(
+  static PreferredSizeWidget appBar(
     BuildContext context, {
-    String title,
-    List<Widget> actions,
-    Color backgroundColor,
-    TabBar bottom,
+    required String title,
+    List<Widget>? actions,
+    Color? backgroundColor,
+    TabBar? bottom,
   }) {
     return PreferredSize(
       preferredSize: bottom == null

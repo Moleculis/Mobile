@@ -4,41 +4,41 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class Input extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool obscureText;
-  final String title;
+  final String? title;
   final TextInputType inputType;
-  final EdgeInsets padding;
-  final EdgeInsets contentPadding;
-  final FocusNode focusNode;
-  final FocusNode nextFocusNode;
-  final String error;
-  final String hint;
+  final EdgeInsets? padding;
+  final EdgeInsets? contentPadding;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
+  final String? error;
+  final String? hint;
   final bool isRequired;
-  final Function(String text) validator;
-  final Widget suffix;
-  final Widget suffixIcon;
+  final String? Function(String?)? validator;
+  final Widget? suffix;
+  final Widget? suffixIcon;
   final bool enabled;
   final bool isReadOnly;
   final bool hasBorder;
-  final Function(String term) onFieldSubmitted;
-  final Function(String term) onChanged;
-  final Function(String value) onSaved;
-  final TextInputAction textInputAction;
+  final Function(String term)? onFieldSubmitted;
+  final Function(String term)? onChanged;
+  final Function(String? value)? onSaved;
+  final TextInputAction? textInputAction;
   final TextCapitalization textCapitalization;
-  final List<TextInputFormatter> textInputFormatters;
-  final Widget prefix;
-  final Widget prefixIcon;
-  final String prefixText;
-  final TextStyle prefixTextStyle;
-  final VoidCallback onTap;
-  final int maxLines;
-  final int minLines;
-  final Color borderColor;
+  final List<TextInputFormatter>? textInputFormatters;
+  final Widget? prefix;
+  final Widget? prefixIcon;
+  final String? prefixText;
+  final TextStyle? prefixTextStyle;
+  final VoidCallback? onTap;
+  final int? maxLines;
+  final int? minLines;
+  final Color? borderColor;
   final bool enableInteractiveSelection;
 
   const Input({
-    Key key,
+    Key? key,
     this.title,
     this.hint,
     this.error,
@@ -82,7 +82,7 @@ class Input extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (title != null)
-            Text(title, style: Theme.of(context).textTheme.caption),
+            Text(title!, style: Theme.of(context).textTheme.caption),
           InkWell(
             onTap: onTap,
             child: Padding(
@@ -96,7 +96,7 @@ class Input extends StatelessWidget {
                           }
                         }
                         return null;
-                      }
+                      } as String? Function(String?)?
                     : validator,
                 keyboardType: inputType,
                 controller: controller,
@@ -105,8 +105,8 @@ class Input extends StatelessWidget {
                 textCapitalization: textCapitalization,
                 inputFormatters: textInputFormatters,
                 onFieldSubmitted: (String text) {
-                  onFieldSubmitted(text);
-                  focusNode.unfocus();
+                  onFieldSubmitted!(text);
+                  focusNode!.unfocus();
                   if (nextFocusNode != null) {
                     FocusScope.of(context).requestFocus(nextFocusNode);
                   }

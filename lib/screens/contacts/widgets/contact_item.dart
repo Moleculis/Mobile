@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moleculis/models/contact/contact.dart';
+import 'package:moleculis/models/contact.dart';
 import 'package:moleculis/screens/user_details/user_details_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/widgets/simple_tile.dart';
@@ -7,12 +7,12 @@ import 'package:moleculis/widgets/simple_tile.dart';
 class ContactItem extends StatelessWidget {
   final Contact contact;
   final bool isReceived;
-  final void Function(int) onAccept;
-  final void Function(int) onRemove;
+  final ValueSetter<int>? onAccept;
+  final ValueSetter<int>? onRemove;
 
   const ContactItem({
-    Key key,
-    @required this.contact,
+    Key? key,
+    required this.contact,
     this.isReceived = false,
     this.onAccept,
     this.onRemove,
@@ -23,7 +23,9 @@ class ContactItem extends StatelessWidget {
     return SimpleTile(
       onTap: () {
         Navigation.toScreen(
-            context: context, screen: UserDetails(userSmall: contact.user,));
+          context: context,
+          screen: UserDetails(userSmall: contact.user),
+        );
       },
       title: contact.user.displayName,
       subtitle: contact.user.username,
@@ -32,7 +34,7 @@ class ContactItem extends StatelessWidget {
         children: <Widget>[
           if (isReceived && !contact.accepted)
             GestureDetector(
-              onTap: () => onAccept(contact.id),
+              onTap: () => onAccept?.call(contact.id),
               child: Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: Icon(
@@ -42,7 +44,7 @@ class ContactItem extends StatelessWidget {
               ),
             ),
           GestureDetector(
-            onTap: () => onRemove(contact.id),
+            onTap: () => onRemove?.call(contact.id),
             child: Icon(
               Icons.close,
               color: Colors.red,

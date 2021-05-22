@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 
 class Navigation {
   static Future<dynamic> toScreen({
-    @required BuildContext context,
-    @required Widget screen,
+    required BuildContext context,
+    required Widget screen,
   }) async {
     return await Navigator.of(context).push(
       MaterialPageRoute(
@@ -14,8 +14,8 @@ class Navigation {
   }
 
   static Future<dynamic> toScreenAndCleanBackStack({
-    @required BuildContext context,
-    @required Widget screen,
+    required BuildContext context,
+    required Widget screen,
   }) async {
     return await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

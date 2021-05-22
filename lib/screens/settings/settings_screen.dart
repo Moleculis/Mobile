@@ -51,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 child: LanguagesPopup(
+                  context: context,
                   backgroundColor: settingsBackgroundColor,
                   showIcon: false,
                   child: SettingsTile(
@@ -59,12 +60,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     leading: Icon(Icons.language),
                     onPressed: (_) async {
                       if (Platform.isIOS) {
-                        final int index = await Navigation.toScreen(
+                        final int? index = await Navigation.toScreen(
                           context: context,
                           screen: ChooseLanguageScreen(),
                         );
                         if (index != null) {
-                          (this.context ?? context)
+                          this
+                              .context
                               .setLocale(LocaleUtils.localeItems[index].locale);
                         }
                       }

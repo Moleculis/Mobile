@@ -22,13 +22,13 @@ class EventsState {
   });
 
   EventsState copyWith({
-    bool isLoading,
-    List<Event> events,
-    List<Event> othersEvents,
-    int page,
-    int othersPage,
-    int pagesCount,
-    int othersPagesCount,
+    bool? isLoading,
+    List<Event>? events,
+    List<Event>? othersEvents,
+    int? page,
+    int? othersPage,
+    int? pagesCount,
+    int? othersPagesCount,
   }) {
     return EventsState(
       isLoading: isLoading ?? this.isLoading,
@@ -45,16 +45,16 @@ class EventsState {
 class EventsFailure extends EventsState {
   final String error;
 
-  EventsFailure({@required this.error}) : super();
+  EventsFailure({required this.error}) : super();
 
   @override
   String toString() => 'EventsFailure { error: $error }';
 }
 
 class EventsSuccess extends EventsState {
-  final String message;
+  final String? message;
 
-  EventsSuccess({@required this.message}) : super();
+  EventsSuccess({required this.message}) : super();
 
   @override
   String toString() => 'EventsSuccess { error: $message }';

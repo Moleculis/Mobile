@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_event.dart';
-import 'package:moleculis/blocs/authentication/authentication_state.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
+import 'package:moleculis/blocs/auth/auth_state.dart';
 import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/requests/register_request.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
@@ -19,7 +19,7 @@ import 'package:moleculis/widgets/toolbar.dart';
 class CreateEditUserScreen extends StatefulWidget {
   final bool edit;
 
-  const CreateEditUserScreen({Key key, this.edit = false}) : super(key: key);
+  const CreateEditUserScreen({Key? key, this.edit = false}) : super(key: key);
 
   @override
   _CreateEditUserScreenState createState() => _CreateEditUserScreenState();
@@ -27,7 +27,7 @@ class CreateEditUserScreen extends StatefulWidget {
 
 class _CreateEditUserScreenState extends State<CreateEditUserScreen>
     with AutomaticKeepAliveClientMixin {
-  AuthenticationBloc authenticationBloc;
+  AuthBloc? authenticationBloc;
 
   final TextEditingController usernameController = TextEditingController();
   final FocusNode usernameFocus = FocusNode();
@@ -49,7 +49,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
 
   Gender currentGender = Gender.male;
 
-  File pickedImage;
+  File? pickedImage;
 
   @override
   bool get wantKeepAlive => true;
@@ -58,14 +58,14 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
 
   @override
   void didChangeDependencies() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    authenticationBloc = BlocProvider.of<AuthBloc>(context);
     if (widget.edit) {
-      final User currentUser = authenticationBloc.state.currentUser;
+      final User currentUser = authenticationBloc!.state.currentUser!;
       usernameController.text = currentUser.username;
       emailController.text = currentUser.email;
       displayNameController.text = currentUser.displayname;
       fullNameController.text = currentUser.fullname;
-      currentGender = currentUser.gender.gender;
+      currentGender = currentUser.gender;
     }
     super.didChangeDependencies();
   }
@@ -73,17 +73,17 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (BuildContext context, AuthenticationState state) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (BuildContext context, AuthState state) {
         if (widget.edit) {
-          if (state is AuthenticationSuccess) {
+          if (state is AuthSuccess) {
             Navigator.pop(context);
           }
         }
       },
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      child: BlocBuilder<AuthBloc, AuthState>(
           bloc: authenticationBloc,
-          builder: (BuildContext context, AuthenticationState authState) {
+          builder: (BuildContext context, AuthState authState) {
             return SafeArea(
               child: Stack(
                 children: <Widget>[
@@ -118,8 +118,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                 nextFocusNode: passwordFocus,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {},
-                                validator: (String value) {
-                                  value = value.trim();
+                                validator: (String? value) {
+                                  value = value!.trim();
                                   if (value.isEmpty) {
                                     return 'username_empty'.tr();
                                   }
@@ -146,8 +146,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                     textInputAction: TextInputAction.next,
                                     onFieldSubmitted: (String value) {},
                                     maxLines: 1,
-                                    validator: (String value) {
-                                      value = value.trim();
+                                    validator: (String? value) {
+                                      value = value!.trim();
                                       if (value.isEmpty) {
                                         return 'password_empty'.tr();
                                       }
@@ -176,8 +176,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                     textInputAction: TextInputAction.next,
                                     onFieldSubmitted: (String value) {},
                                     maxLines: 1,
-                                    validator: (String value) {
-                                      value = value.trim();
+                                    validator: (String? value) {
+                                      value = value!.trim();
                                       if (value.isEmpty) {
                                         return 'password_empty'.tr();
                                       }
@@ -203,8 +203,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                 textInputAction: TextInputAction.next,
                                 inputType: TextInputType.emailAddress,
                                 onFieldSubmitted: (String value) {},
-                                validator: (String value) {
-                                  value = value.trim();
+                                validator: (String? value) {
+                                  value = value!.trim();
                                   if (value.isEmpty) {
                                     return 'email_empty'.tr();
                                   }
@@ -224,8 +224,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                 nextFocusNode: fullNameFocus,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {},
-                                validator: (String value) {
-                                  value = value.trim();
+                                validator: (String? value) {
+                                  value = value!.trim();
                                   if (value.length > 20) {
                                     return 'display_name_long'.tr();
                                   }
@@ -244,8 +244,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                 focusNode: fullNameFocus,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {},
-                                validator: (String value) {
-                                  if (value.length > 50) {
+                                validator: (String? value) {
+                                  if (value!.length > 50) {
                                     return 'full_name_long'.tr();
                                   }
                                   if (value.isNotEmpty && value.length < 5) {
@@ -282,9 +282,9 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                                             child: Radio<Gender>(
                                               groupValue: currentGender,
                                               value: gender,
-                                              onChanged: (Gender value) {
+                                              onChanged: (Gender? value) {
                                                 setState(() {
-                                                  currentGender = value;
+                                                  currentGender = value!;
                                                 });
                                               },
                                             ),
@@ -319,7 +319,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
   }
 
   void register() {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       usernameFocus.unfocus();
       passwordFocus.unfocus();
       password2Focus.unfocus();
@@ -334,7 +334,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
           email: emailController.text,
           gender: currentGender,
         );
-        authenticationBloc.add(UpdateUserEvent(updateUserRequest));
+        authenticationBloc!.add(UpdateUserEvent(updateUserRequest));
       } else {
         final RegisterRequest registerRequest = RegisterRequest(
           username: usernameController.text,
@@ -344,7 +344,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
           email: emailController.text,
           gender: currentGender,
         );
-        authenticationBloc.add(RegisterEvent(registerRequest));
+        authenticationBloc!.add(RegisterEvent(registerRequest));
       }
     }
   }

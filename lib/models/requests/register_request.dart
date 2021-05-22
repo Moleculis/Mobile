@@ -9,12 +9,12 @@ class RegisterRequest {
   final String password;
 
   RegisterRequest({
-    this.displayName,
-    this.fullName,
-    this.gender,
-    this.username,
-    this.email,
-    this.password,
+    required this.displayName,
+    required this.fullName,
+    required this.gender,
+    required this.username,
+    required this.email,
+    required this.password,
   });
 
   Map<String, dynamic> toMap() {
