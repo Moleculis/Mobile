@@ -8,7 +8,7 @@ import 'package:moleculis/utils/locator.dart';
 
 class AuthServiceImpl implements AuthService {
   final HttpHelper _httpHelper = locator<HttpHelper>();
-  final SharedPrefManager _sharedPrefManager = SharedPrefManager();
+  final SharedPrefManager _prefs = locator<SharedPrefManager>();
   final String _endpointBase = '/users';
 
   String get _loginEndpoint => _endpointBase + '/login';
@@ -28,7 +28,7 @@ class AuthServiceImpl implements AuthService {
     final Map<String, dynamic> jwt = JWT.parseJwt(response['token']);
     final int exp = jwt['exp'] as int;
 
-    await _sharedPrefManager.saveAccessToken(response['token'], exp * 1000);
+    await _prefs.saveAccessToken(response['token'], exp * 1000);
   }
 
   @override
@@ -45,7 +45,7 @@ class AuthServiceImpl implements AuthService {
   Future<String?> logOut() async {
     final Map<String, dynamic> response =
         await _httpHelper.post(_logOutEndpoint);
-    await _sharedPrefManager.clear();
+    await _prefs.clear();
     return response['message'];
   }
 }

@@ -9,7 +9,7 @@ import 'package:moleculis/screens/home/home_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/languages_popup.dart';
-import 'package:moleculis/widgets/loading_widget.dart';
+import 'package:moleculis/widgets/loading_wrapper.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -46,50 +46,48 @@ class _AuthScreenState extends State<AuthScreen>
         body: BlocBuilder<AuthBloc, AuthState>(
           bloc: authBloc,
           builder: (BuildContext context, AuthState state) {
-            return SafeArea(
-              child: Stack(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      TabBar(
-                        controller: authTabsController,
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              'login'.tr(),
-                              style: TextStyle(color: Colors.black),
-                            ),
+            return LoadingWrapper(
+              isLoading: state.isLoading,
+              child: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    TabBar(
+                      controller: authTabsController,
+                      tabs: [
+                        Tab(
+                          child: Text(
+                            'login'.tr(),
+                            style: TextStyle(color: Colors.black),
                           ),
-                          Tab(
-                            child: Text(
-                              'register'.tr(),
-                              style: TextStyle(color: Colors.black),
-                            ),
+                        ),
+                        Tab(
+                          child: Text(
+                            'register'.tr(),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Stack(
+                        children: <Widget>[
+                          TabBarView(
+                            controller: authTabsController,
+                            children: [
+                              LoginScreen(),
+                              CreateEditUserScreen(),
+                            ],
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: LanguagesPopup(context: context),
                           ),
                         ],
                       ),
-                      Expanded(
-                        child: Stack(
-                          children: <Widget>[
-                            TabBarView(
-                              controller: authTabsController,
-                              children: [
-                                LoginScreen(),
-                                CreateEditUserScreen(),
-                              ],
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: LanguagesPopup(context: context),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (state.isLoading) LoadingWidget(),
-                ],
+                    ),
+                  ],
+                ),
               ),
             );
           },

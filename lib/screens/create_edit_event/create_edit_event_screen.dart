@@ -16,7 +16,7 @@ import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/info_item.dart';
 import 'package:moleculis/widgets/input.dart';
-import 'package:moleculis/widgets/loading_widget.dart';
+import 'package:moleculis/widgets/loading_wrapper.dart';
 import 'package:moleculis/widgets/select_date_time.dart';
 import 'package:moleculis/widgets/simple_button.dart';
 import 'package:moleculis/widgets/toolbar.dart';
@@ -83,138 +83,135 @@ class _CreateEditEventScreenState extends State<CreateEditEventScreen> {
           }
         },
         builder: (BuildContext context, EventsState eventsState) {
-          return SafeArea(
-            child: Form(
-              key: formKey,
-              child: Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 20,
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Toolbar(
-                              title: (event != null
-                                      ? 'edit_event'
-                                      : 'create_event')
-                                  .tr(),
-                              backButton: true,
-                              onImagePicked: (File image) {
-                                pickedImage = image;
-                              },
-                            ),
+          return LoadingWrapper(
+            isLoading: eventsState.isLoading,
+            child: SafeArea(
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Toolbar(
+                            title:
+                                (event != null ? 'edit_event' : 'create_event')
+                                    .tr(),
+                            backButton: true,
+                            onImagePicked: (File image) {
+                              pickedImage = image;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Input(
-                              controller: titleController,
-                              focusNode: titleFocusNode,
-                              nextFocusNode: descriptionFocusNode,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (String value) {},
-                              validator: (String? value) {
-                                value = value!.trim();
-                                if (value.isEmpty) {
-                                  return 'title_empty'.tr();
-                                }
-                                if (value.length < 5) {
-                                  return 'title_short'.tr();
-                                }
-                                return null;
-                              },
-                              title: 'title'.tr(),
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: titleController,
+                            focusNode: titleFocusNode,
+                            nextFocusNode: descriptionFocusNode,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              value = value!.trim();
+                              if (value.isEmpty) {
+                                return 'title_empty'.tr();
+                              }
+                              if (value.length < 5) {
+                                return 'title_short'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'title'.tr(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Input(
-                              controller: descriptionController,
-                              focusNode: descriptionFocusNode,
-                              nextFocusNode: locationFocusNode,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (String value) {},
-                              title: 'description'.tr(),
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: descriptionController,
+                            focusNode: descriptionFocusNode,
+                            nextFocusNode: locationFocusNode,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String value) {},
+                            title: 'description'.tr(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Input(
-                              controller: locationController,
-                              focusNode: locationFocusNode,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (String value) {},
-                              validator: (String? value) {
-                                value = value!.trim();
-                                if (value.isEmpty) {
-                                  return 'location_empty'.tr();
-                                }
-                                if (value.length < 5) {
-                                  return 'location_short'.tr();
-                                }
-                                return null;
-                              },
-                              title: 'location'.tr(),
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: locationController,
+                            focusNode: locationFocusNode,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              value = value!.trim();
+                              if (value.isEmpty) {
+                                return 'location_empty'.tr();
+                              }
+                              if (value.length < 5) {
+                                return 'location_short'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'location'.tr(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: SelectDateTime(
-                              onTap: () => selectDate(context),
-                              selectedDate: date,
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: SelectDateTime(
+                            onTap: () => selectDate(context),
+                            selectedDate: date,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: SelectDateTime(
-                              onTap: () => selectTime(context),
-                              title: '${'time'.tr()}:',
-                              isTime: true,
-                              selectedDate: date,
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: SelectDateTime(
+                            onTap: () => selectTime(context),
+                            title: '${'time'.tr()}:',
+                            isTime: true,
+                            selectedDate: date,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: InfoItem(
-                              title: 'participants'.tr(),
-                              contentWidget: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  UsersList(
-                                    editing: true,
-                                    onStateChane: () {
-                                      setState(() {});
-                                    },
-                                    users: event?.users ?? newUsers,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: InfoItem(
+                            title: 'participants'.tr(),
+                            contentWidget: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                UsersList(
+                                  editing: true,
+                                  onStateChane: () {
+                                    setState(() {});
+                                  },
+                                  users: event?.users ?? newUsers,
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  child: SimpleButton(
+                                    text: '+',
+                                    onPressed: onPickUsersTapped,
                                   ),
-                                  Container(
-                                    width: double.infinity,
-                                    child: SimpleButton(
-                                      text: '+',
-                                      onPressed: onPickUsersTapped,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: GradientButton(
-                              onPressed: save,
-                              text: 'save'.tr(),
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: GradientButton(
+                            onPressed: save,
+                            text: 'save'.tr(),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  if (eventsState.isLoading) LoadingWidget(),
-                ],
+                ),
               ),
             ),
           );

@@ -14,6 +14,9 @@ import 'package:moleculis/storage/shared_pref_manager.dart';
 final GetIt locator = GetIt.instance;
 
 void setupServiceLocator() {
+  // Managers
+  locator.registerSingleton<SharedPrefManager>(SharedPrefManager());
+
   locator.registerSingleton<HttpHelper>(HttpHelper());
 
   // Services
@@ -21,9 +24,6 @@ void setupServiceLocator() {
   locator.registerSingleton<EventsService>(EventsServiceImpl());
   locator.registerSingleton<GroupsService>(GroupsServiceImpl());
   locator.registerSingleton<UserService>(UserServiceImpl());
-
-  // Managers
-  locator.registerSingleton<SharedPrefManager>(SharedPrefManager());
 
   // Blocs (Must be in bottom of setupServiceLocator)
   locator.registerSingleton<AuthBloc>(AuthBloc());

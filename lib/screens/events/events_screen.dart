@@ -23,9 +23,9 @@ class _EventsScreenState extends State<EventsScreen> {
   late final EventsBloc eventsBloc;
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
     eventsBloc = EventsBloc()..add(LoadEvents());
-    super.didChangeDependencies();
   }
 
   @override

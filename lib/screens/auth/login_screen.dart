@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen>
                   controller: usernameController,
                   focusNode: usernameFocus,
                   textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.none,
                   nextFocusNode: passwordFocus,
                   onFieldSubmitted: (String value) {},
                   validator: (String? value) {

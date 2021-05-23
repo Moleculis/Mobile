@@ -13,7 +13,7 @@ import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/utils/validation.dart';
 import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/input.dart';
-import 'package:moleculis/widgets/loading_widget.dart';
+import 'package:moleculis/widgets/loading_wrapper.dart';
 import 'package:moleculis/widgets/toolbar.dart';
 
 class CreateEditUserScreen extends StatefulWidget {
@@ -82,239 +82,229 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
-          bloc: authenticationBloc,
-          builder: (BuildContext context, AuthState authState) {
-            return SafeArea(
-              child: Stack(
-                children: <Widget>[
-                  Form(
-                    key: formKey,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: widget.edit ? 0 : 40,
+        bloc: authenticationBloc,
+        builder: (BuildContext context, AuthState authState) {
+          return LoadingWrapper(
+            isLoading: authState.isLoading && widget.edit,
+            child: SafeArea(
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 30,
+                      right: 30,
+                      top: widget.edit ? 0 : 40,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        if (widget.edit)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Toolbar(
+                              title: 'edit_personal_info'.tr(),
+                              backButton: true,
+                              onImagePicked: (File image) {
+                                pickedImage = image;
+                              },
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: usernameController,
+                            focusNode: usernameFocus,
+                            nextFocusNode: passwordFocus,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.none,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              value = value!.trim();
+                              if (value.isEmpty) {
+                                return 'username_empty'.tr();
+                              }
+                              if (value.length < 5) {
+                                return 'username_short'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'username'.tr(),
+                          ),
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            if (widget.edit)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20),
-                                child: Toolbar(
-                                  title: 'edit_personal_info'.tr(),
-                                  backButton: true,
-                                  onImagePicked: (File image) {
-                                    pickedImage = image;
-                                  },
-                                ),
-                              ),
-                            Padding(
+                        if (!widget.edit)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 60,
+                            child: Padding(
                               padding: const EdgeInsets.only(bottom: 20),
                               child: Input(
-                                controller: usernameController,
-                                focusNode: usernameFocus,
-                                nextFocusNode: passwordFocus,
+                                controller: passwordController,
+                                focusNode: passwordFocus,
+                                nextFocusNode: password2Focus,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (String value) {},
+                                maxLines: 1,
                                 validator: (String? value) {
                                   value = value!.trim();
                                   if (value.isEmpty) {
-                                    return 'username_empty'.tr();
+                                    return 'password_empty'.tr();
                                   }
                                   if (value.length < 5) {
-                                    return 'username_short'.tr();
+                                    return 'password_short'.tr();
                                   }
                                   return null;
                                 },
-                                title: 'username'.tr(),
+                                title: 'password'.tr(),
+                                obscureText: true,
                               ),
                             ),
-                            if (!widget.edit)
-                              SizedBox(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width - 60,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Input(
-                                    controller: passwordController,
-                                    focusNode: passwordFocus,
-                                    nextFocusNode: password2Focus,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (String value) {},
-                                    maxLines: 1,
-                                    validator: (String? value) {
-                                      value = value!.trim();
-                                      if (value.isEmpty) {
-                                        return 'password_empty'.tr();
-                                      }
-                                      if (value.length < 5) {
-                                        return 'password_short'.tr();
-                                      }
-                                      return null;
-                                    },
-                                    title: 'password'.tr(),
-                                    obscureText: true,
-                                  ),
-                                ),
-                              ),
-                            if (!widget.edit)
-                              SizedBox(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width - 60,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Input(
-                                    controller: password2Controller,
-                                    focusNode: password2Focus,
-                                    nextFocusNode: emailFocus,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (String value) {},
-                                    maxLines: 1,
-                                    validator: (String? value) {
-                                      value = value!.trim();
-                                      if (value.isEmpty) {
-                                        return 'password_empty'.tr();
-                                      }
-                                      if (value.length < 5) {
-                                        return 'password_short'.tr();
-                                      }
-                                      if (passwordController.text != value) {
-                                        return 'passwords_no_match'.tr();
-                                      }
-                                      return null;
-                                    },
-                                    title: 'password_again'.tr(),
-                                    obscureText: true,
-                                  ),
-                                ),
-                              ),
-                            Padding(
+                          ),
+                        if (!widget.edit)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 60,
+                            child: Padding(
                               padding: const EdgeInsets.only(bottom: 20),
                               child: Input(
-                                controller: emailController,
-                                focusNode: emailFocus,
-                                nextFocusNode: displayNameFocus,
+                                controller: password2Controller,
+                                focusNode: password2Focus,
+                                nextFocusNode: emailFocus,
                                 textInputAction: TextInputAction.next,
-                                inputType: TextInputType.emailAddress,
                                 onFieldSubmitted: (String value) {},
+                                maxLines: 1,
                                 validator: (String? value) {
                                   value = value!.trim();
                                   if (value.isEmpty) {
-                                    return 'email_empty'.tr();
+                                    return 'password_empty'.tr();
                                   }
-                                  if (Validation.emailRegExp.hasMatch(value)) {
-                                    return 'email_wrong'.tr();
+                                  if (value.length < 5) {
+                                    return 'password_short'.tr();
                                   }
-                                  return null;
-                                },
-                                title: 'email'.tr(),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Input(
-                                controller: displayNameController,
-                                focusNode: displayNameFocus,
-                                nextFocusNode: fullNameFocus,
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (String value) {},
-                                validator: (String? value) {
-                                  value = value!.trim();
-                                  if (value.length > 20) {
-                                    return 'display_name_long'.tr();
-                                  }
-                                  if (value.isNotEmpty && value.length < 5) {
-                                    return 'display_name_short'.tr();
+                                  if (passwordController.text != value) {
+                                    return 'passwords_no_match'.tr();
                                   }
                                   return null;
                                 },
-                                title: 'display_name'.tr(),
+                                title: 'password_again'.tr(),
+                                obscureText: true,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Input(
-                                controller: fullNameController,
-                                focusNode: fullNameFocus,
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (String value) {},
-                                validator: (String? value) {
-                                  if (value!.length > 50) {
-                                    return 'full_name_long'.tr();
-                                  }
-                                  if (value.isNotEmpty && value.length < 5) {
-                                    return 'full_name_short'.tr();
-                                  }
-                                  return null;
-                                },
-                                title: 'full_name'.tr(),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text('gender'.tr(),
-                                      style:
-                                      Theme
-                                          .of(context)
-                                          .textTheme
-                                          .caption),
-                                  ...Gender.values.map((Gender gender) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          currentGender = gender;
-                                        });
-                                      },
-                                      child: Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10),
-                                            child: Radio<Gender>(
-                                              groupValue: currentGender,
-                                              value: gender,
-                                              onChanged: (Gender? value) {
-                                                setState(() {
-                                                  currentGender = value!;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          Text(gender.assetName.tr()),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: GradientButton(
-                                onPressed: register,
-                                text:
-                                widget.edit ? 'save'.tr() : 'register'.tr(),
-                              ),
-                            ),
-                          ],
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: emailController,
+                            focusNode: emailFocus,
+                            nextFocusNode: displayNameFocus,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.none,
+                            inputType: TextInputType.emailAddress,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              value = value!.trim();
+                              if (value.isEmpty) {
+                                return 'email_empty'.tr();
+                              }
+                              if (Validation.emailRegExp.hasMatch(value)) {
+                                return 'email_wrong'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'email'.tr(),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: displayNameController,
+                            focusNode: displayNameFocus,
+                            nextFocusNode: fullNameFocus,
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.none,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              value = value!.trim();
+                              if (value.length > 20) {
+                                return 'display_name_long'.tr();
+                              }
+                              if (value.isNotEmpty && value.length < 5) {
+                                return 'display_name_short'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'display_name'.tr(),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Input(
+                            controller: fullNameController,
+                            focusNode: fullNameFocus,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (String value) {},
+                            validator: (String? value) {
+                              if (value!.length > 50) {
+                                return 'full_name_long'.tr();
+                              }
+                              if (value.isNotEmpty && value.length < 5) {
+                                return 'full_name_short'.tr();
+                              }
+                              return null;
+                            },
+                            title: 'full_name'.tr(),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text('gender'.tr(),
+                                  style: Theme.of(context).textTheme.caption),
+                              ...Gender.values.map((Gender gender) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      currentGender = gender;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: Radio<Gender>(
+                                          groupValue: currentGender,
+                                          value: gender,
+                                          onChanged: (Gender? value) {
+                                            setState(() {
+                                              currentGender = value!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Text(gender.assetName.tr()),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: GradientButton(
+                            onPressed: register,
+                            text: widget.edit ? 'save'.tr() : 'register'.tr(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  if (authState.isLoading && widget.edit) LoadingWidget(),
-                ],
+                ),
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 

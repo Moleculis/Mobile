@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:moleculis/services/app_esceptions.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
+import 'package:moleculis/utils/locator.dart';
 
 class HttpHelper {
   HttpHelper({String? locale}) {
@@ -22,7 +23,7 @@ class HttpHelper {
   final String _baseUrl =
       "http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:8080";
 
-  final SharedPrefManager _prefs = SharedPrefManager();
+  final SharedPrefManager _prefs = locator<SharedPrefManager>();
   final HttpClient _httpClient = HttpClient();
   late IOClient _ioClient;
   String? _locale;
@@ -99,7 +100,7 @@ class HttpHelper {
     bool localized = true,
   }) async {
     var responseJson;
-    final Map<String, String?> putHeaders = {};
+    final Map<String, String> putHeaders = {};
     putHeaders.addAll(_postHeaders);
     if (headers != null) {
       putHeaders.addAll(headers);
@@ -113,7 +114,7 @@ class HttpHelper {
     try {
       final response = await _ioClient.put(
         Uri.parse(_baseUrl + endpoint),
-        headers: putHeaders as Map<String, String>?,
+        headers: putHeaders,
         body: json.encode(body),
       );
       responseJson = _returnResponse(response);
