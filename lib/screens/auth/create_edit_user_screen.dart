@@ -27,7 +27,7 @@ class CreateEditUserScreen extends StatefulWidget {
 
 class _CreateEditUserScreenState extends State<CreateEditUserScreen>
     with AutomaticKeepAliveClientMixin {
-  AuthBloc? authenticationBloc;
+  late final AuthBloc authBloc;
 
   final TextEditingController usernameController = TextEditingController();
   final FocusNode usernameFocus = FocusNode();
@@ -58,9 +58,9 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
 
   @override
   void didChangeDependencies() {
-    authenticationBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc = BlocProvider.of<AuthBloc>(context);
     if (widget.edit) {
-      final User currentUser = authenticationBloc!.state.currentUser!;
+      final User currentUser = authBloc.state.currentUser!;
       usernameController.text = currentUser.username;
       emailController.text = currentUser.email;
       displayNameController.text = currentUser.displayname;
@@ -82,7 +82,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
-        bloc: authenticationBloc,
+        bloc: authBloc,
         builder: (BuildContext context, AuthState authState) {
           return LoadingWrapper(
             isLoading: authState.isLoading && widget.edit,
@@ -324,7 +324,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
           email: emailController.text,
           gender: currentGender,
         );
-        authenticationBloc!.add(UpdateUserEvent(updateUserRequest));
+        authBloc.add(UpdateUserEvent(updateUserRequest));
       } else {
         final RegisterRequest registerRequest = RegisterRequest(
           username: usernameController.text,
@@ -334,7 +334,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
           email: emailController.text,
           gender: currentGender,
         );
-        authenticationBloc!.add(RegisterEvent(registerRequest));
+        authBloc.add(RegisterEvent(registerRequest));
       }
     }
   }

@@ -58,19 +58,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: 'language'.tr(),
                     subtitle: LocaleUtils.currentLocaleItem(context).name,
                     leading: Icon(Icons.language),
-                    onPressed: (_) async {
-                      if (Platform.isIOS) {
-                        final int? index = await Navigation.toScreen(
-                          context: context,
-                          screen: ChooseLanguageScreen(),
-                        );
-                        if (index != null) {
-                          this
-                              .context
-                              .setLocale(LocaleUtils.localeItems[index].locale);
-                        }
-                      }
-                    },
+                    onPressed: Platform.isIOS
+                        ? (_) async {
+                            final int? index = await Navigation.toScreen(
+                              context: context,
+                              screen: ChooseLanguageScreen(),
+                            );
+                            if (index != null) {
+                              this.context.setLocale(
+                                  LocaleUtils.localeItems[index].locale);
+                            }
+                          }
+                        : null,
                   ),
                 ),
               ),

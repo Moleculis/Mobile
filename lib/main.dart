@@ -59,6 +59,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         title: 'Moleculis',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           cupertinoOverrideTheme:
               CupertinoThemeData(primaryColor: Colors.black),

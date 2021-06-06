@@ -89,14 +89,14 @@ class Input extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8),
               child: TextFormField(
                 validator: validator == null
-                    ? (String s) {
+                    ? (String? s) {
                         if (isRequired) {
-                          if (s.isEmpty) {
+                          if (s!.isEmpty) {
                             return '${title ?? hint ?? 'field'.tr()} ${'cannot_be_empty'.tr()}';
                           }
                         }
                         return null;
-                      } as String? Function(String?)?
+                      }
                     : validator,
                 keyboardType: inputType,
                 controller: controller,

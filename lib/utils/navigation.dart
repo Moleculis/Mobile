@@ -7,9 +7,7 @@ class Navigation {
     required Widget screen,
   }) async {
     return await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => screen,
-      ),
+      MaterialPageRoute(builder: (_) => screen),
     );
   }
 
@@ -18,9 +16,7 @@ class Navigation {
     required Widget screen,
   }) async {
     return await Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => screen,
-      ),
+      MaterialPageRoute(builder: (_) => screen),
       (_) => false,
     );
   }

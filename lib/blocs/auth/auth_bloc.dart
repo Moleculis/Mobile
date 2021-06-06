@@ -95,9 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } on AppException catch (e) {
       yield AuthFailure(error: e.toString());
     } finally {
-      yield state.copyWith(
-        isLoading: false,
-      );
+      yield state.copyWith(isLoading: false);
     }
   }
 

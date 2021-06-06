@@ -25,6 +25,6 @@ void setupServiceLocator() {
   locator.registerSingleton<GroupsService>(GroupsServiceImpl());
   locator.registerSingleton<UserService>(UserServiceImpl());
 
-  // Blocs (Must be in bottom of setupServiceLocator)
+  // Blocs (must be at the bottom of the setupServiceLocator)
   locator.registerSingleton<AuthBloc>(AuthBloc());
 }
