@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "153338132699",
+    "project_id": "moleculis-24e8a",
+    "storage_bucket": "moleculis-24e8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153338132699:android:af578eb5c8461181e234fe",
+        "android_client_info": {
+          "package_name": "ua.nure.moleculis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153338132699-0pbq0sfsqm0o08bo6ce9tj5pakvgacub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ua.nure.moleculis",
+            "certificate_hash": "419c0c4ebffd94da111523e1ce47a233cbb6b002"
+          }
+        },
+        {
+          "client_id": "153338132699-6e62gd9dtr4eqt1a0a3iutlhqibh7m4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwW7wth0RloERQ5KfEMMO47HdbwS1nvro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153338132699-6e62gd9dtr4eqt1a0a3iutlhqibh7m4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
