@@ -3,7 +3,6 @@ import 'package:moleculis/models/enums/chat_type.dart';
 import 'package:moleculis/models/enums/enum_parser.dart';
 
 part 'chat_model.freezed.dart';
-
 part 'chat_model.g.dart';
 
 @freezed
@@ -17,6 +16,8 @@ abstract class ChatModel with _$ChatModel {
         required ChatType chatType,
     required List<String> usersIds,
     String? groupId,
+    List<String>? mutedForUsersIds,
+    List<String>? onlineUsersIds,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

@@ -52,27 +52,20 @@ const $MessageModel = _$MessageModelTearOff();
 /// @nodoc
 mixin _$MessageModel {
   String get id => throw _privateConstructorUsedError;
-
   String get creatorId => throw _privateConstructorUsedError;
-
   String get text => throw _privateConstructorUsedError;
-
   @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull,
       toJson: ConvertUtils.dateTimeToTimestamp)
   DateTime get createdAt => throw _privateConstructorUsedError;
-
   String get chatId => throw _privateConstructorUsedError;
-
   @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestamp,
       toJson: ConvertUtils.dateTimeToTimestamp)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-
   bool get isDeleted => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $MessageModelCopyWith<MessageModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -83,7 +76,6 @@ abstract class $MessageModelCopyWith<$Res> {
   factory $MessageModelCopyWith(
           MessageModel value, $Res Function(MessageModel) then) =
       _$MessageModelCopyWithImpl<$Res>;
-
   $Res call(
       {String id,
       String creatorId,
@@ -101,7 +93,6 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
   _$MessageModelCopyWithImpl(this._value, this._then);
 
   final MessageModel _value;
-
   // ignore: unused_field
   final $Res Function(MessageModel) _then;
 
@@ -154,7 +145,6 @@ abstract class _$MessageModelCopyWith<$Res>
   factory _$MessageModelCopyWith(
           _MessageModel value, $Res Function(_MessageModel) then) =
       __$MessageModelCopyWithImpl<$Res>;
-
   @override
   $Res call(
       {String id,
@@ -323,7 +313,6 @@ abstract class _MessageModel extends MessageModel {
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestamp, toJson: ConvertUtils.dateTimeToTimestamp)
           DateTime? updatedAt,
       bool isDeleted}) = _$_MessageModel;
-
   _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -331,31 +320,24 @@ abstract class _MessageModel extends MessageModel {
 
   @override
   String get id => throw _privateConstructorUsedError;
-
   @override
   String get creatorId => throw _privateConstructorUsedError;
-
   @override
   String get text => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull,
       toJson: ConvertUtils.dateTimeToTimestamp)
   DateTime get createdAt => throw _privateConstructorUsedError;
-
   @override
   String get chatId => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestamp,
       toJson: ConvertUtils.dateTimeToTimestamp)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-
   @override
   bool get isDeleted => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(ignore: true)
   _$MessageModelCopyWith<_MessageModel> get copyWith =>
