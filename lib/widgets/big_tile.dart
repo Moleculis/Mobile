@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 
 class BigTile extends StatelessWidget {
   final String title;
-  final String subtitle;
-  final String imageUrl;
-  final Widget trailing;
+  final String? subtitle;
+  final String? imageUrl;
+  final Widget? trailing;
 
-  const BigTile(
-      {Key key, this.title, this.subtitle, this.imageUrl, this.trailing})
-      : super(key: key);
+  const BigTile({
+    Key? key,
+    required this.title,
+    this.subtitle,
+    this.imageUrl,
+    this.trailing,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: imageUrl == null ? null : NetworkImage(imageUrl),
+          backgroundImage: imageUrl == null ? null : NetworkImage(imageUrl!),
           child: imageUrl == null
               ? Text(
                   title[0],
@@ -41,7 +45,7 @@ class BigTile extends StatelessWidget {
                 subtitle == null
                     ? Container()
                     : Text(
-                        subtitle,
+                  subtitle!,
                         textAlign: TextAlign.justify,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

@@ -7,9 +7,9 @@ class LocaleWidget extends StatelessWidget {
   final LocaleItem localeItem;
 
   const LocaleWidget({
-    Key key,
+    Key? key,
+    required this.localeItem,
     this.showLanguageName = true,
-    this.localeItem,
   }) : super(key: key);
 
   @override

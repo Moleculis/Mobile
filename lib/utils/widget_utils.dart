@@ -10,9 +10,30 @@ import 'package:google_fonts/google_fonts.dart';
 typedef ShowSnackBar = void Function(String);
 
 class WidgetUtils {
-  static void showErrorSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
-      String error) {
-    scaffoldKey.currentState.showSnackBar(
+  static Widget loadingIndicator(
+    BuildContext context, {
+    double width = 4.0,
+    bool isAlignCenter = true,
+    Color? color,
+    double? value,
+  }) {
+    final indicator = Platform.isIOS
+        ? CupertinoActivityIndicator()
+        : CircularProgressIndicator(
+            value: value,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              color ?? Theme.of(context).accentColor,
+            ),
+            strokeWidth: width,
+          );
+    return isAlignCenter ? Center(child: indicator) : indicator;
+  }
+
+  static void showErrorSnackbar(
+    BuildContext context, {
+    required String error,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(error),
         backgroundColor: Colors.red,
@@ -20,10 +41,11 @@ class WidgetUtils {
     );
   }
 
-  static void showSuccessSnackbar(GlobalKey<ScaffoldState> scaffoldKey,
-      String message,
-      {Duration duration}) {
-    scaffoldKey.currentState.showSnackBar(
+  static void showSuccessSnackbar(BuildContext context, {
+    required String message,
+    Duration? duration,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         duration: duration ?? Duration(milliseconds: 4000),
@@ -32,19 +54,21 @@ class WidgetUtils {
     );
   }
 
-  static void showSnackbar(GlobalKey<ScaffoldState> scaffoldKey, String text) {
-    scaffoldKey.currentState.showSnackBar(
+  static void showSnackbar(BuildContext context, {
+    required String text,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(text)),
     );
   }
 
   static void showSimpleDialog({
-    BuildContext context,
+    required BuildContext context,
     String title = '',
-    VoidCallback onYes,
-    VoidCallback onNo,
+    VoidCallback? onYes,
+    VoidCallback? onNo,
     String confirmText = 'Ok',
-    String cancelText,
+    String? cancelText,
   }) {
     showDialog(
       context: context,
@@ -52,7 +76,7 @@ class WidgetUtils {
         return AlertDialog(
           title: Text(title),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 if (onYes != null) {
@@ -64,7 +88,7 @@ class WidgetUtils {
                 style: TextStyle(color: Colors.red),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 if (onNo != null) {
@@ -85,24 +109,26 @@ class WidgetUtils {
   static Widget backButton(BuildContext context) {
     if (Platform.isAndroid) {
       return IconButton(
-          icon: Icon(Icons.arrow_back),
-          padding: EdgeInsets.all(0),
-          alignment: Alignment.centerLeft,
-          onPressed: () => Navigator.pop(context));
+        icon: Icon(Icons.arrow_back),
+        padding: EdgeInsets.all(0),
+        alignment: Alignment.centerLeft,
+        onPressed: () => Navigator.pop(context),
+      );
     } else {
       return IconButton(
-          icon: Icon(CupertinoIcons.left_chevron),
-          padding: EdgeInsets.all(0),
-          alignment: Alignment.centerLeft,
-          onPressed: () => Navigator.pop(context));
+        icon: Icon(CupertinoIcons.left_chevron),
+        padding: EdgeInsets.all(0),
+        alignment: Alignment.centerLeft,
+        onPressed: () => Navigator.pop(context),
+      );
     }
   }
 
-  static Widget appBar(BuildContext context, {
-    String title,
-    List<Widget> actions,
-    Color backgroundColor,
-    TabBar bottom,
+  static PreferredSizeWidget appBar(BuildContext context, {
+    required String title,
+    List<Widget>? actions,
+    Color? backgroundColor,
+    TabBar? bottom,
   }) {
     return PreferredSize(
       preferredSize: bottom == null
@@ -124,9 +150,7 @@ class WidgetUtils {
             ),
           ),
           backgroundColor:
-          backgroundColor ?? Theme
-              .of(context)
-              .scaffoldBackgroundColor,
+          backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
           brightness: Brightness.light,
           centerTitle: false,
           actions: actions,
@@ -144,5 +168,126 @@ class WidgetUtils {
         ),
       ),
     );
+  }
+
+  static AppBar simpleAppBar(
+    BuildContext context, {
+    List<Widget>? actions,
+    Widget? leading,
+    Widget? title,
+    Color? iconColor,
+    bool centerTitle = false,
+    Brightness brightness = Brightness.light,
+    double titleSpacing = 16.0,
+    bool automaticallyImplyLeading = true,
+  }) {
+    return AppBar(
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      titleSpacing: titleSpacing,
+      elevation: 0.0,
+      brightness: brightness,
+      backgroundColor: Colors.transparent,
+      leading: leading,
+      actions: actions,
+      centerTitle: centerTitle,
+      title: title,
+      iconTheme: iconColor == null ? null : IconThemeData(color: iconColor),
+    );
+  }
+
+  static Future<void> showAlertDialog({
+    required BuildContext context,
+    required String title,
+    String? content,
+    String submitText = 'ok',
+    String refuseText = 'cancel',
+    bool isShowCancelButton = true,
+    Color? titleColor,
+    Color? submitTextColor,
+    VoidCallback? onCancel,
+    VoidCallback? onSubmit,
+    VoidCallback? onDismiss,
+    bool barrierDismissible = false,
+  }) async {
+    if (Platform.isIOS) {
+      await showCupertinoDialog(
+        context: context,
+        useRootNavigator: true,
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Text(title.tr()),
+            ),
+            content: content == null ? null : Text(content.tr()),
+            actions: <Widget>[
+              if (isShowCancelButton)
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (onCancel != null) onCancel();
+                  },
+                  isDefaultAction: true,
+                  child: Text(refuseText.tr()),
+                ),
+              CupertinoDialogAction(
+                onPressed: onSubmit ?? () => Navigator.pop(context),
+                child: Text(
+                  submitText.tr(),
+                  style: TextStyle(color: submitTextColor),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      await showDialog(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              title.tr(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: content == null
+                ? null
+                : Text(
+                    content.tr(),
+                    style: TextStyle(color: Colors.grey[800]),
+                  ),
+            actions: <Widget>[
+              if (isShowCancelButton)
+                TextButton(
+                  child: Text(
+                    refuseText.tr(),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (onCancel != null) onCancel();
+                  },
+                ),
+              TextButton(
+                child: Text(
+                  submitText.tr(),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: onSubmit ?? () => Navigator.pop(context),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    onDismiss?.call();
   }
 }

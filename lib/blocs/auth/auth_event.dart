@@ -2,19 +2,32 @@ import 'package:equatable/equatable.dart';
 import 'package:moleculis/models/requests/register_request.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
 
-abstract class AuthenticationEvent extends Equatable {}
+abstract class AuthEvent extends Equatable {}
 
-class LoginEvent extends AuthenticationEvent {
+class SilentLoginEvent extends AuthEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ReloadUserEvent extends AuthEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class LoginEvent extends AuthEvent {
   final String username;
   final String password;
 
-  LoginEvent({this.username, this.password});
+  LoginEvent({
+    required this.username,
+    required this.password,
+  });
 
   @override
   List<Object> get props => [username, password];
 }
 
-class RegisterEvent extends AuthenticationEvent {
+class RegisterEvent extends AuthEvent {
   final RegisterRequest registerRequest;
 
   RegisterEvent(this.registerRequest);
@@ -23,17 +36,12 @@ class RegisterEvent extends AuthenticationEvent {
   List<Object> get props => [registerRequest];
 }
 
-class LoadInitialData extends AuthenticationEvent {
-  @override
-  List<Object> get props => null;
-}
-
-class LogOutEvent extends AuthenticationEvent {
+class LogOutEvent extends AuthEvent {
   @override
   List<Object> get props => [];
 }
 
-class UpdateUserEvent extends AuthenticationEvent {
+class UpdateUserEvent extends AuthEvent {
   final UpdateUserRequest request;
 
   UpdateUserEvent(this.request);
@@ -42,7 +50,7 @@ class UpdateUserEvent extends AuthenticationEvent {
   List<Object> get props => [request];
 }
 
-class RemoveContactEvent extends AuthenticationEvent {
+class RemoveContactEvent extends AuthEvent {
   final int id;
 
   RemoveContactEvent(this.id);
@@ -51,7 +59,7 @@ class RemoveContactEvent extends AuthenticationEvent {
   List<Object> get props => [id];
 }
 
-class AcceptContactEvent extends AuthenticationEvent {
+class AcceptContactEvent extends AuthEvent {
   final int id;
 
   AcceptContactEvent(this.id);
@@ -60,11 +68,11 @@ class AcceptContactEvent extends AuthenticationEvent {
   List<Object> get props => [id];
 }
 
-class SendContactRequestEvent extends AuthenticationEvent {
+class SendContactRequestEvent extends AuthEvent {
   final String username;
 
   SendContactRequestEvent(this.username);
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }

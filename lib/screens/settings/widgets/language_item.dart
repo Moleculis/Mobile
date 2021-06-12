@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:moleculis/utils/locale_utils.dart';
 
 class LanguageItem extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final LocaleItem localeItem;
 
-  const LanguageItem({Key key, this.onTap, this.localeItem}) : super(key: key);
+  const LanguageItem({
+    Key? key,
+    required this.localeItem,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

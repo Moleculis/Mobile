@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_event.dart';
-import 'package:moleculis/blocs/authentication/authentication_state.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
+import 'package:moleculis/blocs/auth/auth_state.dart';
 import 'package:moleculis/screens/auth/auth_screen.dart';
 import 'package:moleculis/screens/contacts/contacts_screen.dart';
 import 'package:moleculis/screens/more/widgets/more_tile.dart';
@@ -21,55 +21,41 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> {
-  PackageInfo packageInfo;
-  AuthenticationBloc authenticationBloc;
-  AuthenticationState authState;
+  PackageInfo? packageInfo;
+  late final AuthBloc authBloc;
 
   @override
   void initState() {
-    PackageInfo.fromPlatform().then((value) {
-      setState(() {
-        packageInfo = value;
-      });
-    });
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    super.didChangeDependencies();
+    PackageInfo.fromPlatform().then((value) {
+      setState(() => packageInfo = value);
+    });
+    authBloc = BlocProvider.of<AuthBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (BuildContext context, AuthenticationState state) {
-        if (state is AuthenticationLogOutSuccess) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (BuildContext context, AuthState state) {
+        if (state is LogOutSuccess) {
           Navigation.toScreenAndCleanBackStack(
-              context: context, screen: AuthScreen());
+            context: context,
+            screen: AuthScreen(),
+          );
         }
       },
       child: SafeArea(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 10,
-                top: 20,
-              ),
-              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                cubit: authenticationBloc,
-                builder: (BuildContext context, AuthenticationState state) {
-                  if (state.currentUser == null) {
-                    return Container(
-                      height: 100,
-                    );
-                  }
+              padding: const EdgeInsets.only(left: 20, right: 10, top: 20),
+              child: BlocBuilder<AuthBloc, AuthState>(
+                bloc: authBloc,
+                builder: (BuildContext context, AuthState state) {
+                  if (state.currentUser == null) return SizedBox(height: 100);
                   return BigTile(
-                    title: state.currentUser.fullname,
-                    subtitle: state.currentUser.username,
+                    title: state.currentUser!.fullname,
+                    subtitle: state.currentUser!.username,
                     trailing: IconButton(
                       icon: Icon(
                         Icons.exit_to_app,
@@ -79,9 +65,7 @@ class _MoreScreenState extends State<MoreScreen> {
                         WidgetUtils.showSimpleDialog(
                           context: context,
                           title: 'log_out_confirm'.tr(),
-                          onYes: () {
-                            authenticationBloc.add(LogOutEvent());
-                          },
+                          onYes: () => authBloc.add(LogOutEvent()),
                         );
                       },
                     ),
@@ -114,7 +98,9 @@ class _MoreScreenState extends State<MoreScreen> {
                     ),
                     onTap: () async {
                       Navigation.toScreen(
-                          context: context, screen: ContactsScreen());
+                        context: context,
+                        screen: ContactsScreen(),
+                      );
                     },
                   ),
                   SettingsTile(
@@ -132,8 +118,9 @@ class _MoreScreenState extends State<MoreScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, left: 20),
                     child: Text(
-                        '${'version'.tr()}: ${packageInfo
-                            ?.version}+${packageInfo?.buildNumber}'),
+                      '${'version'.tr()}: ${packageInfo?.version}'
+                      '+${packageInfo?.buildNumber}',
+                    ),
                   ),
                 ],
               ),

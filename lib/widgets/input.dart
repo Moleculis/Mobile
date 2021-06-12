@@ -1,54 +1,58 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class Input extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool obscureText;
-  final String title;
+  final String? title;
   final TextInputType inputType;
-  final EdgeInsets padding;
-  final EdgeInsets contentPadding;
-  final FocusNode focusNode;
-  final FocusNode nextFocusNode;
-  final String error;
-  final String hint;
-  final bool isRequired;
-  final Function(String text) validator;
-  final Widget suffix;
-  final Widget suffixIcon;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
+  final EdgeInsets? contentPadding;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
+  final String? error;
+  final String? hint;
+  final String? Function(String? text)? validator;
+  final Widget? suffix;
+  final Widget? suffixIcon;
   final bool enabled;
-  final bool isReadOnly;
-  final bool hasBorder;
-  final Function(String term) onFieldSubmitted;
-  final Function(String term) onChanged;
-  final Function(String value) onSaved;
-  final TextInputAction textInputAction;
+  final bool isRequired;
+  final Function(String term)? onFieldSubmitted;
+  final Function(String? value)? onSaved;
+  final TextInputAction? textInputAction;
   final TextCapitalization textCapitalization;
-  final List<TextInputFormatter> textInputFormatters;
-  final Widget prefix;
-  final Widget prefixIcon;
-  final String prefixText;
-  final TextStyle prefixTextStyle;
-  final VoidCallback onTap;
+  final List<TextInputFormatter>? textInputFormatters;
+  final Widget? prefix;
+  final Widget? prefixIcon;
+  final String? prefixText;
+  final String? helperText;
+  final TextStyle? prefixTextStyle;
+  final TextStyle? helperStyle;
+  final TextStyle? style;
+  final TextStyle? hintStyle;
+  final ValueChanged<String>? onChanged;
+  final BorderRadius? borderRadius;
+  final Color backgroundColor;
+  final Color disabledBorderColor;
+  final Color? activeBorderColor;
+  final bool isDense;
+  final VoidCallback? onTap;
   final int maxLines;
   final int minLines;
-  final Color borderColor;
-  final bool enableInteractiveSelection;
+  final double? height;
 
   const Input({
-    Key key,
+    Key? key,
+    required this.controller,
     this.title,
     this.hint,
     this.error,
+    this.margin,
     this.padding,
     this.contentPadding,
     this.focusNode,
-    this.nextFocusNode,
-    this.onTap,
-    this.controller,
-    this.isReadOnly = false,
     this.obscureText = false,
     this.inputType = TextInputType.text,
     this.validator,
@@ -59,98 +63,98 @@ class Input extends StatelessWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.textInputAction,
-    this.textCapitalization = TextCapitalization.sentences,
+    this.textCapitalization = TextCapitalization.none,
     this.textInputFormatters,
-    this.hasBorder = true,
     this.prefix,
     this.prefixIcon,
     this.prefixText,
+    this.helperText,
     this.prefixTextStyle,
-    this.maxLines,
-    this.minLines,
-    this.borderColor,
+    this.helperStyle,
+    this.style,
+    this.hintStyle,
     this.onChanged,
-    this.enableInteractiveSelection = true,
+    this.nextFocusNode,
+    this.borderRadius,
+    this.backgroundColor = Colors.white,
+    this.disabledBorderColor = Colors.grey,
+    this.isDense = false,
+    this.onTap,
+    this.maxLines = 1,
+    this.minLines = 1,
+    this.height,
+    this.activeBorderColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding ?? EdgeInsets.zero,
+    return Container(
+      margin: margin ?? EdgeInsets.zero,
+      padding: padding ?? EdgeInsets.fromLTRB(12.0, 9.0, 12.0, 4.0),
+      height: height,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: focusNode!.hasFocus
+              ? activeBorderColor ?? Theme.of(context).accentColor
+              : disabledBorderColor,
+        ),
+        color: backgroundColor,
+        borderRadius: borderRadius ?? BorderRadius.circular(10.0),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (title != null)
-            Text(title, style: Theme.of(context).textTheme.caption),
-          InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: TextFormField(
-                validator: validator == null
-                    ? (String s) {
-                        if (isRequired) {
-                          if (s.isEmpty) {
-                            return '${title ?? hint ?? 'field'.tr()} ${'cannot_be_empty'.tr()}';
-                          }
-                        }
-                        return null;
-                      }
-                    : validator,
-                keyboardType: inputType,
-                controller: controller,
-                obscureText: obscureText,
-                focusNode: focusNode,
-                textCapitalization: textCapitalization,
-                inputFormatters: textInputFormatters,
-                onFieldSubmitted: (String text) {
-                  onFieldSubmitted(text);
-                  focusNode.unfocus();
-                  if (nextFocusNode != null) {
-                    FocusScope.of(context).requestFocus(nextFocusNode);
+            Text(title!, style: Theme.of(context).textTheme.caption),
+          TextFormField(
+            validator: validator == null
+                ? (String? s) {
+                    if (isRequired && (s == null || s.isEmpty)) {
+                      return '${title ?? hint ?? 'Field'} cannot be empty';
+                    }
+                    return null;
                   }
-                },
-                enableInteractiveSelection: enableInteractiveSelection,
-                onChanged: onChanged,
-                onSaved: onSaved,
-                maxLines: maxLines,
-                minLines: minLines,
-                enabled: enabled,
-                textInputAction: textInputAction,
-                style: TextStyle(
+                : validator,
+            onChanged: onChanged,
+            onTap: onTap,
+            keyboardType: inputType,
+            controller: controller,
+            obscureText: obscureText,
+            focusNode: focusNode,
+            textCapitalization: textCapitalization,
+            inputFormatters: textInputFormatters,
+            onFieldSubmitted: (String text) {
+              onFieldSubmitted?.call(text);
+              if (nextFocusNode != null) {
+                FocusScope.of(context).requestFocus(nextFocusNode);
+              }
+            },
+            maxLines: maxLines,
+            minLines: minLines,
+            onSaved: onSaved,
+            enabled: enabled,
+            textInputAction: textInputAction,
+            style: style ??
+                TextStyle(
                   color: enabled ? Colors.black : Colors.grey,
                 ),
-                readOnly: isReadOnly,
-                onTap: onTap,
-                decoration: InputDecoration(
-                  contentPadding: contentPadding ??
-                      EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 14,
-                      ),
-                  prefix: prefix,
-                  prefixIcon: prefixIcon,
-                  prefixText: prefixText,
-                  prefixStyle: prefixTextStyle,
-                  suffix: suffix,
-                  suffixIcon: suffixIcon,
-                  errorText: error,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: borderColor ?? Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: borderColor ?? Theme.of(context).accentColor),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  hintText: hint ?? '',
-                ),
-              ),
+            decoration: InputDecoration(
+              contentPadding: contentPadding ??
+                  EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
+              prefix: prefix,
+              isDense: isDense,
+              prefixIcon: prefixIcon,
+              prefixText: prefixText,
+              prefixStyle: prefixTextStyle,
+              suffix: suffix,
+              suffixIcon: suffixIcon,
+              errorText: error,
+              hintText: hint ?? '',
+              hintStyle: hintStyle,
+              helperStyle: helperStyle,
+              helperText: helperText,
+              border: InputBorder.none,
             ),
           ),
         ],

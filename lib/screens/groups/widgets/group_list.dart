@@ -10,30 +10,29 @@ import 'package:moleculis/widgets/list_refresh.dart';
 class GroupsList extends StatelessWidget {
   final bool isOther;
 
-  const GroupsList({Key key, this.isOther = false}) : super(key: key);
+  const GroupsList({Key? key, this.isOther = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final groupsBloc = BlocProvider.of<GroupsBloc>(context);
     return BlocBuilder<GroupsBloc, GroupsState>(
-        cubit: groupsBloc,
-        builder: (BuildContext context, GroupsState state) {
-          return ListRefresh(
-            onRefresh: () async => groupsBloc.add(LoadGroups()),
-            isNoItems: (isOther && state.otherGroups.isEmpty) ||
-                (!isOther && state.groups.isEmpty),
-            noItemsText: 'no_groups'.tr(),
-            child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return GroupItem(
-                  group:
-                      isOther ? state.otherGroups[index] : state.groups[index],
-                );
-              },
-              itemCount:
-                  isOther ? state.otherGroups.length : state.groups.length,
-            ),
-          );
-        });
+      bloc: groupsBloc,
+      builder: (BuildContext context, GroupsState state) {
+        return ListRefresh(
+          onRefresh: () async => groupsBloc.add(LoadGroups()),
+          isNoItems: (isOther && state.otherGroups.isEmpty) ||
+              (!isOther && state.groups.isEmpty),
+          noItemsText: 'no_groups'.tr(),
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return GroupItem(
+                group: isOther ? state.otherGroups[index] : state.groups[index],
+              );
+            },
+            itemCount: isOther ? state.otherGroups.length : state.groups.length,
+          ),
+        );
+      },
+    );
   }
 }

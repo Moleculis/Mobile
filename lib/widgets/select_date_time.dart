@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:moleculis/utils/format.dart';
 
 class SelectDateTime extends StatefulWidget {
-  final VoidCallback onTap;
-  final DateTime selectedDate;
+  final VoidCallback? onTap;
+  final DateTime? selectedDate;
   final bool isTime;
-  final String title;
+  final String? title;
 
   const SelectDateTime({
-    Key key,
+    Key? key,
     this.onTap,
     this.selectedDate,
     this.title,
@@ -43,8 +43,8 @@ class _SelectDateTimeState extends State<SelectDateTime> {
             ),
             child: Text(
               widget.isTime
-                  ? FormatUtils.formatTime(widget.selectedDate)
-                  : FormatUtils.formatDate(widget.selectedDate, context),
+                  ? FormatUtils.formatTime(widget.selectedDate!)
+                  : FormatUtils.formatDate(widget.selectedDate!, context),
             ),
           ),
         ),

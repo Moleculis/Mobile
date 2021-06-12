@@ -1,13 +1,13 @@
 import 'package:moleculis/models/requests/update_user_request.dart';
 import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/services/apis/user_service.dart';
+import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/locator.dart';
 
-import 'http_helper.dart';
+class UserServiceImpl implements UserService {
+  final HttpHelper _httpHelper = locator<HttpHelper>();
 
-class UserService {
-  final HttpHelper _httpHelper;
   final String _endpointBase = '/users';
-
-  UserService(this._httpHelper);
 
   String get _currentUserEndpoint => _endpointBase + '/current';
 
@@ -15,7 +15,7 @@ class UserService {
 
   String get _otherUsersEndpoint => _endpointBase + '/other';
 
-  String _sendContactRequestEndpoint(String username) =>
+  String _sendContactRequestEndpoint(String? username) =>
       _endpointBase + '/send_contact_request/$username';
 
   String _deleteContactEndpoint(int id) =>
@@ -24,13 +24,15 @@ class UserService {
   String _acceptContactEndpoint(int id) =>
       _endpointBase + '/accept_contact_request/$id';
 
+  @override
   Future<User> getCurrentUser() async {
     final Map<String, dynamic> response =
         await _httpHelper.get(_currentUserEndpoint);
     return User.fromMap(response);
   }
 
-  Future<String> updateUser(UpdateUserRequest request) async {
+  @override
+  Future<String?> updateUser(UpdateUserRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.put(
       _currentUserEndpoint,
       body: request.toMap(),
@@ -38,33 +40,38 @@ class UserService {
     return response['message'];
   }
 
-  Future<String> sendContactRequest(String username) async {
+  @override
+  Future<String?> sendContactRequest(String? username) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _sendContactRequestEndpoint(username),
     );
     return response['message'];
   }
 
-  Future<String> deleteContact(int id) async {
+  @override
+  Future<String?> deleteContact(int id) async {
     final Map<String, dynamic> response = await _httpHelper.delete(
       _deleteContactEndpoint(id),
     );
     return response['message'];
   }
 
-  Future<String> acceptContact(int id) async {
+  @override
+  Future<String?> acceptContact(int id) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _acceptContactEndpoint(id),
     );
     return response['message'];
   }
 
+  @override
   Future<List<User>> getUsers() async {
     final List<dynamic> response = await _httpHelper.get(_usersEndpoint);
     final List<User> users = response.map((e) => User.fromMap(e)).toList();
     return users;
   }
 
+  @override
   Future<List<User>> getOtherUsers() async {
     final List<dynamic> response = await _httpHelper.get(_otherUsersEndpoint);
     final List<User> users = response.map((e) => User.fromMap(e)).toList();

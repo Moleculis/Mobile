@@ -1,8 +1,8 @@
 class CreateUpdateGroupRequest {
-  final String title;
-  final String description;
-  final List<String> users;
-  final List<String> admins;
+  final String? title;
+  final String? description;
+  final List<String>? users;
+  final List<String>? admins;
 
   CreateUpdateGroupRequest({
     this.title,
@@ -21,10 +21,10 @@ class CreateUpdateGroupRequest {
   }
 
   CreateUpdateGroupRequest copyWith({
-    String title,
-    String description,
-    List<String> users,
-    List<String> admins,
+    String? title,
+    String? description,
+    List<String>? users,
+    List<String>? admins,
   }) {
     return CreateUpdateGroupRequest(
       title: title ?? this.title,

@@ -20,10 +20,10 @@ class EventDetailsScreen extends StatefulWidget {
   final EventsBloc eventsBloc;
 
   const EventDetailsScreen({
-    Key key,
-    @required this.eventId,
-    this.owned,
-    this.eventsBloc,
+    Key? key,
+    required this.eventId,
+    required this.owned,
+    required this.eventsBloc,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class EventDetailsScreen extends StatefulWidget {
 }
 
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
-  EventsBloc eventsBloc;
+  late final EventsBloc eventsBloc;
 
   @override
   void initState() {
@@ -42,8 +42,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: widget.eventsBloc,
-      listener: (BuildContext context, state) {
+      bloc: widget.eventsBloc,
+      listener: (BuildContext context, dynamic state) {
         if (state is EventsSuccess) {
           Navigator.pop(context);
         }
@@ -72,9 +72,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           children: <Widget>[
             SingleChildScrollView(
               child: BlocBuilder<EventsBloc, EventsState>(
-                cubit: eventsBloc,
+                bloc: eventsBloc,
                 builder: (BuildContext context, EventsState state) {
-                  final Event event = eventsBloc.getEventById(widget.eventId);
+                  final Event event = eventsBloc.getEventById(widget.eventId)!;
                   return Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -85,7 +85,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           child: BigTile(
                             title: event.title,
                             subtitle:
-                            '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
+                                '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
                               event.dateCreated,
                               context,
                             )}',
@@ -117,9 +117,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ),
                         InfoItem(
                           title: 'participants'.tr(),
-                          contentWidget: UsersList(
-                            users: event.users,
-                          ),
+                          contentWidget: UsersList(users: event.users),
                         ),
                       ],
                     ),
@@ -138,9 +136,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   child: Text(
                     'leave_event'.tr(),
                     style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),

@@ -17,8 +17,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   bool fingerprintSwitchValue = false;
   bool notificationsSwitchValue = false;
 
@@ -32,7 +30,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ? settingsBackgroundColor
             : Colors.black,
       ),
-      key: scaffoldKey,
       body: _getBody(),
       backgroundColor: settingsBackgroundColor,
     );
@@ -49,29 +46,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'general'.tr(),
                 style:
-                TextStyle(color: accentColor, fontWeight: FontWeight.bold),
+                    TextStyle(color: accentColor, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 child: LanguagesPopup(
+                  context: context,
                   backgroundColor: settingsBackgroundColor,
                   showIcon: false,
                   child: SettingsTile(
                     title: 'language'.tr(),
                     subtitle: LocaleUtils.currentLocaleItem(context).name,
                     leading: Icon(Icons.language),
-                    onTap: () async {
-                      if (Platform.isIOS) {
-                        final int index = await Navigation.toScreen(
-                          context: context,
-                          screen: ChooseLanguageScreen(),
-                        );
-                        if (index != null) {
-                          (this.context ?? context).locale =
-                              LocaleUtils.localeItems[index].locale;
-                        }
-                      }
-                    },
+                    onPressed: Platform.isIOS
+                        ? (_) async {
+                            final int? index = await Navigation.toScreen(
+                              context: context,
+                              screen: ChooseLanguageScreen(),
+                            );
+                            if (index != null) {
+                              this.context.setLocale(
+                                  LocaleUtils.localeItems[index].locale);
+                            }
+                          }
+                        : null,
                   ),
                 ),
               ),
@@ -93,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'security'.tr(),
                 style:
-                TextStyle(color: accentColor, fontWeight: FontWeight.bold),
+                    TextStyle(color: accentColor, fontWeight: FontWeight.bold),
               ),
               SettingsTile.switchTile(
                 title: 'use_fingerprint'.tr(),

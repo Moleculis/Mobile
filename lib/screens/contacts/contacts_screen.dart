@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_event.dart';
-import 'package:moleculis/blocs/authentication/authentication_state.dart';
-import 'package:moleculis/models/contact/contact.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
+import 'package:moleculis/blocs/auth/auth_state.dart';
+import 'package:moleculis/models/contact.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/screens/contacts/widgets/contacts_list.dart';
 import 'package:moleculis/screens/contacts/widgets/users_list.dart';
@@ -16,17 +16,17 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
-  AuthenticationBloc authenticationBloc;
-  User currentUser;
+  late final AuthBloc authBloc;
+  late User currentUser;
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
   @override
-  void didChangeDependencies() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    authenticationBloc.add(LoadInitialData());
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.add(ReloadUserEvent());
   }
 
   @override
@@ -38,26 +38,26 @@ class _ContactsScreenState extends State<ContactsScreen> {
           context,
           title: 'contact'.plural(2).toLowerCase(),
         ),
-        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            cubit: authenticationBloc,
-            builder: (BuildContext context, AuthenticationState state) {
+        body: BlocBuilder<AuthBloc, AuthState>(
+            bloc: authBloc,
+            builder: (BuildContext context, AuthState state) {
               if (state.isLoading) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              currentUser = state.currentUser;
+              currentUser = state.currentUser!;
               final List<Contact> contacts = [];
               final List<Contact> sentRequests = [];
               final List<Contact> contactRequests = [];
-              for (Contact contact in currentUser.contacts) {
+              for (final contact in currentUser.contacts!) {
                 if (contact.accepted) {
                   contacts.add(contact);
                 } else {
                   sentRequests.add(contact);
                 }
               }
-              for (Contact contact in currentUser.contactRequests) {
+              for (final contact in currentUser.contactRequests!) {
                 if (contact.accepted) {
                   contacts.add(contact);
                 } else {

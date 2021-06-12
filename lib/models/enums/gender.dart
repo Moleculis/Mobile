@@ -1,5 +1,11 @@
 enum Gender { male, female }
 
+Gender genderFromString(String string) {
+  return Gender.values.firstWhere(
+    (element) => element.name == string,
+  );
+}
+
 extension GenderName on Gender {
   String get name {
     switch (this) {
@@ -8,7 +14,6 @@ extension GenderName on Gender {
       case Gender.female:
         return 'FEMALE';
     }
-    return null;
   }
 
   String get assetName {
@@ -18,18 +23,14 @@ extension GenderName on Gender {
       case Gender.female:
         return 'female';
     }
-    return null;
   }
 }
 
-extension GenderExtension on String{
+extension GenderExtension on String {
   Gender get gender {
     if (this == 'MALE') {
       return Gender.male;
     }
-    if (this == 'FEMALE') {
-      return Gender.female;
-    }
-    return null;
+    return Gender.female;
   }
 }

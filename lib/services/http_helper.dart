@@ -6,59 +6,51 @@ import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:moleculis/services/app_esceptions.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
+import 'package:moleculis/utils/locator.dart';
 
 class HttpHelper {
-  HttpHelper._internal({String locale}) {
-    this._locale = locale == 'uk' ? 'ua' : locale;
+  HttpHelper({String? locale}) {
+    if (locale != null) updateLocale(locale);
     _httpClient.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => _trustSelfSigned);
     _ioClient = IOClient(_httpClient);
   }
 
-  static HttpHelper _instance;
-
-  factory HttpHelper({String locale}) {
-    if (_instance == null ||
-        (_instance != null && locale != null && _instance._locale != locale)) {
-      _instance = HttpHelper._internal(locale: locale);
-    }
-    return _instance;
+  void updateLocale(String newLocale) {
+    this._locale = newLocale == 'uk' ? 'ua' : newLocale;
   }
 
   final String _baseUrl =
       "http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:8080";
 
-  SharedPrefManager _prefs = SharedPrefManager();
-  HttpClient _httpClient = HttpClient();
-  IOClient _ioClient;
-  String _locale;
+  final SharedPrefManager _prefs = locator<SharedPrefManager>();
+  final HttpClient _httpClient = HttpClient();
+  late IOClient _ioClient;
+  String? _locale;
 
-  String get locale => _locale;
-  bool _trustSelfSigned = true;
+  final bool _trustSelfSigned = true;
 
-  Map<String, String> _postHeaders = {
+  final Map<String, String> _postHeaders = {
     'accept': 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
   };
 
   Map<String, String> get _authTokenHeader {
-    final String accessToken = _prefs.getAccessToken();
-    return {HttpHeaders.authorizationHeader: accessToken};
+    return {HttpHeaders.authorizationHeader: _prefs.accessToken};
   }
 
-  Map<String, String> get _localizationHeader =>
-      {'Accept-Language': _instance.locale};
+  Map<String, String> get _localizationHeader => {'Accept-Language': _locale!};
 
   Future<dynamic> get(String endpoint, {bool localized = true}) async {
     var responseJson;
     try {
-      final Map<String, String> getHeaders = {};
+      final Map<String, String?> getHeaders = {};
       getHeaders.addAll(_authTokenHeader);
       if (localized) {
         getHeaders.addAll(_localizationHeader);
       }
       final response = await _ioClient.get(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: _authTokenHeader,
       );
       responseJson = _returnResponse(response);
@@ -68,9 +60,10 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<dynamic> post(String endpoint, {
-    Map<String, String> headers,
-    Map<String, dynamic> body,
+  Future<dynamic> post(
+    String endpoint, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
     authorized = true,
     bool localized = true,
   }) async {
@@ -88,7 +81,7 @@ class HttpHelper {
     }
     try {
       final response = await _ioClient.post(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: postHeaders,
         body: json.encode(body),
       );
@@ -99,9 +92,10 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<dynamic> put(String endpoint, {
-    Map<String, String> headers,
-    Map<String, dynamic> body,
+  Future<dynamic> put(
+    String endpoint, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
     authorized = true,
     bool localized = true,
   }) async {
@@ -119,7 +113,7 @@ class HttpHelper {
     }
     try {
       final response = await _ioClient.put(
-        _baseUrl + endpoint,
+        Uri.parse(_baseUrl + endpoint),
         headers: putHeaders,
         body: json.encode(body),
       );
@@ -133,14 +127,14 @@ class HttpHelper {
   Future<dynamic> delete(String endpoint, {bool localized = true}) async {
     var responseJson;
     try {
-      final Map<String, String> deleteHeaders = {};
+      final Map<String, String?> deleteHeaders = {};
       deleteHeaders.addAll(_authTokenHeader);
       if (localized) {
         deleteHeaders.addAll(_localizationHeader);
       }
       final response = await _ioClient.delete(
-        _baseUrl + endpoint,
-        headers: deleteHeaders,
+        Uri.parse(_baseUrl + endpoint),
+        headers: deleteHeaders as Map<String, String>?,
       );
       responseJson = _returnResponse(response);
     } on SocketException {

@@ -6,18 +6,18 @@ abstract class EventsEvent extends Equatable {}
 
 class LoadEvents extends EventsEvent {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class UpdateEvent extends EventsEvent {
   final int eventId;
   final CreateUpdateEventRequest request;
-  final List<UserSmall> users;
+  final List<UserSmall>? users;
 
   UpdateEvent(this.eventId, this.request, this.users);
 
   @override
-  List<Object> get props => [eventId, request, users];
+  List<Object?> get props => [eventId, request, users];
 }
 
 class CreateEvent extends EventsEvent {

@@ -3,23 +3,25 @@ import 'package:moleculis/common/colors.dart';
 
 class SimpleButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  final Function? onPressed;
 
   const SimpleButton({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: Text(
         text,
         style: TextStyle(color: Colors.white, fontSize: 24),
       ),
-      onPressed: onPressed,
-      color: accentColorDark,
+      onPressed: onPressed as void Function()?,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(accentColorDark),
+      ),
     );
   }
 }

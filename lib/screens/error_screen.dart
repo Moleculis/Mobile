@@ -1,15 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flexible_scrollbar/flexible_scrollbar.dart';
 import 'package:flutter/material.dart';
-import 'package:moleculis/widgets/flexible_scrollbar.dart';
 
 class ErrorScreen extends StatelessWidget {
-  final FlutterErrorDetails details;
+  final FlutterErrorDetails? details;
   final bool showStacktrace;
 
   final ScrollController stackTraceController = ScrollController();
 
-  ErrorScreen({Key key, this.details, this.showStacktrace})
-      : super(key: key);
+  ErrorScreen({
+    Key? key,
+    this.details,
+    this.showStacktrace = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +40,12 @@ class ErrorScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.black, fontSize: 25),
                 textAlign: TextAlign.center,
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               Text(
                 description,
                 textAlign: TextAlign.center,
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               _getStackTraceWidget()
             ],
           ),
@@ -57,23 +56,19 @@ class ErrorScreen extends StatelessWidget {
 
   Widget _getStackTraceWidget() {
     if (showStacktrace) {
-      List<String> stackTrace = details.stack.toString().split("\n");
+      final List<String> stackTrace = details!.stack.toString().split('\n');
       return SizedBox(
         height: 200.0,
         child: FlexibleScrollbar(
-          key: GlobalKey(),
           controller: stackTraceController,
+          thumbMainAxisMinSize: 10,
           child: ListView.builder(
             controller: stackTraceController,
             padding: EdgeInsets.all(8.0),
             itemCount: stackTrace.length,
             itemBuilder: (BuildContext context, int index) {
-              String line = stackTrace[index];
-              if (line?.isNotEmpty == true) {
-                return Text(line);
-              } else {
-                return SizedBox();
-              }
+              final String line = stackTrace[index];
+              return line.isNotEmpty ? Text(line) : SizedBox();
             },
           ),
         ),

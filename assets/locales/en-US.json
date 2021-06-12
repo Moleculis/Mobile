@@ -89,5 +89,10 @@
   "no_contacts": "No contacts",
   "no_contact_requests": "No requests",
   "refresh": "Refresh",
-  "no_other_users": "No other users"
+  "no_other_users": "No other users",
+  "write_message": "Write message",
+  "no_messages": "No messages yet",
+  "delete_this_message": "Delete this message",
+  "today": "Today",
+  "yesterday": "Yesterday"
 }

@@ -3,9 +3,7 @@ import 'dart:convert';
 class JWT {
   static Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
-    if (parts.length != 3) {
-      throw Exception('invalid token');
-    }
+    if (parts.length != 3) throw Exception('invalid token');
 
     final payload = _decodeBase64(parts[1]);
     final payloadMap = json.decode(payload);

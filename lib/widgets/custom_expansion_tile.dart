@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   final Widget title;
-  final Widget trailing;
-  final EdgeInsets tilePadding;
-  final EdgeInsets contentPadding;
   final Widget content;
+  final Widget? trailing;
+  final EdgeInsets? tilePadding;
   final bool initialExpanded;
   final Duration duration;
   final bool centerTitle;
 
   const CustomExpansionTile({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
+    required this.content,
     this.trailing,
     this.tilePadding,
-    this.contentPadding,
-    @required this.content,
     this.initialExpanded = false,
     this.duration = const Duration(milliseconds: 300),
     this.centerTitle = false,
@@ -28,9 +26,9 @@ class CustomExpansionTile extends StatefulWidget {
 
 class _CustomExpansionTileState extends State<CustomExpansionTile>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> contentAnimation;
-  Animation<double> trailingAnimation;
+  late AnimationController animationController;
+  late Animation<double> contentAnimation;
+  late Animation<double> trailingAnimation;
   bool isForward = true;
 
   @override

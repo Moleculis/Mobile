@@ -7,22 +7,21 @@ import 'package:moleculis/models/event.dart';
 import 'package:moleculis/models/page.dart';
 import 'package:moleculis/models/requests/create_update_event_request.dart';
 import 'package:moleculis/models/user/user_small.dart';
+import 'package:moleculis/services/apis/events_service.dart';
 import 'package:moleculis/services/app_esceptions.dart';
-import 'package:moleculis/services/events_service.dart';
+import 'package:moleculis/utils/locator.dart';
 
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
-  final EventsService _eventsService;
+  final EventsService _eventsService = locator<EventsService>();
 
-  EventsBloc({EventsService eventsService})
-      : _eventsService = eventsService,
-        super(EventsState());
+  EventsBloc() : super(EventsState());
 
   @override
   Stream<EventsState> mapEventToState(EventsEvent event) async* {
     if (event is LoadEvents) {
       yield* _loadInitialData();
     } else if (event is UpdateEvent) {
-      yield* _updateEvent(event.eventId, event.request, event.users);
+      yield* _updateEvent(event.eventId, event.request, event.users!);
     } else if (event is CreateEvent) {
       yield* _createEvent(event.request, event.users);
     } else if (event is LeaveEvent) {
@@ -60,9 +59,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String> userNames = users.map((e) => e.username).toList();
+      final List<String?> userNames = users.map((e) => e.username).toList();
       request = request.copyWith(users: userNames);
-      final String message = await _eventsService.updateEvent(eventId, request);
+      final String? message =
+          await _eventsService.updateEvent(eventId, request);
       yield* _updateLocalEventById(eventId, request, users);
       final EventsState normalState = state;
       yield EventsSuccess(message: message);
@@ -78,9 +78,9 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String> userNames = users.map((e) => e.username).toList();
+      final List<String?> userNames = users.map((e) => e.username).toList();
       request = request.copyWith(users: userNames);
-      final String message = await _eventsService.createEvent(request);
+      final String? message = await _eventsService.createEvent(request);
 
       yield EventsSuccess(message: message);
       yield* _loadInitialData();
@@ -90,7 +90,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   }
 
   Stream<EventsState> _updateLocalEventById(
-      int id, CreateUpdateEventRequest request, List<UserSmall> users) async* {
+    int id,
+    CreateUpdateEventRequest request,
+    List<UserSmall> users,
+  ) async* {
     final List<Event> newEvents = state.events;
     for (int i = 0; i < newEvents.length; ++i) {
       if (newEvents[i].id == id) {
@@ -107,10 +110,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     try {
       yield state.copyWith(isLoading: true);
 
-      final String message = await _eventsService.leaveEvent(id);
-      final normalState = state;
+      final String? message = await _eventsService.leaveEvent(id);
+      final EventsState normalState = state;
       final Event event =
-      state.events.firstWhere((element) => element.id == id);
+          state.events.firstWhere((element) => element.id == id);
 
       yield EventsSuccess(message: message);
       yield normalState.copyWith(
@@ -122,13 +125,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     }
   }
 
-  Event getEventById(int id) {
-    for (Event event in state.events) {
+  Event? getEventById(int id) {
+    for (final event in state.events) {
       if (event.id == id) {
         return event;
       }
     }
-    for (Event event in state.othersEvents) {
+    for (final event in state.othersEvents) {
       if (event.id == id) {
         return event;
       }

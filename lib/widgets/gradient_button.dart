@@ -3,16 +3,16 @@ import 'package:moleculis/common/colors.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
-  final Gradient gradient;
+  final Gradient? gradient;
   final double width;
   final double height;
-  final Function onPressed;
-  final List<BoxShadow> shadow;
-  final Color shadowColor;
+  final Function? onPressed;
+  final List<BoxShadow>? shadow;
+  final Color? shadowColor;
 
   const GradientButton({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.gradient,
     this.width = double.infinity,
     this.height = 50.0,
@@ -39,7 +39,7 @@ class GradientButton extends StatelessWidget {
         boxShadow: shadow ??
             [
               BoxShadow(
-                color: shadowColor ?? Colors.grey[500],
+                color: shadowColor ?? Colors.grey[500]!,
                 offset: Offset(0.0, 1.5),
                 blurRadius: 1.5,
               ),
@@ -48,7 +48,7 @@ class GradientButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onPressed,
+          onTap: onPressed as void Function()?,
           child: Center(
             child: Text(
               text,

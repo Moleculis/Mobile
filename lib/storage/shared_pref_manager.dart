@@ -1,46 +1,42 @@
+import 'package:flutter/cupertino.dart';
+import 'package:moleculis/utils/locale_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefManager {
-  SharedPrefManager._internal();
+  late final SharedPreferences _prefs;
+  final String currentLanguageKey = 'current_lang';
+  final String accessTokenKey = 'access_token';
+  final String accessTokenExpirationDateKey = 'access_token_expiration';
 
-  static final SharedPrefManager _instance = SharedPrefManager._internal();
-
-  factory SharedPrefManager() {
-    return _instance;
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
-  SharedPreferences prefs;
-  final String accessTokenKey = 'access_token_key';
-  final String accessTokenExpirationDateKey = 'access_token_expiration_key';
-
-  Future<void> saveAccessToken(String accessToken, int expireDate) async {
-    await prefs.setString(accessTokenKey, accessToken);
-    await prefs.setInt(accessTokenExpirationDateKey, expireDate);
-  }
-
-  String getAccessToken() {
-    return 'Bearer ${prefs.getString(accessTokenKey)}';
-  }
-
-  Future<bool> isAuthenticated() async {
-    prefs = await SharedPreferences.getInstance();
-
+  bool get authenticated {
     bool isAuthenticated = false;
-    if (getAccessToken() != 'Bearer null') {
-      final int expirationDate = prefs.getInt(accessTokenExpirationDateKey);
-      int expireIn = expirationDate - DateTime.now().millisecondsSinceEpoch;
+    if (_prefs.getString(accessTokenKey) != null) {
+      final int expirationDate = _prefs.getInt(accessTokenExpirationDateKey)!;
+      final int expireIn =
+          expirationDate - DateTime.now().millisecondsSinceEpoch;
 
-      if (expireIn > 0) {
-        isAuthenticated = true;
-      }
+      if (expireIn > 0) isAuthenticated = true;
     }
     return isAuthenticated;
   }
 
-  Future<bool> clear() async {
-    if (prefs != null) {
-      return prefs.clear();
-    }
-    return true;
+  String get accessToken => 'Bearer ${_prefs.getString(accessTokenKey)}';
+
+  Future<void> saveAccessToken(String accessToken, int expireDate) async {
+    await _prefs.setString(accessTokenKey, accessToken);
+    await _prefs.setInt(accessTokenExpirationDateKey, expireDate);
   }
+
+  Future<void> saveCurrentLocale(Locale locale) async {
+    await _prefs.setString(currentLanguageKey, locale.languageCode);
+  }
+
+  Locale get currentLocale =>
+      LocaleUtils.localeFromCode(_prefs.getString(currentLanguageKey));
+
+  Future<void> clear() async => await _prefs.clear();
 }

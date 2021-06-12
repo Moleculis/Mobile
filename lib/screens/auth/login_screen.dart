@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_bloc.dart';
-import 'package:moleculis/blocs/authentication/authentication_event.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
 import 'package:moleculis/widgets/gradient_button.dart';
 import 'package:moleculis/widgets/input.dart';
 
@@ -24,16 +24,17 @@ class _LoginScreenState extends State<LoginScreen>
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  AuthenticationBloc authenticationBloc;
+  late final AuthBloc authBloc;
 
   @override
   void initState() {
-    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    authBloc = BlocProvider.of<AuthBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
       key: formKey,
       child: SingleChildScrollView(
@@ -52,10 +53,11 @@ class _LoginScreenState extends State<LoginScreen>
                   controller: usernameController,
                   focusNode: usernameFocus,
                   textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.none,
                   nextFocusNode: passwordFocus,
                   onFieldSubmitted: (String value) {},
-                  validator: (String value) {
-                    value = value.trim();
+                  validator: (String? value) {
+                    value = value!.trim();
                     if (value.isEmpty) {
                       return 'username_empty'.tr();
                     }
@@ -81,8 +83,8 @@ class _LoginScreenState extends State<LoginScreen>
                       login();
                     },
                     maxLines: 1,
-                    validator: (String value) {
-                      value = value.trim();
+                    validator: (String? value) {
+                      value = value!.trim();
                       if (value.isEmpty) {
                         return 'password_empty'.tr();
                       }
@@ -111,10 +113,10 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void login() {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       usernameFocus.unfocus();
       passwordFocus.unfocus();
-      authenticationBloc.add(
+      authBloc.add(
         LoginEvent(
           username: usernameController.text.trim(),
           password: passwordController.text.trim(),

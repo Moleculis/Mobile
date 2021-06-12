@@ -1,15 +1,15 @@
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
+import 'package:moleculis/services/apis/auth_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/jwt.dart';
+import 'package:moleculis/utils/locator.dart';
 
-class AuthenticationService {
-  final HttpHelper _httpHelper;
-  final SharedPrefManager _sharedPrefManager = SharedPrefManager();
+class AuthServiceImpl implements AuthService {
+  final HttpHelper _httpHelper = locator<HttpHelper>();
+  final SharedPrefManager _prefs = locator<SharedPrefManager>();
   final String _endpointBase = '/users';
-
-  AuthenticationService(this._httpHelper);
 
   String get _loginEndpoint => _endpointBase + '/login';
 
@@ -17,6 +17,7 @@ class AuthenticationService {
 
   String get _logOutEndpoint => _endpointBase + '/logout';
 
+  @override
   Future<void> login(LoginRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _loginEndpoint,
@@ -27,10 +28,11 @@ class AuthenticationService {
     final Map<String, dynamic> jwt = JWT.parseJwt(response['token']);
     final int exp = jwt['exp'] as int;
 
-    await _sharedPrefManager.saveAccessToken(response['token'], exp * 1000);
+    await _prefs.saveAccessToken(response['token'], exp * 1000);
   }
 
-  Future<String> register(RegisterRequest request) async {
+  @override
+  Future<String?> register(RegisterRequest request) async {
     final Map<String, dynamic> response = await _httpHelper.post(
       _registerEndpoint,
       body: request.toMap(),
@@ -39,11 +41,11 @@ class AuthenticationService {
     return response['message'];
   }
 
-  Future<String> logOut() async {
-    final Map<String, dynamic> response = await _httpHelper.post(
-        _logOutEndpoint
-    );
-    await _sharedPrefManager.clear();
+  @override
+  Future<String?> logOut() async {
+    final Map<String, dynamic> response =
+        await _httpHelper.post(_logOutEndpoint);
+    await _prefs.clear();
     return response['message'];
   }
 }

@@ -10,16 +10,16 @@ import 'package:moleculis/utils/widget_utils.dart';
 
 class Toolbar extends StatefulWidget {
   final String title;
-  final String initialImageUrl;
-  final Function(File) onImagePicked;
+  final String? initialImageUrl;
+  final ValueChanged<File>? onImagePicked;
   final bool backButton;
-  final String cardId;
-  final File imageFile;
-  final List<Widget> actions;
+  final String? cardId;
+  final File? imageFile;
+  final List<Widget>? actions;
 
   const Toolbar({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.onImagePicked,
     this.initialImageUrl,
     this.backButton = false,
@@ -33,7 +33,9 @@ class Toolbar extends StatefulWidget {
 }
 
 class _ToolbarState extends State<Toolbar> {
-  File _image;
+  final ImagePicker imagePicker = ImagePicker();
+
+  File? pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +61,49 @@ class _ToolbarState extends State<Toolbar> {
         ),
         if (widget.onImagePicked != null)
           if (widget.imageFile != null)
-            _pickedImage(widget.imageFile)
+            imageView(widget.imageFile!)
           else
-            _image == null ? _emptyImage() : _pickedImage(_image),
+            pickedImage == null ? emptyImage : imageView(pickedImage!),
         if (widget.actions != null)
-          ...widget?.actions?.map((Widget action) => action)?.toList(),
+          ...widget.actions!.map((Widget action) => action).toList(),
       ],
     );
   }
 
-  Future addImage() async {
+  Widget get emptyImage {
+    final bool toShowCameraIcon =
+        widget.initialImageUrl == null || widget.initialImageUrl!.isEmpty;
+    return GestureDetector(
+      onTap: () {
+        addImage();
+      },
+      child: CircleAvatar(
+        backgroundColor: Theme.of(context).accentColor,
+        backgroundImage: widget.initialImageUrl == null
+            ? null
+            : NetworkImage(widget.initialImageUrl!),
+        radius: 50,
+        child: toShowCameraIcon
+            ? Icon(Icons.camera_enhance, color: Colors.grey[600], size: 28.0)
+            : null,
+      ),
+    );
+  }
+
+  Widget imageView(File imageFile) {
+    return GestureDetector(
+      onTap: () {
+        addImage();
+      },
+      child: CircleAvatar(
+        backgroundImage: FileImage(imageFile),
+        backgroundColor: Theme.of(context).accentColor,
+        radius: 50,
+      ),
+    );
+  }
+
+  Future<void> addImage() async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
@@ -84,15 +119,7 @@ class _ToolbarState extends State<Toolbar> {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
-                    File image =
-                        await ImagePicker.pickImage(source: ImageSource.camera);
-                    if (image != null) {
-                      setState(() {
-                        _image = image;
-                      });
-
-                      widget.onImagePicked(image);
-                    }
+                    await pickImage(ImageSource.camera);
                   },
                 ),
                 ListTile(
@@ -103,15 +130,7 @@ class _ToolbarState extends State<Toolbar> {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
-                    File image = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    if (image != null) {
-                      setState(() {
-                        _image = image;
-                      });
-
-                      widget.onImagePicked(image);
-                    }
+                    await pickImage(ImageSource.gallery);
                   },
                 ),
               ],
@@ -122,36 +141,15 @@ class _ToolbarState extends State<Toolbar> {
     );
   }
 
-  Widget _emptyImage() {
-    bool toShowCameraIcon =
-        widget.initialImageUrl == null || widget.initialImageUrl.isEmpty;
-    return GestureDetector(
-      onTap: () {
-        addImage();
-      },
-      child: CircleAvatar(
-        backgroundColor: Theme.of(context).accentColor,
-        backgroundImage: widget.initialImageUrl == null
-            ? null
-            : NetworkImage(widget.initialImageUrl),
-        radius: 50,
-        child: toShowCameraIcon
-            ? Icon(Icons.camera_enhance, color: Colors.grey[600], size: 28.0)
-            : null,
-      ),
-    );
-  }
+  Future<void> pickImage(ImageSource source) async {
+    final PickedFile? image = await imagePicker.getImage(source: source);
+    if (image != null) {
+      final imageFile = File(image.path);
+      setState(() {
+        pickedImage = imageFile;
+      });
 
-  Widget _pickedImage(File imageFile) {
-    return GestureDetector(
-      onTap: () {
-        addImage();
-      },
-      child: CircleAvatar(
-        backgroundImage: FileImage(imageFile),
-        backgroundColor: Theme.of(context).accentColor,
-        radius: 50,
-      ),
-    );
+      widget.onImagePicked!(imageFile);
+    }
   }
 }
