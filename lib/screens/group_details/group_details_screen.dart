@@ -7,6 +7,7 @@ import 'package:moleculis/blocs/groups/groups_bloc.dart';
 import 'package:moleculis/blocs/groups/groups_state.dart';
 import 'package:moleculis/models/group.dart';
 import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/screens/chat/chat_screen.dart';
 import 'package:moleculis/screens/create_edit_group/create_edit_group_screen.dart';
 import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/utils/navigation.dart';
@@ -110,6 +111,16 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigation.toScreen(
+            context: context,
+            screen: ChatScreen(group: group),
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.chat, color: Colors.white),
       ),
     );
   }

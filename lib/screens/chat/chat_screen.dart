@@ -51,7 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (isGroup) {
       chatId = ChatUtils.getGroupChatId(group!);
-      members = group!.users;
+      members = group!.admins..addAll(group!.users);
     } else {
       chatId = ChatUtils.getUserChatId(user!);
       final currentUser = locator<AuthBloc>().state.currentUser!;
