@@ -57,7 +57,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
   final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
     if (widget.edit) {
       final User currentUser = authBloc.state.currentUser!;
@@ -67,7 +68,6 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
       fullNameController.text = currentUser.fullname;
       currentGender = currentUser.gender;
     }
-    super.didChangeDependencies();
   }
 
   @override

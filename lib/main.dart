@@ -17,6 +17,8 @@ import 'package:moleculis/utils/locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   SystemChrome.setPreferredOrientations(
     <DeviceOrientation>[DeviceOrientation.portraitUp],
   );
@@ -25,8 +27,6 @@ void main() async {
 
   final prefManager = locator<SharedPrefManager>();
   await prefManager.init();
-
-  await Firebase.initializeApp();
 
   runApp(
     EasyLocalization(

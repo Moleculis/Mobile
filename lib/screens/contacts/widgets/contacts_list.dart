@@ -33,9 +33,9 @@ class _ContactsListState extends State<ContactsList>
   late final AuthBloc authBloc;
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
-    super.didChangeDependencies();
   }
 
   @override

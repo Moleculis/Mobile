@@ -1,11 +1,26 @@
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
+import 'package:moleculis/models/group.dart';
+import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/utils/extensions/datetime_extension.dart';
+import 'package:moleculis/utils/hash_utils.dart';
+import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/sort_utils.dart';
 
 class ChatUtils {
   static String getAlbumChatId(String? albumId, String? albumCreatorId) {
     return '$albumId$albumCreatorId';
+  }
+
+  static String getUserChatId(UserSmall user) {
+    final currentUser = locator<AuthBloc>().state.currentUser!;
+    final sortedUsernames = [currentUser.username, user.username]..sort();
+    return HashUtils.countHash(sortedUsernames.join());
+  }
+
+  static String getGroupChatId(Group group) {
+    return HashUtils.countHash('Group${group.id}Chat');
   }
 
   static List<MessagesGroupModel> divideMessagesByDateAndCreatorId(
@@ -55,8 +70,7 @@ class ChatUtils {
   }
 
   static List<MessagesGroupModel> _divideMessagesGroupByDate(
-    List<MessagesGroupModel> messagesGroups,
-  ) {
+      List<MessagesGroupModel> messagesGroups,) {
     if (messagesGroups.isEmpty) return <MessagesGroupModel>[];
 
     final result = <MessagesGroupModel>[];

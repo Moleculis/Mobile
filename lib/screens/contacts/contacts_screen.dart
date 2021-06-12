@@ -23,10 +23,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
       GlobalKey<RefreshIndicatorState>();
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
     authBloc.add(ReloadUserEvent());
-    super.didChangeDependencies();
   }
 
   @override

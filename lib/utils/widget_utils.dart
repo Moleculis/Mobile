@@ -10,6 +10,25 @@ import 'package:google_fonts/google_fonts.dart';
 typedef ShowSnackBar = void Function(String);
 
 class WidgetUtils {
+  static Widget loadingIndicator(
+    BuildContext context, {
+    double width = 4.0,
+    bool isAlignCenter = true,
+    Color? color,
+    double? value,
+  }) {
+    final indicator = Platform.isIOS
+        ? CupertinoActivityIndicator()
+        : CircularProgressIndicator(
+            value: value,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              color ?? Theme.of(context).accentColor,
+            ),
+            strokeWidth: width,
+          );
+    return isAlignCenter ? Center(child: indicator) : indicator;
+  }
+
   static void showErrorSnackbar(
     BuildContext context, {
     required String error,
@@ -22,8 +41,7 @@ class WidgetUtils {
     );
   }
 
-  static void showSuccessSnackbar(
-    BuildContext context, {
+  static void showSuccessSnackbar(BuildContext context, {
     required String message,
     Duration? duration,
   }) {
@@ -36,8 +54,7 @@ class WidgetUtils {
     );
   }
 
-  static void showSnackbar(
-    BuildContext context, {
+  static void showSnackbar(BuildContext context, {
     required String text,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -107,8 +124,7 @@ class WidgetUtils {
     }
   }
 
-  static PreferredSizeWidget appBar(
-    BuildContext context, {
+  static PreferredSizeWidget appBar(BuildContext context, {
     required String title,
     List<Widget>? actions,
     Color? backgroundColor,
@@ -134,7 +150,7 @@ class WidgetUtils {
             ),
           ),
           backgroundColor:
-              backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
           brightness: Brightness.light,
           centerTitle: false,
           actions: actions,
@@ -152,5 +168,126 @@ class WidgetUtils {
         ),
       ),
     );
+  }
+
+  static AppBar simpleAppBar(
+    BuildContext context, {
+    List<Widget>? actions,
+    Widget? leading,
+    Widget? title,
+    Color? iconColor,
+    bool centerTitle = false,
+    Brightness brightness = Brightness.light,
+    double titleSpacing = 16.0,
+    bool automaticallyImplyLeading = true,
+  }) {
+    return AppBar(
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      titleSpacing: titleSpacing,
+      elevation: 0.0,
+      brightness: brightness,
+      backgroundColor: Colors.transparent,
+      leading: leading,
+      actions: actions,
+      centerTitle: centerTitle,
+      title: title,
+      iconTheme: iconColor == null ? null : IconThemeData(color: iconColor),
+    );
+  }
+
+  static Future<void> showAlertDialog({
+    required BuildContext context,
+    required String title,
+    String? content,
+    String submitText = 'ok',
+    String refuseText = 'cancel',
+    bool isShowCancelButton = true,
+    Color? titleColor,
+    Color? submitTextColor,
+    VoidCallback? onCancel,
+    VoidCallback? onSubmit,
+    VoidCallback? onDismiss,
+    bool barrierDismissible = false,
+  }) async {
+    if (Platform.isIOS) {
+      await showCupertinoDialog(
+        context: context,
+        useRootNavigator: true,
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Text(title.tr()),
+            ),
+            content: content == null ? null : Text(content.tr()),
+            actions: <Widget>[
+              if (isShowCancelButton)
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (onCancel != null) onCancel();
+                  },
+                  isDefaultAction: true,
+                  child: Text(refuseText.tr()),
+                ),
+              CupertinoDialogAction(
+                onPressed: onSubmit ?? () => Navigator.pop(context),
+                child: Text(
+                  submitText.tr(),
+                  style: TextStyle(color: submitTextColor),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      await showDialog(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              title.tr(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: content == null
+                ? null
+                : Text(
+                    content.tr(),
+                    style: TextStyle(color: Colors.grey[800]),
+                  ),
+            actions: <Widget>[
+              if (isShowCancelButton)
+                TextButton(
+                  child: Text(
+                    refuseText.tr(),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (onCancel != null) onCancel();
+                  },
+                ),
+              TextButton(
+                child: Text(
+                  submitText.tr(),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: onSubmit ?? () => Navigator.pop(context),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    onDismiss?.call();
   }
 }

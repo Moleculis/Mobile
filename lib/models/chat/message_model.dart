@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:moleculis/utils/convert_utils.dart';
 
 part 'message_model.freezed.dart';
-
 part 'message_model.g.dart';
 
 @freezed
@@ -30,4 +29,19 @@ abstract class MessageModel implements _$MessageModel {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
       _$MessageModelFromJson(json);
+
+  factory MessageModel.sendMessage({
+    required String creatorId,
+    required String chatId,
+    required String text,
+  }) {
+    return MessageModel(
+      id: '',
+      creatorId: creatorId,
+      createdAt: DateTime.now(),
+      text: text,
+      isDeleted: false,
+      chatId: chatId,
+    );
+  }
 }

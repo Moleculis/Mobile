@@ -7,6 +7,7 @@ import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/screens/auth/create_edit_user_screen.dart';
+import 'package:moleculis/screens/chat/chat_screen.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
@@ -27,9 +28,10 @@ class _UserDetailsState extends State<UserDetails> {
   bool get isProfile => widget.userSmall == null;
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
+
     authBloc = BlocProvider.of<AuthBloc>(context);
-    super.didChangeDependencies();
   }
 
   @override
@@ -100,6 +102,16 @@ class _UserDetailsState extends State<UserDetails> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigation.toScreen(
+            context: context,
+            screen: ChatScreen(user: widget.userSmall),
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.chat, color: Colors.white),
       ),
     );
   }

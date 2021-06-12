@@ -14,7 +14,7 @@ abstract class ChatModel with _$ChatModel {
       fromJson: chatTypeFromString,
     )
         required ChatType chatType,
-    required List<String> usersIds,
+    required List<String> usersUsernames,
     String? groupId,
     List<String>? mutedForUsersIds,
     List<String>? onlineUsersIds,

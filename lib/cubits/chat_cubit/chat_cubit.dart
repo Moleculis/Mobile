@@ -5,6 +5,8 @@ import 'package:moleculis/cubits/chat_cubit/chat_state.dart';
 import 'package:moleculis/models/chat/chat_model.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/enums/chat_type.dart';
+import 'package:moleculis/models/group.dart';
+import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/services/apis/chats_service.dart';
 import 'package:moleculis/utils/chat_utils.dart';
 import 'package:moleculis/utils/locator.dart';
@@ -19,7 +21,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   bool _messagesStreamInitialized = false;
 
-  void initAlbumChatStream({required String chatId}) {
+  void initChatStream({required String chatId}) {
     try {
       _messagesStreamInitialized = false;
       emit(ChatState(isLoading: true));
@@ -72,23 +74,25 @@ class ChatCubit extends Cubit<ChatState> {
 
   void sendMessage({
     required String chatId,
-    required String groupId,
-    required List<String> usersIds,
+    required List<String> usersUsernames,
     required ChatType chatType,
     required MessageModel message,
     required bool chatCreated,
+    Group? group,
+    User? user,
   }) async {
     try {
       await _chatService.sendMessage(
         chatId: chatId,
-        groupId: groupId,
         message: message,
-        usersIds: usersIds,
+        usersUsernames: usersUsernames,
         isChatCreated: chatCreated,
         chatType: chatType,
+        group: group,
+        user: user,
       );
       if (state.chat?.id == null) {
-        initAlbumChatStream(chatId: chatId);
+        initChatStream(chatId: chatId);
       }
     } catch (e, s) {
       emit(AlbumChatFailure(error: e.toString(), stacktrace: s));

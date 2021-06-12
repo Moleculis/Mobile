@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moleculis/models/chat/chat_model.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/enums/chat_type.dart';
+import 'package:moleculis/models/group.dart';
+import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/services/apis/chats_service.dart';
 import 'package:moleculis/utils/convert_utils.dart';
 
@@ -43,17 +45,18 @@ class ChatsServiceImpl implements ChatsService {
   Future<String> sendMessage({
     required String chatId,
     required MessageModel message,
-    required List<String> usersIds,
+    required List<String> usersUsernames,
     required ChatType chatType,
-    String? groupId,
+    Group? group,
+    User? user,
     bool isChatCreated = false,
   }) async {
     final chatDoc = _chatCollection.doc(chatId);
     if (!isChatCreated) {
       await chatDoc.set(ChatModel(
         id: chatId,
-        usersIds: usersIds,
-        groupId: groupId,
+        usersUsernames: usersUsernames,
+        groupId: group?.id.toString(),
         chatType: chatType,
         onlineUsersIds: [],
       ).toJson());

@@ -77,6 +77,9 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             body: BlocBuilder<EventsBloc, EventsState>(
               bloc: eventsBloc,
+              buildWhen: (prev, curr) {
+                return prev.isLoading != curr.isLoading || prev.isLoading;
+              },
               builder: (BuildContext context, EventsState eventsState) {
                 if (eventsState.isLoading) {
                   return Center(child: CircularProgressIndicator());
@@ -84,11 +87,8 @@ class _EventsScreenState extends State<EventsScreen> {
                 return SafeArea(
                   child: TabBarView(
                     children: <Widget>[
-                      EventsList(events: eventsState.events),
-                      EventsList(
-                        events: eventsState.othersEvents,
-                        others: true,
-                      ),
+                      EventsList(),
+                      EventsList(others: true),
                     ],
                   ),
                 );

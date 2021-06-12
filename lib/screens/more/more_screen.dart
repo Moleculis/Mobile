@@ -98,7 +98,9 @@ class _MoreScreenState extends State<MoreScreen> {
                     ),
                     onTap: () async {
                       Navigation.toScreen(
-                          context: context, screen: ContactsScreen());
+                        context: context,
+                        screen: ContactsScreen(),
+                      );
                     },
                   ),
                   SettingsTile(

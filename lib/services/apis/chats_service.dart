@@ -1,6 +1,8 @@
 import 'package:moleculis/models/chat/chat_model.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/enums/chat_type.dart';
+import 'package:moleculis/models/group.dart';
+import 'package:moleculis/models/user/user.dart';
 
 abstract class ChatsService {
   Stream<ChatModel?> chatStream(String chatId);
@@ -10,9 +12,10 @@ abstract class ChatsService {
   Future<String> sendMessage({
     required String chatId,
     required MessageModel message,
-    required List<String> usersIds,
+    required List<String> usersUsernames,
     required ChatType chatType,
-    String? groupId,
+    Group? group,
+    User? user,
     bool isChatCreated = false,
   });
 
