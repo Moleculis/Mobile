@@ -12,12 +12,11 @@ abstract class ChatModel with _$ChatModel {
     @JsonKey(
       toJson: EnumParser.toStringValue,
       fromJson: chatTypeFromString,
-    )
-        required ChatType chatType,
+    ) required ChatType chatType,
     required List<String> usersUsernames,
     String? groupId,
-    List<String>? mutedForUsersIds,
-    List<String>? onlineUsersIds,
+    List<String>? mutedForUserNames,
+    List<String>? onlineUsersNames,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

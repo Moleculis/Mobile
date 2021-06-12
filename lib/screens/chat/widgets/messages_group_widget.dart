@@ -25,7 +25,7 @@ class MessagesGroupWidget extends StatelessWidget {
   void _onLongTap(BuildContext context, MessageModel message) {
     final currentUserUsername = locator<AuthBloc>().state.currentUser!.username;
     final isCurrentUserMessageCreator =
-        messagesGroup.groupCreatorId == currentUserUsername;
+        messagesGroup.groupCreatorUsername == currentUserUsername;
     if (isCurrentUserMessageCreator) {
       WidgetUtils.showAlertDialog(
         context: context,
@@ -42,7 +42,7 @@ class MessagesGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCurrentUserMessageCreator = messagesGroup.groupCreatorId ==
+    final isCurrentUserMessageCreator = messagesGroup.groupCreatorUsername ==
         locator<AuthBloc>().state.currentUser!.username;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),

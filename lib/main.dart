@@ -1,19 +1,25 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/notifications/notifications_bloc.dart';
 import 'package:moleculis/common/colors.dart';
+import 'package:moleculis/models/notification/notification_model.dart';
 import 'package:moleculis/screens/error_screen.dart';
 import 'package:moleculis/screens/splash_screen.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/locale_utils.dart';
 import 'package:moleculis/utils/locator.dart';
+import 'package:moleculis/utils/notification_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,10 +54,71 @@ class _MyAppState extends State<MyApp> {
   late var easyLocalization;
 
   @override
+  void initState() {
+    super.initState();
+    initLocalNotifications();
+  }
+
+  @override
   void didChangeDependencies() {
     easyLocalization = EasyLocalization.of(context);
     locator<HttpHelper>().updateLocale(easyLocalization.locale.languageCode);
     super.didChangeDependencies();
+  }
+
+  Future<void> initLocalNotifications() async {
+    final initializationSettingsAndroid =
+    AndroidInitializationSettings('notification_logo_moleculis');
+    final initializationSettingsIOS = IOSInitializationSettings(
+      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+    final initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    await NotificationUtils.localNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: selectNotification,
+    );
+  }
+
+  Future<void> selectNotification(String? payload) async {
+    if (payload != null) onLocalPushNotificationTap(payload);
+  }
+
+  Future<void> onDidReceiveLocalNotification(int id,
+      String? title,
+      String? body,
+      String? payload,) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) =>
+          CupertinoAlertDialog(
+            title: Text(title!),
+            content: Text(body!),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text('Ok'),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  onLocalPushNotificationTap(payload!);
+                },
+              )
+            ],
+          ),
+    );
+  }
+
+  void onLocalPushNotificationTap(String payload) {
+    final Map<String, dynamic> message = jsonDecode(payload);
+    NotificationUtils.onPushNotificationTap(
+      message: message,
+      notificationConfigureType: PushNotificationConfigureType.message,
+    );
   }
 
   @override
@@ -59,13 +126,15 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(create: (_) => locator<AuthBloc>()),
+        BlocProvider<NotificationsBloc>(
+            create: (_) => locator<NotificationsBloc>()),
       ],
       child: MaterialApp(
         title: 'Moleculis',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           cupertinoOverrideTheme:
-              CupertinoThemeData(primaryColor: Colors.black),
+          CupertinoThemeData(primaryColor: Colors.black),
           scaffoldBackgroundColor: backgroundColor,
           accentColor: accentColor,
           textTheme: GoogleFonts.firaSansTextTheme(
@@ -77,13 +146,13 @@ class _MyAppState extends State<MyApp> {
             iconTheme: IconThemeData(color: Colors.black),
             actionsIconTheme: IconThemeData(color: Colors.black),
             textTheme: Theme.of(context).textTheme.copyWith(
-                  headline6: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    letterSpacing: -2,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+              headline6: TextStyle(
+                color: Colors.black,
+                fontSize: 25,
+                letterSpacing: -2,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

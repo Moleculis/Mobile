@@ -9,7 +9,7 @@ part of 'message_model.dart';
 _$_MessageModel _$_$_MessageModelFromJson(Map<String, dynamic> json) {
   return _$_MessageModel(
     id: json['id'] as String,
-    creatorId: json['creatorId'] as String,
+    creatorUsername: json['creatorUsername'] as String,
     text: json['text'] as String,
     createdAt: ConvertUtils.dateTimeFromTimestampNonNull(json['createdAt']),
     chatId: json['chatId'] as String,
@@ -21,7 +21,7 @@ _$_MessageModel _$_$_MessageModelFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_MessageModelToJson(_$_MessageModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'creatorId': instance.creatorId,
+      'creatorUsername': instance.creatorUsername,
       'text': instance.text,
       'createdAt': ConvertUtils.dateTimeToTimestamp(instance.createdAt),
       'chatId': instance.chatId,

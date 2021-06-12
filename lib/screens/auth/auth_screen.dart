@@ -34,7 +34,9 @@ class _AuthScreenState extends State<AuthScreen>
       listener: (BuildContext context, AuthState state) {
         if (state is AuthSuccess) {
           Navigation.toScreenAndCleanBackStack(
-              context: context, screen: HomeScreen());
+            context: context,
+            screen: HomeScreen(),
+          );
         } else if (state is RegisterSuccess) {
           authTabsController.animateTo(0);
           WidgetUtils.showSuccessSnackbar(context, message: state.message!);

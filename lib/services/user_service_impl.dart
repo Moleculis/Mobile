@@ -1,10 +1,16 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
 import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/models/user/user_model.dart';
 import 'package:moleculis/services/apis/user_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/utils/locator.dart';
+import 'package:moleculis/utils/values/collections_refs.dart';
 
 class UserServiceImpl implements UserService {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   final HttpHelper _httpHelper = locator<HttpHelper>();
 
   final String _endpointBase = '/users';
@@ -27,8 +33,53 @@ class UserServiceImpl implements UserService {
   @override
   Future<User> getCurrentUser() async {
     final Map<String, dynamic> response =
-        await _httpHelper.get(_currentUserEndpoint);
+    await _httpHelper.get(_currentUserEndpoint);
     return User.fromMap(response);
+  }
+
+  @override
+  Stream<UserModel?> currentUserModelStream([String? username]) {
+    final currentUserUsername = username ??
+        locator<AuthBloc>().state.currentUser!.username;
+    return usersCollection.doc(currentUserUsername).snapshots().map((event) {
+      if (!event.exists) return null;
+      final userModel = UserModel.fromJson(event.data()!);
+      return userModel;
+    });
+  }
+
+  Future<void> updateUserDeviceToken(UserModel user) async {
+    final List<String> existingInFirestoreTokens = user.tokens ?? <String>[];
+    final currentToken = await _firebaseMessaging.getToken();
+    if (currentToken != null) {
+      if (!existingInFirestoreTokens.contains(currentToken)) {
+        existingInFirestoreTokens.add(currentToken);
+        await usersCollection
+            .doc(user.username)
+            .update({'tokens': existingInFirestoreTokens});
+      }
+    }
+  }
+
+  @override
+  Future<void> deleteCurrentUserDeviceToken() async {
+    final user = locator<AuthBloc>().state.currentUserModel;
+    if (user == null) return;
+    final existTokens = user.tokens!;
+    final newToken = await _firebaseMessaging.getToken();
+    if (existTokens.contains(newToken)) {
+      existTokens.remove(newToken);
+    } else {
+      return;
+    }
+    await usersCollection.doc(user.username).update({'tokens': existTokens});
+  }
+
+  Future<void> createUserModel() async {
+    final currentUser = locator<AuthBloc>().state.currentUser!;
+    await usersCollection
+        .doc(currentUser.username)
+        .set(UserModel(username: currentUser.username).toJson());
   }
 
   @override

@@ -14,10 +14,10 @@ _$_ChatModel _$_$_ChatModelFromJson(Map<String, dynamic> json) {
         .map((e) => e as String)
         .toList(),
     groupId: json['groupId'] as String?,
-    mutedForUsersIds: (json['mutedForUsersIds'] as List<dynamic>?)
+    mutedForUserNames: (json['mutedForUserNames'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
-    onlineUsersIds: (json['onlineUsersIds'] as List<dynamic>?)
+    onlineUsersNames: (json['onlineUsersNames'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
   );
@@ -29,6 +29,6 @@ Map<String, dynamic> _$_$_ChatModelToJson(_$_ChatModel instance) =>
       'chatType': EnumParser.toStringValue(instance.chatType),
       'usersUsernames': instance.usersUsernames,
       'groupId': instance.groupId,
-      'mutedForUsersIds': instance.mutedForUsersIds,
-      'onlineUsersIds': instance.onlineUsersIds,
+      'mutedForUserNames': instance.mutedForUserNames,
+      'onlineUsersNames': instance.onlineUsersNames,
     };

@@ -159,7 +159,8 @@ class _ChatScreenState extends State<ChatScreen> {
           itemBuilder: (_, index) {
             final messagesList = chatState.messagesGroups![index];
             final messageCreator = members.firstWhere(
-              (element) => element.username == messagesList.groupCreatorId,
+              (element) =>
+              element.username == messagesList.groupCreatorUsername,
             );
             return MessagesGroupWidget(
               messageCreator: messageCreator,

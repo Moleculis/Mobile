@@ -35,31 +35,32 @@ class ChatUtils {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
-      } else if (messages[i - 1].creatorId == messages[i].creatorId &&
+      } else
+      if (messages[i - 1].creatorUsername == messages[i].creatorUsername &&
           messages[i - 1].createdAt.isSameDay(messages[i].createdAt)) {
         subResult.add(messages[i]);
         if (i == messages.length - 1) {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
       } else {
         SortUtils.messages(subResult);
         result.add(MessagesGroupModel(
           messagesGroup: subResult,
-          groupCreatorId: subResult.first.creatorId,
+          groupCreatorUsername: subResult.first.creatorUsername,
         ));
         subResult = []..add(messages[i]);
         if (i == messages.length - 1) {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
       }

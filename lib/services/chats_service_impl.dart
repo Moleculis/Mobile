@@ -55,7 +55,7 @@ class ChatsServiceImpl implements ChatsService {
         usersUsernames: usersUsernames,
         groupId: group?.id.toString(),
         chatType: chatType,
-        onlineUsersIds: [],
+        onlineUsersNames: [],
       ).toJson());
     }
     final messageDoc = chatMessagesCollection(chatId).doc();
