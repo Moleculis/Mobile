@@ -58,8 +58,8 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String?> userNames = users.map((e) => e.username).toList();
-      final List<String?> adminNames = admins.map((e) => e.username).toList();
+      final List<String> userNames = users.map((e) => e.username).toList();
+      final List<String> adminNames = admins.map((e) => e.username).toList();
       request = request.copyWith(users: userNames, admins: adminNames);
 
       final String? message = await _groupsService.createGroup(request);
@@ -79,8 +79,8 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String?> userNames = users.map((e) => e.username).toList();
-      final List<String?> adminNames = admins.map((e) => e.username).toList();
+      final List<String> userNames = users.map((e) => e.username).toList();
+      final List<String> adminNames = admins.map((e) => e.username).toList();
       request = request.copyWith(users: userNames, admins: adminNames);
 
       final String? message =

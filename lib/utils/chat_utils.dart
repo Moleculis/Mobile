@@ -1,7 +1,6 @@
 import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
-import 'package:moleculis/models/group.dart';
 import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/utils/extensions/datetime_extension.dart';
 import 'package:moleculis/utils/hash_utils.dart';
@@ -19,8 +18,8 @@ class ChatUtils {
     return HashUtils.countHash(sortedUsernames.join());
   }
 
-  static String getGroupChatId(Group group) {
-    return HashUtils.countHash('Group${group.id}Chat');
+  static String getGroupChatId(int groupId) {
+    return HashUtils.countHash('Group${groupId}Chat');
   }
 
   static List<MessagesGroupModel> divideMessagesByDateAndCreatorId(

@@ -6,19 +6,16 @@ import 'package:moleculis/models/group.dart';
 import 'package:moleculis/models/user/user.dart';
 import 'package:moleculis/services/apis/chats_service.dart';
 import 'package:moleculis/utils/convert_utils.dart';
+import 'package:moleculis/utils/values/collections_refs.dart';
 
 class ChatsServiceImpl implements ChatsService {
-  final _chatCollection = FirebaseFirestore.instance.collection('chats');
-
   final _createdAt = 'createdAt';
   final _isDeleted = 'isDeleted';
   final _updatedAt = 'updatedAt';
 
   @override
   Stream<List<MessageModel>> messagesStream(String chatId) {
-    return _chatCollection
-        .doc(chatId)
-        .collection('messages')
+    return chatMessagesCollection(chatId)
         .where(_isDeleted, isEqualTo: false)
         .orderBy(_createdAt, descending: true)
         .snapshots()
@@ -32,7 +29,7 @@ class ChatsServiceImpl implements ChatsService {
 
   @override
   Stream<ChatModel?> chatStream(String chatId) {
-    return _chatCollection.doc(chatId).snapshots().map((documentSnapshot) {
+    return chatsCollection.doc(chatId).snapshots().map((documentSnapshot) {
       if (documentSnapshot.exists) {
         return ChatModel.fromJson(documentSnapshot.data()!)
             .copyWith(id: documentSnapshot.id);
@@ -51,7 +48,7 @@ class ChatsServiceImpl implements ChatsService {
     User? user,
     bool isChatCreated = false,
   }) async {
-    final chatDoc = _chatCollection.doc(chatId);
+    final chatDoc = chatsCollection.doc(chatId);
     if (!isChatCreated) {
       await chatDoc.set(ChatModel(
         id: chatId,
@@ -61,7 +58,7 @@ class ChatsServiceImpl implements ChatsService {
         onlineUsersIds: [],
       ).toJson());
     }
-    final messageDoc = chatDoc.collection('messages').doc();
+    final messageDoc = chatMessagesCollection(chatId).doc();
     await messageDoc.set(message.copyWith(id: messageDoc.id).toJson());
     return messageDoc.id;
   }
@@ -71,8 +68,7 @@ class ChatsServiceImpl implements ChatsService {
     required String chatId,
     required String messageId,
   }) async {
-    final messageDoc =
-        _chatCollection.doc(chatId).collection('messages').doc(messageId);
+    final messageDoc = chatMessagesCollection(chatId).doc(messageId);
     await messageDoc.update({
       _isDeleted: true,
       _updatedAt: ConvertUtils.dateTimeToTimestamp(DateTime.now()),

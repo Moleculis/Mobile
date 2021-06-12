@@ -244,8 +244,12 @@ class _CreateEditGroupScreenState extends State<CreateEditGroupScreen> {
       if (group == null) {
         groupsBloc.add(CreateGroupEvent(request, newUsers, newAdmins));
       } else {
-        groupsBloc.add(
-            UpdateGroupEvent(request, group!.users, group!.admins, group!.id));
+        groupsBloc.add(UpdateGroupEvent(
+          request,
+          group!.users,
+          group!.admins,
+          group!.id,
+        ));
       }
     }
   }

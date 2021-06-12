@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     isGroup = chatType == ChatType.group;
 
     if (isGroup) {
-      chatId = ChatUtils.getGroupChatId(group!);
+      chatId = ChatUtils.getGroupChatId(group!.id);
       members = group!.admins..addAll(group!.users);
     } else {
       chatId = ChatUtils.getUserChatId(user!);

@@ -2,7 +2,9 @@ import 'package:moleculis/models/page.dart';
 import 'package:moleculis/models/requests/create_update_group_request.dart';
 import 'package:moleculis/services/apis/groups_service.dart';
 import 'package:moleculis/services/http_helper.dart';
+import 'package:moleculis/utils/chat_utils.dart';
 import 'package:moleculis/utils/locator.dart';
+import 'package:moleculis/utils/values/collections_refs.dart';
 
 class GroupsServiceImpl implements GroupsService {
   final HttpHelper _httpHelper = locator<HttpHelper>();
@@ -48,6 +50,19 @@ class GroupsServiceImpl implements GroupsService {
       _updateGroupEndpoint(groupId),
       body: request.toMap(),
     );
+
+    final newMembers = [...request.admins!, ...request.users!];
+
+    await firestore.runTransaction((t) async {
+      final chatRef = chatsCollection.doc(ChatUtils.getGroupChatId(groupId));
+      final chatDoc = await t.get(chatRef);
+      if (!chatDoc.exists) return;
+
+      t.update(chatRef, {
+        'usersUsernames': newMembers,
+      });
+    });
+
     return response['message'];
   }
 }
