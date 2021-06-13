@@ -18,7 +18,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool fingerprintSwitchValue = false;
-  bool notificationsSwitchValue = false;
+  bool notificationsSwitchValue = true;
 
   @override
   Widget build(BuildContext context) {

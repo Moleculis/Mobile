@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/blocs/events/events_bloc.dart';
 import 'package:moleculis/blocs/events/events_event.dart';
 import 'package:moleculis/blocs/events/events_state.dart';
@@ -9,6 +10,7 @@ import 'package:moleculis/models/event.dart';
 import 'package:moleculis/screens/create_edit_event/create_edit_event_screen.dart';
 import 'package:moleculis/screens/event_details/widgets/users_list.dart';
 import 'package:moleculis/utils/format.dart';
+import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
@@ -41,6 +43,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final eventTmp = eventsBloc.getEventById(widget.eventId)!;
+    final currentUserUsername = locator<AuthBloc>().state.currentUser!.username;
+    bool isMember = false;
+    for (final member in eventTmp.users) {
+      if (member.username == currentUserUsername) {
+        isMember = true;
+        break;
+      }
+    }
     return BlocListener(
       bloc: widget.eventsBloc,
       listener: (BuildContext context, dynamic state) {
@@ -85,7 +96,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           child: BigTile(
                             title: event.title,
                             subtitle:
-                                '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
+                            '${'created'.tr()}: ${FormatUtils.formatDateAndTime(
                               event.dateCreated,
                               context,
                             )}',
@@ -125,25 +136,26 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 },
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    eventsBloc.add(LeaveEvent(widget.eventId));
-                  },
-                  child: Text(
-                    'leave_event'.tr(),
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+            if (isMember)
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, bottom: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      eventsBloc.add(LeaveEvent(widget.eventId));
+                    },
+                    child: Text(
+                      'leave_event'.tr(),
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

@@ -119,6 +119,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       yield normalState.copyWith(
         events: state.events..removeWhere((element) => element.id == id),
         othersEvents: state.othersEvents..add(event),
+        isLoading: false,
       );
     } on AppException catch (e) {
       yield EventsFailure(error: e.toString());
