@@ -76,7 +76,6 @@ abstract class $MessageModelCopyWith<$Res> {
   factory $MessageModelCopyWith(
           MessageModel value, $Res Function(MessageModel) then) =
       _$MessageModelCopyWithImpl<$Res>;
-
   $Res call(
       {String id,
       String creatorUsername,
@@ -146,7 +145,6 @@ abstract class _$MessageModelCopyWith<$Res>
   factory _$MessageModelCopyWith(
           _MessageModel value, $Res Function(_MessageModel) then) =
       __$MessageModelCopyWithImpl<$Res>;
-
   @override
   $Res call(
       {String id,
@@ -315,7 +313,6 @@ abstract class _MessageModel extends MessageModel {
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestamp, toJson: ConvertUtils.dateTimeToTimestamp)
           DateTime? updatedAt,
       bool isDeleted}) = _$_MessageModel;
-
   _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -323,10 +320,8 @@ abstract class _MessageModel extends MessageModel {
 
   @override
   String get id => throw _privateConstructorUsedError;
-
   @override
   String get creatorUsername => throw _privateConstructorUsedError;
-
   @override
   String get text => throw _privateConstructorUsedError;
   @override

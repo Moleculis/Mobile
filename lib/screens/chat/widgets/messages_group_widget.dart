@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
+import 'package:moleculis/models/user/user_model.dart';
 import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/project_date_utils.dart';
@@ -12,7 +13,8 @@ import 'package:moleculis/widgets/user_avatar.dart';
 
 class MessagesGroupWidget extends StatelessWidget {
   final MessagesGroupModel messagesGroup;
-  final UserSmall? messageCreator;
+  final UserSmall messageCreator;
+  final UserModel messageCreatorModel;
   final ValueChanged<MessageModel> onDelete;
 
   const MessagesGroupWidget({
@@ -20,6 +22,7 @@ class MessagesGroupWidget extends StatelessWidget {
     required this.messagesGroup,
     required this.onDelete,
     required this.messageCreator,
+    required this.messageCreatorModel,
   }) : super(key: key);
 
   void _onLongTap(BuildContext context, MessageModel message) {
@@ -128,7 +131,7 @@ class MessagesGroupWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 4.0),
                         child: Text(
-                          messageCreator!.displayName,
+                          messageCreator.displayName,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -167,6 +170,7 @@ class MessagesGroupWidget extends StatelessWidget {
     if (!isLatestMessages) return SizedBox(width: 29.0);
     return UserAvatar(
       user: messageCreator,
+      imageUrl: messageCreatorModel.imageUrl,
       hasBorder: false,
       hasInnerBorder: false,
       maxRadius: 29.0,

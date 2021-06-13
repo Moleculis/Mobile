@@ -27,6 +27,7 @@ class ContactItem extends StatelessWidget {
           screen: UserDetails(userSmall: contact.user),
         );
       },
+      avatarUrl: contact.userModel?.imageUrl,
       title: contact.user.displayName,
       subtitle: contact.user.username,
       trailing: Row(

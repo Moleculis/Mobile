@@ -69,6 +69,7 @@ class _MoreScreenState extends State<MoreScreen> {
                         );
                       },
                     ),
+                    imageUrl: state.currentUserModel?.imageUrl,
                   );
                 },
               ),

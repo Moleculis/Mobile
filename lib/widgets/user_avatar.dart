@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/common/colors.dart';
@@ -12,6 +13,7 @@ class UserAvatar extends StatefulWidget {
   final bool isOnline;
   final bool isAnimate;
   final bool isFriend;
+  final String? imageUrl;
 
   // white inner circle
   final bool hasInnerBorder;
@@ -39,6 +41,7 @@ class UserAvatar extends StatefulWidget {
     this.borderHeight,
     this.maxRadius = 26.0,
     this.letterSize,
+    this.imageUrl,
     this.isFriend = true,
   }) : super(key: key);
 
@@ -119,7 +122,7 @@ class _UserAvatarState extends State<UserAvatar> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        userLetter,
+        widget.imageUrl == null ? userLetter : imageBuilder,
         if (!widget.isFriend)
           Container(
             decoration: BoxDecoration(
@@ -134,6 +137,21 @@ class _UserAvatarState extends State<UserAvatar> {
   Widget get userLetter {
     return Center(
       child: UserLetter(user: widget.user, fontSize: widget.maxRadius / 3),
+    );
+  }
+
+  Widget get imageBuilder {
+    return SizedBox(
+      width: widget.maxRadius,
+      height: widget.maxRadius,
+      child: ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: widget.imageUrl ?? '',
+          placeholder: (_, __) => userLetter,
+          errorWidget: (_, __, ___) => userLetter,
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }

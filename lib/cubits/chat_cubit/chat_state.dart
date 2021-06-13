@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:moleculis/models/chat/chat_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
 import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/models/user/user_model.dart';
 
 @immutable
 class ChatState {
@@ -9,7 +10,7 @@ class ChatState {
   final bool isLoadingMore;
   final ChatModel? chat;
   final List<MessagesGroupModel>? messagesGroups;
-  final List<User>? members;
+  final List<UserModel>? membersModels;
   final bool isChatDeleted;
 
   ChatState({
@@ -17,7 +18,7 @@ class ChatState {
     this.isLoadingMore = false,
     this.chat,
     this.messagesGroups,
-    this.members,
+    this.membersModels,
     this.isChatDeleted = false,
   });
 
@@ -26,7 +27,8 @@ class ChatState {
     bool? isLoadingMore,
     ChatModel? chat,
     List<MessagesGroupModel>? messagesGroups,
-    List<User>? albumMembers,
+    List<User>? members,
+    List<UserModel>? membersModels,
     bool? isChatDeleted,
   }) {
     return ChatState(
@@ -34,7 +36,7 @@ class ChatState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       chat: chat ?? this.chat,
       messagesGroups: messagesGroups ?? this.messagesGroups,
-      members: albumMembers ?? this.members,
+      membersModels: membersModels ?? this.membersModels,
       isChatDeleted: isChatDeleted ?? this.isChatDeleted,
     );
   }

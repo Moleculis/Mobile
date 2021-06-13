@@ -66,7 +66,6 @@ mixin _$ChatModel {
 abstract class $ChatModelCopyWith<$Res> {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) then) =
       _$ChatModelCopyWithImpl<$Res>;
-
   $Res call(
       {String id,
       @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
@@ -128,7 +127,6 @@ abstract class _$ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
   factory _$ChatModelCopyWith(
           _ChatModel value, $Res Function(_ChatModel) then) =
       __$ChatModelCopyWithImpl<$Res>;
-
   @override
   $Res call(
       {String id,
@@ -280,11 +278,9 @@ abstract class _ChatModel implements ChatModel {
 
   @override
   String get id => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
   ChatType get chatType => throw _privateConstructorUsedError;
-
   @override
   List<String> get usersUsernames => throw _privateConstructorUsedError;
   @override

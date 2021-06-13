@@ -61,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     usersUsernames = members.map((e) => e.username).toList();
     chatCubit = ChatCubit();
-    chatCubit.initChatStream(chatId: chatId);
+    chatCubit.initChatStream(chatId: chatId, membersUsernames: usersUsernames);
     super.initState();
   }
 
@@ -168,6 +168,8 @@ class _ChatScreenState extends State<ChatScreen> {
               messageCreator: messageCreator,
               messagesGroup: messagesList,
               onDelete: onDeleteMessage,
+              messageCreatorModel: chatState.membersModels!.firstWhere(
+                  (element) => element.username == messageCreator.username),
             );
           },
         ),

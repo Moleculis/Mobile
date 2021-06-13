@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/requests/update_user_request.dart';
 import 'package:moleculis/models/user/user.dart';
@@ -7,6 +10,7 @@ import 'package:moleculis/services/apis/user_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/values/collections_refs.dart';
+import 'package:moleculis/utils/values/constants.dart';
 
 class UserServiceImpl implements UserService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -33,14 +37,47 @@ class UserServiceImpl implements UserService {
   @override
   Future<User> getCurrentUser() async {
     final Map<String, dynamic> response =
-    await _httpHelper.get(_currentUserEndpoint);
-    return User.fromMap(response);
+        await _httpHelper.get(_currentUserEndpoint);
+    final User currentUser = User.fromMap(response);
+    final currentUserContacts = currentUser.contacts;
+    final currentUserContactsRequests = currentUser.contactRequests;
+    List<UserModel> contactsModels;
+    List<UserModel> contactsRequestsModels;
+    if (currentUserContacts != null && currentUserContacts.isNotEmpty) {
+      contactsModels = await getUsersModels(
+          currentUserContacts.map((e) => e.user.username).toList());
+      for (final model in contactsModels) {
+        final contactIndex = currentUserContacts
+            .indexWhere((element) => element.user.username == model.username);
+
+        currentUserContacts[contactIndex] =
+            currentUserContacts[contactIndex].copyWith(userModel: model);
+      }
+    }
+    if (currentUserContactsRequests != null &&
+        currentUserContactsRequests.isNotEmpty) {
+      contactsRequestsModels = await getUsersModels(
+          currentUserContactsRequests.map((e) => e.user.username).toList());
+      for (final model in contactsRequestsModels) {
+        final contactIndex = currentUserContactsRequests
+            .indexWhere((element) => element.user.username == model.username);
+
+        currentUserContactsRequests[contactIndex] =
+            currentUserContactsRequests[contactIndex]
+                .copyWith(userModel: model);
+      }
+    }
+
+    return currentUser.copyWith(
+      contacts: currentUserContacts,
+      contactRequests: currentUserContactsRequests,
+    );
   }
 
   @override
   Stream<UserModel?> currentUserModelStream([String? username]) {
-    final currentUserUsername = username ??
-        locator<AuthBloc>().state.currentUser!.username;
+    final currentUserUsername =
+        username ?? locator<AuthBloc>().state.currentUser!.username;
     return usersCollection.doc(currentUserUsername).snapshots().map((event) {
       if (!event.exists) return null;
       final userModel = UserModel.fromJson(event.data()!);
@@ -59,6 +96,23 @@ class UserServiceImpl implements UserService {
             .update({'tokens': existingInFirestoreTokens});
       }
     }
+  }
+
+  @override
+  Future<List<UserModel>> getUsersModels(List<String> usersUsernames) async {
+    return (await usersCollection
+            .where('username', whereIn: usersUsernames)
+            .get())
+        .docs
+        .map((e) {
+      return UserModel.fromJson(e.data());
+    }).toList();
+  }
+
+  @override
+  Future<UserModel> getUserModel(String username) async {
+    return UserModel.fromJson(
+        (await usersCollection.doc(username).get()).data()!);
   }
 
   @override
@@ -88,6 +142,11 @@ class UserServiceImpl implements UserService {
       _currentUserEndpoint,
       body: request.toMap(),
     );
+    if (request.newAvatar != null) {
+      final userUsername = locator<AuthBloc>().state.currentUser!.username;
+      final url = await _uploadAvatar(request.newAvatar!);
+      await usersCollection.doc(userUsername).update({'imageUrl': url});
+    }
     return response['message'];
   }
 
@@ -127,5 +186,23 @@ class UserServiceImpl implements UserService {
     final List<dynamic> response = await _httpHelper.get(_otherUsersEndpoint);
     final List<User> users = response.map((e) => User.fromMap(e)).toList();
     return users;
+  }
+
+  Future<String> _uploadAvatar(
+    File file,
+  ) async {
+    final userUsername = locator<AuthBloc>().state.currentUser!.username;
+    final fileName = '$userUsername${Constants.imageFormat}';
+
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child(users)
+        .child(userUsername)
+        .child(fileName);
+
+    TaskSnapshot task;
+    task = await ref.putFile(file);
+    final fileUrl = await task.ref.getDownloadURL();
+    return fileUrl;
   }
 }
