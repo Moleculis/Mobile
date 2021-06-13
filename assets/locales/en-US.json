@@ -92,11 +92,13 @@
   "no_other_users": "No other users",
   "write_message": "Write message",
   "no_messages": "No messages yet",
-  "delete_this_message": "Delete this message",
+  "delete_this_message": "Delete this message?",
   "today": "Today",
   "yesterday": "Yesterday",
   "choose_option": "Choose option",
   "mute_messages": "Mute messages",
   "no_new_activity": "No new activity",
-  "read_all": "Read all"
+  "read_all": "Read all",
+  "delete_this_notification": "Delete this notification?",
+  "delete": "Delete"
 }

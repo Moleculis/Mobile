@@ -54,6 +54,7 @@ class _ContactsListState extends State<ContactsList>
                 widget.sentRequests!.isNotEmpty) {
               return CustomExpansionTile(
                 title: Text('sent_requests'.tr()),
+                initialExpanded: true,
                 content: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -77,7 +78,7 @@ class _ContactsListState extends State<ContactsList>
             contact: contact,
             onRemove: deleteContact,
             onAccept:
-            widget.isReceived ? (int id) => acceptContact(contact) : null,
+                widget.isReceived ? (int id) => acceptContact(contact) : null,
             isReceived: widget.isReceived,
           );
         },

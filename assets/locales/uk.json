@@ -97,5 +97,8 @@
   "choose_option": "Виберіть варіант",
   "mute_messages": "Вимкнути повідомлення",
   "no_new_activity": "Немає активності",
-  "read_all": "Прочитати усе"
+  "read_all": "Прочитати усе",
+  "delete_this_notification": "Видалити це повідомлення?",
+  "delete_this_message": "Видалити це повідомлення?",
+  "delete": "Видалити"
 }

@@ -119,10 +119,10 @@ class UserServiceImpl implements UserService {
   Future<void> deleteCurrentUserDeviceToken() async {
     final user = locator<AuthBloc>().state.currentUserModel;
     if (user == null) return;
-    final existTokens = user.tokens!;
+    final existTokens = user.tokens;
     final newToken = await _firebaseMessaging.getToken();
-    if (existTokens.contains(newToken)) {
-      existTokens.remove(newToken);
+    if (existTokens?.contains(newToken) ?? false) {
+      existTokens!.remove(newToken);
     } else {
       return;
     }

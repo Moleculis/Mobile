@@ -32,8 +32,8 @@ class MessagesGroupWidget extends StatelessWidget {
     if (isCurrentUserMessageCreator) {
       WidgetUtils.showAlertDialog(
         context: context,
-        title: 'delete_this_message',
-        submitText: 'delete',
+        titleKey: 'delete_this_message',
+        submitTextKey: 'delete',
         submitTextColor: Colors.red,
         onSubmit: () {
           Navigator.pop(context);

@@ -197,9 +197,9 @@ class WidgetUtils {
 
   static Future<void> showAlertDialog({
     required BuildContext context,
-    required String title,
+    required String titleKey,
     String? content,
-    String submitText = 'ok',
+    String submitTextKey = 'ok',
     String refuseText = 'cancel',
     bool isShowCancelButton = true,
     Color? titleColor,
@@ -218,7 +218,7 @@ class WidgetUtils {
           return CupertinoAlertDialog(
             title: Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
-              child: Text(title.tr()),
+              child: Text(titleKey.tr()),
             ),
             content: content == null ? null : Text(content.tr()),
             actions: <Widget>[
@@ -234,7 +234,7 @@ class WidgetUtils {
               CupertinoDialogAction(
                 onPressed: onSubmit ?? () => Navigator.pop(context),
                 child: Text(
-                  submitText.tr(),
+                  submitTextKey.tr(),
                   style: TextStyle(color: submitTextColor),
                 ),
               )
@@ -249,7 +249,7 @@ class WidgetUtils {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              title.tr(),
+              titleKey.tr(),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             content: content == null
@@ -275,7 +275,7 @@ class WidgetUtils {
                 ),
               TextButton(
                 child: Text(
-                  submitText.tr(),
+                  submitTextKey.tr(),
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
