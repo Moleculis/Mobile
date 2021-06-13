@@ -44,9 +44,17 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
     final User currentUser =
         BlocProvider.of<AuthBloc>(context).state.currentUser!;
     bool isAdmin = false;
+    bool isMember = false;
     for (final user in group.admins) {
       if (user.username == currentUser.username) {
         isAdmin = true;
+        break;
+      }
+    }
+
+    for (final user in group.users) {
+      if (user.username == currentUser.username) {
+        isMember = true;
         break;
       }
     }
@@ -112,16 +120,18 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigation.toScreen(
-            context: context,
-            screen: ChatScreen(group: group),
-          );
-        },
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.chat, color: Colors.white),
-      ),
+      floatingActionButton: isAdmin || isMember
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigation.toScreen(
+                  context: context,
+                  screen: ChatScreen(group: group),
+                );
+              },
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.chat, color: Colors.white),
+            )
+          : null,
     );
   }
 }
