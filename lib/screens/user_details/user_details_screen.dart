@@ -33,7 +33,6 @@ class _UserDetailsState extends State<UserDetails> {
   @override
   void initState() {
     super.initState();
-
     authBloc = BlocProvider.of<AuthBloc>(context);
   }
 
@@ -124,16 +123,18 @@ class _UserDetailsState extends State<UserDetails> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigation.toScreen(
-            context: context,
-            screen: ChatScreen(user: widget.userSmall),
-          );
-        },
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.chat, color: Colors.white),
-      ),
+      floatingActionButton: isProfile
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigation.toScreen(
+                  context: context,
+                  screen: ChatScreen(user: widget.userSmall),
+                );
+              },
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.chat, color: Colors.white),
+            ),
     );
   }
 
