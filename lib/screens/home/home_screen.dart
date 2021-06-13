@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (int tab) => setState(() => currentTab = tab),
           selectedItemColor: accentColor,
           unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.event),
