@@ -12,7 +12,7 @@ class HttpHelper {
   HttpHelper({String? locale}) {
     if (locale != null) updateLocale(locale);
     _httpClient.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => _trustSelfSigned);
+    ((X509Certificate cert, String host, int port) => _trustSelfSigned);
     _ioClient = IOClient(_httpClient);
   }
 
@@ -21,7 +21,7 @@ class HttpHelper {
   }
 
   final String _baseUrl =
-      "http://${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:8080";
+      'https://moleculis-6y5troym7a-ey.a.run.app';
 
   final SharedPrefManager _prefs = locator<SharedPrefManager>();
   final HttpClient _httpClient = HttpClient();
@@ -60,8 +60,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<dynamic> post(
-    String endpoint, {
+  Future<dynamic> post(String endpoint, {
     Map<String, String>? headers,
     Map<String, dynamic>? body,
     authorized = true,
@@ -92,8 +91,7 @@ class HttpHelper {
     return responseJson;
   }
 
-  Future<dynamic> put(
-    String endpoint, {
+  Future<dynamic> put(String endpoint, {
     Map<String, String>? headers,
     Map<String, dynamic>? body,
     authorized = true,
