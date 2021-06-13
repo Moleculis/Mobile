@@ -103,6 +103,8 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: Toolbar(
                               title: 'edit_personal_info'.tr(),
+                              initialImageUrl:
+                                  authState.currentUserModel?.imageUrl,
                               backButton: true,
                               onImagePicked: (File image) {
                                 pickedImage = image;
@@ -323,6 +325,7 @@ class _CreateEditUserScreenState extends State<CreateEditUserScreen>
           fullName: fullNameController.text,
           email: emailController.text,
           gender: currentGender,
+          newAvatar: pickedImage,
         );
         authBloc.add(UpdateUserEvent(updateUserRequest));
       } else {

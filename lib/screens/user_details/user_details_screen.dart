@@ -5,9 +5,12 @@ import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/blocs/auth/auth_state.dart';
 import 'package:moleculis/models/enums/gender.dart';
 import 'package:moleculis/models/user/user.dart';
+import 'package:moleculis/models/user/user_model.dart';
 import 'package:moleculis/models/user/user_small.dart';
 import 'package:moleculis/screens/auth/create_edit_user_screen.dart';
 import 'package:moleculis/screens/chat/chat_screen.dart';
+import 'package:moleculis/services/apis/user_service.dart';
+import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/navigation.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/big_tile.dart';
@@ -69,12 +72,30 @@ class _UserDetailsState extends State<UserDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                BigTile(
-                  title: isProfile
-                      ? currentUser.fullname
-                      : widget.userSmall!.fullName,
-                  subtitle: isProfile ? currentUser.username : null,
-                ),
+                isProfile
+                    ? BigTile(
+                        title: isProfile
+                            ? currentUser.fullname
+                            : widget.userSmall!.fullName,
+                        subtitle: isProfile ? currentUser.username : null,
+                        imageUrl: authState.currentUserModel?.imageUrl,
+                      )
+                    : FutureBuilder<UserModel>(
+                        future: locator<UserService>()
+                            .getUserModel(widget.userSmall!.username),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return SizedBox(height: 80);
+                          }
+                          return BigTile(
+                            title: isProfile
+                                ? currentUser.fullname
+                                : widget.userSmall!.fullName,
+                            subtitle: isProfile ? currentUser.username : null,
+                            imageUrl: snapshot.data?.imageUrl,
+                          );
+                        },
+                      ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Divider(),

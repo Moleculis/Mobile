@@ -58,32 +58,22 @@ const $NotificationModel = _$NotificationModelTearOff();
 /// @nodoc
 mixin _$NotificationModel {
   String get id => throw _privateConstructorUsedError;
-
   String get creatorUsername => throw _privateConstructorUsedError;
-
   String get receiverUsername => throw _privateConstructorUsedError;
-
   String get title => throw _privateConstructorUsedError;
-
   String get text => throw _privateConstructorUsedError;
-
   @JsonKey(
       toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
   NotificationType get notificationType => throw _privateConstructorUsedError;
-
   @JsonKey(
       toJson: ConvertUtils.dateTimeToTimestamp,
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
   DateTime get createdAt => throw _privateConstructorUsedError;
-
   bool get isRead => throw _privateConstructorUsedError;
-
   String? get valueName => throw _privateConstructorUsedError;
-
   String? get valueId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $NotificationModelCopyWith<NotificationModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -94,7 +84,6 @@ abstract class $NotificationModelCopyWith<$Res> {
   factory $NotificationModelCopyWith(
           NotificationModel value, $Res Function(NotificationModel) then) =
       _$NotificationModelCopyWithImpl<$Res>;
-
   $Res call(
       {String id,
       String creatorUsername,
@@ -183,7 +172,6 @@ abstract class _$NotificationModelCopyWith<$Res>
   factory _$NotificationModelCopyWith(
           _NotificationModel value, $Res Function(_NotificationModel) then) =
       __$NotificationModelCopyWithImpl<$Res>;
-
   @override
   $Res call(
       {String id,
@@ -397,37 +385,29 @@ abstract class _NotificationModel implements NotificationModel {
 
   @override
   String get id => throw _privateConstructorUsedError;
-
   @override
   String get creatorUsername => throw _privateConstructorUsedError;
-
   @override
   String get receiverUsername => throw _privateConstructorUsedError;
   @override
   String get title => throw _privateConstructorUsedError;
   @override
   String get text => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(
       toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
   NotificationType get notificationType => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(
       toJson: ConvertUtils.dateTimeToTimestamp,
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
   DateTime get createdAt => throw _privateConstructorUsedError;
-
   @override
   bool get isRead => throw _privateConstructorUsedError;
-
   @override
   String? get valueName => throw _privateConstructorUsedError;
-
   @override
   String? get valueId => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(ignore: true)
   _$NotificationModelCopyWith<_NotificationModel> get copyWith =>

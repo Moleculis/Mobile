@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:moleculis/models/enums/gender.dart';
 
 class UpdateUserRequest {
@@ -6,6 +8,7 @@ class UpdateUserRequest {
   final Gender? gender;
   final String? username;
   final String? email;
+  final File? newAvatar;
 
   UpdateUserRequest({
     this.displayName,
@@ -13,6 +16,7 @@ class UpdateUserRequest {
     this.gender,
     this.username,
     this.email,
+    this.newAvatar,
   });
 
   Map<String, dynamic> toMap() {

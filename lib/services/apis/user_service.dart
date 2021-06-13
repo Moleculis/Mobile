@@ -9,6 +9,10 @@ abstract class UserService {
 
   Future<void> updateUserDeviceToken(UserModel user);
 
+  Future<List<UserModel>> getUsersModels(List<String> usersUsernames);
+
+  Future<UserModel> getUserModel(String username);
+
   Future<void> deleteCurrentUserDeviceToken();
 
   Future<void> createUserModel();
