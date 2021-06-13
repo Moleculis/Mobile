@@ -4,6 +4,7 @@ enum NotificationType {
   newPersonalChatMessage,
   newGroupChatMessage,
   newEvent,
+  newGroup,
 }
 
 NotificationType notificationTypeFromString(String json) {
