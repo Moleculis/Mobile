@@ -49,15 +49,16 @@ class ChatCubit extends Cubit<ChatState> {
             _messagesStreamSubscription?.cancel();
             _messagesStreamSubscription =
                 _chatService.messagesStream(chat.id).listen((messages) {
-              _updateChatMessages(messages, chat.id);
+              _updateChatMessages(
+                messages,
+                chat.id,
+                membersUsernames,
+              );
             });
           }, (_, __) {
             // Will get here if the chat just has been created but the messages
             // sub collection has not
           });
-          final usersModels =
-              await locator<UserService>().getUsersModels(membersUsernames);
-          emit(state.copyWith(membersModels: usersModels));
         } else {
           emit(state.copyWith(isLoading: false));
         }
@@ -70,12 +71,19 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> _updateChatMessages(
     List<MessageModel> messages,
     String chatId,
+    List<String> membersUsernames,
   ) async {
     try {
       _messagesStreamInitialized = true;
       final messagesGroups =
           ChatUtils.divideMessagesByDateAndCreatorId(messages);
-      emit(state.copyWith(isLoading: false, messagesGroups: messagesGroups));
+      final usersModels =
+          await locator<UserService>().getUsersModels(membersUsernames);
+      emit(state.copyWith(
+        isLoading: false,
+        messagesGroups: messagesGroups,
+        membersModels: usersModels,
+      ));
       if (!_chatPresenceInitialized) {
         await _chatService.initChatPresence(chatId: chatId);
         _chatPresenceInitialized = true;

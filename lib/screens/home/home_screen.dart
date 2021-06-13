@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moleculis/blocs/notifications/notifications_bloc.dart';
-import 'package:moleculis/blocs/notifications/notifications_event.dart';
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/blocs/auth/auth_event.dart';
 import 'package:moleculis/common/colors.dart';
 import 'package:moleculis/screens/events/events_screen.dart';
 import 'package:moleculis/screens/groups/groups_screen.dart';
 import 'package:moleculis/screens/more/more_screen.dart';
 import 'package:moleculis/screens/notifications/notifications_screen.dart';
+import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/notification_utils.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (isNotificationsGranted) {
       NotificationUtils.initNotificationService();
     }
-    BlocProvider.of<NotificationsBloc>(context).add(LoadNotificationsEvent());
+    locator<AuthBloc>().add(ReloadUserEvent());
   }
 
   @override

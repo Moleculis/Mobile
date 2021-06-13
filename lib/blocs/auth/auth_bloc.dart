@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:moleculis/blocs/auth/auth_event.dart';
 import 'package:moleculis/blocs/auth/auth_state.dart';
+import 'package:moleculis/blocs/notifications/notifications_bloc.dart';
+import 'package:moleculis/blocs/notifications/notifications_event.dart';
 import 'package:moleculis/models/contact.dart';
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
@@ -54,6 +56,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield UnauthorizedState();
     }
   }
+
+  bool _notificationsInitialized = false;
 
   Stream<AuthState> _reloadUser() async* {
     try {
@@ -114,14 +118,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               _userService.createUserModel();
             } else {
               if (!_tokenInitialized) {
-                _userService.updateUserDeviceToken(userModel);
-                _tokenInitialized = true;
-              }
-              emit(state.copyWith(
-                currentUserModel: userModel,
-                isLoading: false,
-              ));
-            }
+            _userService.updateUserDeviceToken(userModel);
+            _tokenInitialized = true;
+          }
+          emit(state.copyWith(
+            currentUserModel: userModel,
+            isLoading: false,
+          ));
+          if (!_notificationsInitialized) {
+            locator<NotificationsBloc>().add(LoadNotificationsEvent());
+            _notificationsInitialized = true;
+          }
+        }
           },
         );
   }
