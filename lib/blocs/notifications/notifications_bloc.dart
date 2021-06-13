@@ -10,13 +10,13 @@ import 'package:moleculis/utils/pagination/pagination_common.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   final NotificationsService _notificationService =
-  locator<NotificationsService>();
+      locator<NotificationsService>();
 
   StreamSubscription<PaginationData<NotificationModel>?>?
-  _notificationsSubscription;
+      _notificationsSubscription;
 
   StreamSubscription<List<NotificationModel>?>?
-  _unreadNotificationsSubscription;
+      _unreadNotificationsSubscription;
 
   NotificationsBloc() : super(NotificationsState());
 
@@ -24,13 +24,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   Stream<NotificationsState> mapEventToState(NotificationsEvent event) async* {
     if (event is LoadNotificationsEvent) {
       yield* _loadNotifications(isLoadMore: event.isLoadMore);
-    } else if (event is ListenNotificationsEvent) {
-      yield* _listenNotifications(
-        notifications: event.notifications,
-        loadedAll: event.loadedAll,
-      );
-    } else if (event is ListenUnreadNotificationsEvent) {
-      yield* _listenUnreadNotifications(event.notifications);
     } else if (event is ReadNotificationEvent) {
       yield* _readNotification(event.notification);
     } else if (event is ReadNotificationsEvent) {
@@ -43,31 +36,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       yield* _clearState();
     } else if (event is ReadAllEvent) {
       yield* _readAll();
-    }
-  }
-
-  Stream<NotificationsState> _listenNotifications({
-    required List<NotificationModel> notifications,
-    bool? loadedAll = false,
-  }) async* {
-    yield state.copyWith(
-      isLoading: false,
-      isLoadingMore: false,
-      loadedAll: loadedAll,
-      notifications: notifications,
-    );
-  }
-
-  Stream<NotificationsState> _listenUnreadNotifications(
-      List<NotificationModel> unreadNotifications,) async* {
-    try {
-      yield state.copyWith(
-        isLoading: false,
-        isLoadingMore: false,
-        unreadNotifications: unreadNotifications,
-      );
-    } on Exception catch (e) {
-      yield NotificationsFailure(error: e.toString());
     }
   }
 
@@ -88,11 +56,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       if (_unreadNotificationsSubscription == null) {
         _unreadNotificationsSubscription =
             _notificationService.loadUnreadNotifications().listen(
-                  (notifications) {
-                add(ListenUnreadNotificationsEvent(
-                    notifications: notifications));
-              },
-            );
+          (notifications) {
+            emit(state.copyWith(
+              isLoading: false,
+              isLoadingMore: false,
+              unreadNotifications: notifications,
+            ));
+          },
+        );
       }
 
       _notificationsSubscription?.cancel();
@@ -101,9 +72,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         isLoadMore: isLoadMore,
       )
           .listen((paginationData) {
-        add(ListenNotificationsEvent(
-          notifications: paginationData.data,
+        emit(state.copyWith(
+          isLoading: false,
+          isLoadingMore: false,
           loadedAll: paginationData.loadedAll,
+          notifications: paginationData.data,
         ));
       });
     } on Exception catch (e) {
@@ -112,7 +85,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   Stream<NotificationsState> _readNotification(
-      NotificationModel notification,) async* {
+    NotificationModel notification,
+  ) async* {
     try {
       if (!notification.isRead) {
         await _notificationService.readNotification(
@@ -125,7 +99,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   Stream<NotificationsState> _readNotifications(
-      List<NotificationModel> notifications,) async* {
+    List<NotificationModel> notifications,
+  ) async* {
     try {
       await _notificationService.readNotifications(
         notifications: notifications,
@@ -136,7 +111,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   Stream<NotificationsState> _deleteNotification(
-      NotificationModel notification,) async* {
+    NotificationModel notification,
+  ) async* {
     try {
       await _notificationService.deleteNotification(
         notificationId: notification.id,
@@ -147,7 +123,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   Stream<NotificationsState> _deleteNotifications(
-      List<NotificationModel> notifications,) async* {
+    List<NotificationModel> notifications,
+  ) async* {
     try {
       await _notificationService.deleteNotifications(
         notifications: notifications,

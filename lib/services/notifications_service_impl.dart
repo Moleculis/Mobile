@@ -22,6 +22,7 @@ class NotificationsServiceImpl extends NotificationsService {
     return _firebasePagination.loadData(
       query: notificationsCollection
           .where('receiverUsername', isEqualTo: currentUserUsername)
+          .where('isRead', isEqualTo: true)
           .orderBy('createdAt', descending: true),
       isLoadMore: isLoadMore,
       mapSnapshot: (querySnapshot) =>
@@ -43,6 +44,7 @@ class NotificationsServiceImpl extends NotificationsService {
     final currentUserUsername = locator<AuthBloc>().state.currentUser!.username;
     return notificationsCollection
         .where('receiverUsername', isEqualTo: currentUserUsername)
+        .where('isRead', isEqualTo: false)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map(

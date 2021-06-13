@@ -96,5 +96,7 @@
   "today": "Today",
   "yesterday": "Yesterday",
   "choose_option": "Choose option",
-  "mute_messages": "Mute messages"
+  "mute_messages": "Mute messages",
+  "no_new_activity": "No new activity",
+  "read_all": "Read all"
 }

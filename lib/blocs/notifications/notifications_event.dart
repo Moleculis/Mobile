@@ -21,28 +21,6 @@ class LoadNotificationsEvent extends NotificationsEvent {
   List<Object> get props => [isLoadMore];
 }
 
-class ListenNotificationsEvent extends NotificationsEvent {
-  final List<NotificationModel> notifications;
-  final bool? loadedAll;
-
-  ListenNotificationsEvent({
-    required this.notifications,
-    this.loadedAll = false,
-  });
-
-  @override
-  List<Object?> get props => [notifications, loadedAll];
-}
-
-class ListenUnreadNotificationsEvent extends NotificationsEvent {
-  final List<NotificationModel> notifications;
-
-  ListenUnreadNotificationsEvent({required this.notifications});
-
-  @override
-  List<Object?> get props => [notifications];
-}
-
 class ReadNotificationEvent extends NotificationsEvent {
   final NotificationModel notification;
 

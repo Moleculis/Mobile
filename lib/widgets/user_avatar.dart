@@ -60,7 +60,7 @@ class _UserAvatarState extends State<UserAvatar> {
     if (widget.isAnimate) animate();
 
     final currentUser = locator<AuthBloc>().state.currentUser!;
-    backgroundColor = currentUser.username == widget.user!.username
+    backgroundColor = currentUser.username == widget.user?.username
         ? accentColor
         : Colors.blue;
   }

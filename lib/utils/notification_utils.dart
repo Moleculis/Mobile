@@ -90,4 +90,11 @@ class NotificationUtils {
       notificationConfigureType: notificationConfigureType,
     );
   }
+
+  static String? translateNotification(NotificationModel notification) {
+    switch (notification.notificationType) {
+      default:
+        return notification.text;
+    }
+  }
 }

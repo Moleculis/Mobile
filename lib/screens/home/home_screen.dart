@@ -7,6 +7,7 @@ import 'package:moleculis/common/colors.dart';
 import 'package:moleculis/screens/events/events_screen.dart';
 import 'package:moleculis/screens/groups/groups_screen.dart';
 import 'package:moleculis/screens/more/more_screen.dart';
+import 'package:moleculis/screens/notifications/notifications_screen.dart';
 import 'package:moleculis/utils/notification_utils.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 
@@ -42,29 +43,41 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           EventsScreen(showErrorSnackBar: showErrorSnackBar),
           GroupsScreen(),
+          NotificationsScreen(),
           MoreScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: backgroundColor,
-        elevation: 0.0,
-        currentIndex: currentTab,
-        onTap: (int tab) => setState(() => currentTab = tab),
-        selectedItemColor: accentColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'events'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'groups'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more),
-            label: 'more'.tr(),
-          )
-        ],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          primaryColor: accentColor,
+          canvasColor: backgroundColor,
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: backgroundColor,
+          elevation: 0.0,
+          currentIndex: currentTab,
+          onTap: (int tab) => setState(() => currentTab = tab),
+          selectedItemColor: accentColor,
+          unselectedItemColor: Colors.grey,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.event),
+              label: 'events'.tr(),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.group),
+              label: 'groups'.tr(),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'notifications'.tr(),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.more),
+              label: 'more'.tr(),
+            )
+          ],
+        ),
       ),
     );
   }

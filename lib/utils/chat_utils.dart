@@ -2,7 +2,7 @@ import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
 import 'package:moleculis/models/user/user_small.dart';
-import 'package:moleculis/utils/extensions/datetime_extension.dart';
+import 'package:moleculis/utils/extensions/date_time_extension.dart';
 import 'package:moleculis/utils/hash_utils.dart';
 import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/sort_utils.dart';

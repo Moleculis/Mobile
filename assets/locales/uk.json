@@ -95,5 +95,7 @@
   "today": "Сьогодні",
   "yesterday": "Учора",
   "choose_option": "Виберіть варіант",
-  "mute_messages": "Вимкнути повідомлення"
+  "mute_messages": "Вимкнути повідомлення",
+  "no_new_activity": "Немає активності",
+  "read_all": "Прочитати усе"
 }
