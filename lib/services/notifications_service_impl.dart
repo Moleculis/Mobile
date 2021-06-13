@@ -11,7 +11,7 @@ import 'package:moleculis/utils/values/constants.dart';
 
 class NotificationsServiceImpl extends NotificationsService {
   final FirebasePagination<NotificationModel> _firebasePagination =
-  FirebasePagination(dataLimit: Constants.notificationsLimit);
+      FirebasePagination(dataLimit: Constants.notificationsLimit);
 
   @override
   Stream<PaginationData<NotificationModel>> loadNotifications({
@@ -25,15 +25,13 @@ class NotificationsServiceImpl extends NotificationsService {
           .where('isRead', isEqualTo: true)
           .orderBy('createdAt', descending: true),
       isLoadMore: isLoadMore,
-      mapSnapshot: (querySnapshot) =>
-          querySnapshot.docs
-              .map((documentSnapshot) =>
-              NotificationModel.fromJson(
+      mapSnapshot: (querySnapshot) => querySnapshot.docs
+          .map((documentSnapshot) => NotificationModel.fromJson(
                   documentSnapshot.data() as Map<String, dynamic>)
-                  .copyWith(id: documentSnapshot.id))
-              .toList(),
+              .copyWith(id: documentSnapshot.id))
+          .toList(),
       dataItemsEqual: (a, b) =>
-      a.id == b.id &&
+          a.id == b.id &&
           a.text == b.text &&
           a.creatorUsername == b.creatorUsername,
     );
@@ -51,8 +49,8 @@ class NotificationsServiceImpl extends NotificationsService {
           (querySnapshot) {
         return querySnapshot.docs
             .map((documentSnapshot) =>
-            NotificationModel.fromJson(documentSnapshot.data())
-                .copyWith(id: documentSnapshot.id))
+                NotificationModel.fromJson(documentSnapshot.data())
+                    .copyWith(id: documentSnapshot.id))
             .toList();
       },
     );
@@ -65,6 +63,23 @@ class NotificationsServiceImpl extends NotificationsService {
     await notificationDocRef.set(
       notification.copyWith(id: notificationDocRef.id).toJson(),
     );
+  }
+
+  @override
+  Future<void> createNotifications(
+    List<NotificationModel> notifications,
+  ) async {
+    final newNotifications = <Map<String, dynamic>>[];
+    final notificationsRefs = <DocumentReference>[];
+    for (final notification in notifications) {
+      final notificationDocRef = notificationsCollection.doc();
+      newNotifications.add(
+        notification.copyWith(id: notificationDocRef.id).toJson(),
+      );
+      notificationsRefs.add(notificationDocRef);
+    }
+
+    await FirebaseUtils.batchSet(notificationsRefs, dataList: newNotifications);
   }
 
   @override

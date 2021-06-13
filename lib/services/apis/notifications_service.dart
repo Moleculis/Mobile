@@ -10,6 +10,8 @@ abstract class NotificationsService {
 
   Future<void> createNotification(NotificationModel notification);
 
+  Future<void> createNotifications(List<NotificationModel> notifications);
+
   Future<void> readNotification({
     required String notificationId,
   });

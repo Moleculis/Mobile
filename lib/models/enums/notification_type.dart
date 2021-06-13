@@ -3,6 +3,7 @@ import 'package:moleculis/models/enums/enum_parser.dart';
 enum NotificationType {
   newPersonalChatMessage,
   newGroupChatMessage,
+  newEvent,
 }
 
 NotificationType notificationTypeFromString(String json) {

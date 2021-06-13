@@ -59,7 +59,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String?> userNames = users.map((e) => e.username).toList();
+      final List<String> userNames = users.map((e) => e.username).toList();
       request = request.copyWith(users: userNames);
       final String? message =
           await _eventsService.updateEvent(eventId, request);
@@ -78,7 +78,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   ) async* {
     try {
       yield state.copyWith(isLoading: true);
-      final List<String?> userNames = users.map((e) => e.username).toList();
+      final List<String> userNames = users.map((e) => e.username).toList();
       request = request.copyWith(users: userNames);
       final String? message = await _eventsService.createEvent(request);
 
