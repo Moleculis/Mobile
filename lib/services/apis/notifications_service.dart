@@ -23,4 +23,6 @@ abstract class NotificationsService {
   Future<void> deleteNotifications({
     required List<NotificationModel> notifications,
   });
+
+  Future<void> readNewMessagesNotifications({required String chatId});
 }

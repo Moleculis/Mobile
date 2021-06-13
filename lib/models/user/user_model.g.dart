@@ -10,7 +10,7 @@ _$_UserModel _$_$_UserModelFromJson(Map<String, dynamic> json) {
   return _$_UserModel(
     username: json['username'] as String,
     tokens:
-    (json['tokens'] as List<dynamic>?)?.map((e) => e as String).toList(),
+        (json['tokens'] as List<dynamic>?)?.map((e) => e as String).toList(),
   );
 }
 

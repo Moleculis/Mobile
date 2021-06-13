@@ -38,11 +38,9 @@ const $UserModel = _$UserModelTearOff();
 /// @nodoc
 mixin _$UserModel {
   String get username => throw _privateConstructorUsedError;
-
   List<String>? get tokens => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $UserModelCopyWith<UserModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -51,8 +49,7 @@ mixin _$UserModel {
 /// @nodoc
 abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
-  _$UserModelCopyWithImpl<$Res>;
-
+      _$UserModelCopyWithImpl<$Res>;
   $Res call({String username, List<String>? tokens});
 }
 
@@ -61,7 +58,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   _$UserModelCopyWithImpl(this._value, this._then);
 
   final UserModel _value;
-
   // ignore: unused_field
   final $Res Function(UserModel) _then;
 
@@ -74,20 +70,20 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
       username: username == freezed
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       tokens: tokens == freezed
           ? _value.tokens
           : tokens // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
     ));
   }
 }
 
 /// @nodoc
 abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
-  factory _$UserModelCopyWith(_UserModel value,
-      $Res Function(_UserModel) then) =
-  __$UserModelCopyWithImpl<$Res>;
+  factory _$UserModelCopyWith(
+          _UserModel value, $Res Function(_UserModel) then) =
+      __$UserModelCopyWithImpl<$Res>;
 
   @override
   $Res call({String username, List<String>? tokens});
@@ -111,11 +107,11 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
       username: username == freezed
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       tokens: tokens == freezed
           ? _value.tokens
           : tokens // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
     ));
   }
 }
@@ -168,19 +164,16 @@ class _$_UserModel extends _UserModel {
 
 abstract class _UserModel extends UserModel {
   factory _UserModel({required String username, List<String>? tokens}) =
-  _$_UserModel;
-
+      _$_UserModel;
   _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
-  _$_UserModel.fromJson;
+      _$_UserModel.fromJson;
 
   @override
   String get username => throw _privateConstructorUsedError;
-
   @override
   List<String>? get tokens => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(ignore: true)
   _$UserModelCopyWith<_UserModel> get copyWith =>

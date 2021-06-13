@@ -20,16 +20,19 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
 class _$NotificationModelTearOff {
   const _$NotificationModelTearOff();
 
-  _NotificationModel call({required String id,
-    required String creatorUsername,
-    required String receiverUsername,
-    required String title,
-    required String text,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: notificationTypeFromString) required NotificationType notificationType,
-    required DateTime createdAt,
-    bool isRead = false,
-    String? valueName}) {
+  _NotificationModel call(
+      {required String id,
+      required String creatorUsername,
+      required String receiverUsername,
+      required String title,
+      required String text,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
+          required NotificationType notificationType,
+      @JsonKey(toJson: ConvertUtils.dateTimeToTimestamp, fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
+          required DateTime createdAt,
+      bool isRead = false,
+      String? valueName,
+      String? valueId}) {
     return _NotificationModel(
       id: id,
       creatorUsername: creatorUsername,
@@ -40,6 +43,7 @@ class _$NotificationModelTearOff {
       createdAt: createdAt,
       isRead: isRead,
       valueName: valueName,
+      valueId: valueId,
     );
   }
 
@@ -67,11 +71,16 @@ mixin _$NotificationModel {
       toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
   NotificationType get notificationType => throw _privateConstructorUsedError;
 
+  @JsonKey(
+      toJson: ConvertUtils.dateTimeToTimestamp,
+      fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   bool get isRead => throw _privateConstructorUsedError;
 
   String? get valueName => throw _privateConstructorUsedError;
+
+  String? get valueId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -82,20 +91,23 @@ mixin _$NotificationModel {
 
 /// @nodoc
 abstract class $NotificationModelCopyWith<$Res> {
-  factory $NotificationModelCopyWith(NotificationModel value,
-      $Res Function(NotificationModel) then) =
-  _$NotificationModelCopyWithImpl<$Res>;
+  factory $NotificationModelCopyWith(
+          NotificationModel value, $Res Function(NotificationModel) then) =
+      _$NotificationModelCopyWithImpl<$Res>;
 
-  $Res call({String id,
-    String creatorUsername,
-    String receiverUsername,
-    String title,
-    String text,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: notificationTypeFromString) NotificationType notificationType,
-    DateTime createdAt,
-    bool isRead,
-    String? valueName});
+  $Res call(
+      {String id,
+      String creatorUsername,
+      String receiverUsername,
+      String title,
+      String text,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
+          NotificationType notificationType,
+      @JsonKey(toJson: ConvertUtils.dateTimeToTimestamp, fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
+          DateTime createdAt,
+      bool isRead,
+      String? valueName,
+      String? valueId});
 }
 
 /// @nodoc
@@ -104,7 +116,6 @@ class _$NotificationModelCopyWithImpl<$Res>
   _$NotificationModelCopyWithImpl(this._value, this._then);
 
   final NotificationModel _value;
-
   // ignore: unused_field
   final $Res Function(NotificationModel) _then;
 
@@ -119,44 +130,49 @@ class _$NotificationModelCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? isRead = freezed,
     Object? valueName = freezed,
+    Object? valueId = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       creatorUsername: creatorUsername == freezed
           ? _value.creatorUsername
           : creatorUsername // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       receiverUsername: receiverUsername == freezed
           ? _value.receiverUsername
           : receiverUsername // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       notificationType: notificationType == freezed
           ? _value.notificationType
           : notificationType // ignore: cast_nullable_to_non_nullable
-      as NotificationType,
+              as NotificationType,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-      as DateTime,
+              as DateTime,
       isRead: isRead == freezed
           ? _value.isRead
           : isRead // ignore: cast_nullable_to_non_nullable
-      as bool,
+              as bool,
       valueName: valueName == freezed
           ? _value.valueName
           : valueName // ignore: cast_nullable_to_non_nullable
-      as String?,
+              as String?,
+      valueId: valueId == freezed
+          ? _value.valueId
+          : valueId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -164,29 +180,32 @@ class _$NotificationModelCopyWithImpl<$Res>
 /// @nodoc
 abstract class _$NotificationModelCopyWith<$Res>
     implements $NotificationModelCopyWith<$Res> {
-  factory _$NotificationModelCopyWith(_NotificationModel value,
-      $Res Function(_NotificationModel) then) =
-  __$NotificationModelCopyWithImpl<$Res>;
+  factory _$NotificationModelCopyWith(
+          _NotificationModel value, $Res Function(_NotificationModel) then) =
+      __$NotificationModelCopyWithImpl<$Res>;
 
   @override
-  $Res call({String id,
-    String creatorUsername,
-    String receiverUsername,
-    String title,
-    String text,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: notificationTypeFromString) NotificationType notificationType,
-    DateTime createdAt,
-    bool isRead,
-    String? valueName});
+  $Res call(
+      {String id,
+      String creatorUsername,
+      String receiverUsername,
+      String title,
+      String text,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
+          NotificationType notificationType,
+      @JsonKey(toJson: ConvertUtils.dateTimeToTimestamp, fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
+          DateTime createdAt,
+      bool isRead,
+      String? valueName,
+      String? valueId});
 }
 
 /// @nodoc
 class __$NotificationModelCopyWithImpl<$Res>
     extends _$NotificationModelCopyWithImpl<$Res>
     implements _$NotificationModelCopyWith<$Res> {
-  __$NotificationModelCopyWithImpl(_NotificationModel _value,
-      $Res Function(_NotificationModel) _then)
+  __$NotificationModelCopyWithImpl(
+      _NotificationModel _value, $Res Function(_NotificationModel) _then)
       : super(_value, (v) => _then(v as _NotificationModel));
 
   @override
@@ -203,44 +222,49 @@ class __$NotificationModelCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? isRead = freezed,
     Object? valueName = freezed,
+    Object? valueId = freezed,
   }) {
     return _then(_NotificationModel(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       creatorUsername: creatorUsername == freezed
           ? _value.creatorUsername
           : creatorUsername // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       receiverUsername: receiverUsername == freezed
           ? _value.receiverUsername
           : receiverUsername // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-      as String,
+              as String,
       notificationType: notificationType == freezed
           ? _value.notificationType
           : notificationType // ignore: cast_nullable_to_non_nullable
-      as NotificationType,
+              as NotificationType,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-      as DateTime,
+              as DateTime,
       isRead: isRead == freezed
           ? _value.isRead
           : isRead // ignore: cast_nullable_to_non_nullable
-      as bool,
+              as bool,
       valueName: valueName == freezed
           ? _value.valueName
           : valueName // ignore: cast_nullable_to_non_nullable
-      as String?,
+              as String?,
+      valueId: valueId == freezed
+          ? _value.valueId
+          : valueId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -248,16 +272,19 @@ class __$NotificationModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_NotificationModel implements _NotificationModel {
-  _$_NotificationModel({required this.id,
-    required this.creatorUsername,
-    required this.receiverUsername,
-    required this.title,
-    required this.text,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: notificationTypeFromString) required this.notificationType,
-    required this.createdAt,
-    this.isRead = false,
-    this.valueName});
+  _$_NotificationModel(
+      {required this.id,
+      required this.creatorUsername,
+      required this.receiverUsername,
+      required this.title,
+      required this.text,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
+          required this.notificationType,
+      @JsonKey(toJson: ConvertUtils.dateTimeToTimestamp, fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
+          required this.createdAt,
+      this.isRead = false,
+      this.valueName,
+      this.valueId});
 
   factory _$_NotificationModel.fromJson(Map<String, dynamic> json) =>
       _$_$_NotificationModelFromJson(json);
@@ -277,16 +304,21 @@ class _$_NotificationModel implements _NotificationModel {
       toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
   final NotificationType notificationType;
   @override
+  @JsonKey(
+      toJson: ConvertUtils.dateTimeToTimestamp,
+      fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
   final DateTime createdAt;
   @JsonKey(defaultValue: false)
   @override
   final bool isRead;
   @override
   final String? valueName;
+  @override
+  final String? valueId;
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, creatorUsername: $creatorUsername, receiverUsername: $receiverUsername, title: $title, text: $text, notificationType: $notificationType, createdAt: $createdAt, isRead: $isRead, valueName: $valueName)';
+    return 'NotificationModel(id: $id, creatorUsername: $creatorUsername, receiverUsername: $receiverUsername, title: $title, text: $text, notificationType: $notificationType, createdAt: $createdAt, isRead: $isRead, valueName: $valueName, valueId: $valueId)';
   }
 
   @override
@@ -315,7 +347,9 @@ class _$_NotificationModel implements _NotificationModel {
                 const DeepCollectionEquality().equals(other.isRead, isRead)) &&
             (identical(other.valueName, valueName) ||
                 const DeepCollectionEquality()
-                    .equals(other.valueName, valueName)));
+                    .equals(other.valueName, valueName)) &&
+            (identical(other.valueId, valueId) ||
+                const DeepCollectionEquality().equals(other.valueId, valueId)));
   }
 
   @override
@@ -329,7 +363,8 @@ class _$_NotificationModel implements _NotificationModel {
       const DeepCollectionEquality().hash(notificationType) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(isRead) ^
-      const DeepCollectionEquality().hash(valueName);
+      const DeepCollectionEquality().hash(valueName) ^
+      const DeepCollectionEquality().hash(valueId);
 
   @JsonKey(ignore: true)
   @override
@@ -343,19 +378,22 @@ class _$_NotificationModel implements _NotificationModel {
 }
 
 abstract class _NotificationModel implements NotificationModel {
-  factory _NotificationModel({required String id,
-    required String creatorUsername,
-    required String receiverUsername,
-    required String title,
-    required String text,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: notificationTypeFromString) required NotificationType notificationType,
-    required DateTime createdAt,
-    bool isRead,
-    String? valueName}) = _$_NotificationModel;
+  factory _NotificationModel(
+      {required String id,
+      required String creatorUsername,
+      required String receiverUsername,
+      required String title,
+      required String text,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: notificationTypeFromString)
+          required NotificationType notificationType,
+      @JsonKey(toJson: ConvertUtils.dateTimeToTimestamp, fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
+          required DateTime createdAt,
+      bool isRead,
+      String? valueName,
+      String? valueId}) = _$_NotificationModel;
 
   factory _NotificationModel.fromJson(Map<String, dynamic> json) =
-  _$_NotificationModel.fromJson;
+      _$_NotificationModel.fromJson;
 
   @override
   String get id => throw _privateConstructorUsedError;
@@ -365,10 +403,8 @@ abstract class _NotificationModel implements NotificationModel {
 
   @override
   String get receiverUsername => throw _privateConstructorUsedError;
-
   @override
   String get title => throw _privateConstructorUsedError;
-
   @override
   String get text => throw _privateConstructorUsedError;
 
@@ -378,6 +414,9 @@ abstract class _NotificationModel implements NotificationModel {
   NotificationType get notificationType => throw _privateConstructorUsedError;
 
   @override
+  @JsonKey(
+      toJson: ConvertUtils.dateTimeToTimestamp,
+      fromJson: ConvertUtils.dateTimeFromTimestampNonNull)
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   @override
@@ -385,6 +424,9 @@ abstract class _NotificationModel implements NotificationModel {
 
   @override
   String? get valueName => throw _privateConstructorUsedError;
+
+  @override
+  String? get valueId => throw _privateConstructorUsedError;
 
   @override
   @JsonKey(ignore: true)

@@ -100,4 +100,28 @@ class NotificationsServiceImpl extends NotificationsService {
     }
     await batch.commit();
   }
+
+  Future<void> readNewMessagesNotifications({required String chatId}) async {
+    final querySnap = await notificationsCollection
+        .where('isRead', isEqualTo: false)
+        .where('valueId', isEqualTo: chatId)
+        .get();
+    await _readNotifications(querySnap);
+  }
+
+  Future<void> _readNotifications(QuerySnapshot querySnapshot) async {
+    if (querySnapshot.size > 0) {
+      final fieldsToUpdate = <String, dynamic>{
+        'isRead': true,
+      };
+      final docs = querySnapshot.docs;
+
+      final readNotificationsBatch = FirebaseFirestore.instance.batch();
+
+      for (final doc in docs) {
+        readNotificationsBatch.update(doc.reference, fieldsToUpdate);
+      }
+      await readNotificationsBatch.commit();
+    }
+  }
 }

@@ -94,5 +94,7 @@
   "no_messages": "No messages yet",
   "delete_this_message": "Delete this message",
   "today": "Today",
-  "yesterday": "Yesterday"
+  "yesterday": "Yesterday",
+  "choose_option": "Choose option",
+  "mute_messages": "Mute messages"
 }

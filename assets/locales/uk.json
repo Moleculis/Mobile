@@ -93,5 +93,7 @@
   "write_message": "Написати повідомлення",
   "no_messages": "Жодного повідомлення",
   "today": "Сьогодні",
-  "yesterday": "Учора"
+  "yesterday": "Учора",
+  "choose_option": "Виберіть варіант",
+  "mute_messages": "Вимкнути повідомлення"
 }

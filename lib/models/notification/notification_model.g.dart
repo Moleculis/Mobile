@@ -14,15 +14,16 @@ _$_NotificationModel _$_$_NotificationModelFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     text: json['text'] as String,
     notificationType:
-    notificationTypeFromString(json['notificationType'] as String),
-    createdAt: DateTime.parse(json['createdAt'] as String),
+        notificationTypeFromString(json['notificationType'] as String),
+    createdAt: ConvertUtils.dateTimeFromTimestampNonNull(json['createdAt']),
     isRead: json['isRead'] as bool? ?? false,
     valueName: json['valueName'] as String?,
+    valueId: json['valueId'] as String?,
   );
 }
 
 Map<String, dynamic> _$_$_NotificationModelToJson(
-    _$_NotificationModel instance) =>
+        _$_NotificationModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'creatorUsername': instance.creatorUsername,
@@ -30,7 +31,8 @@ Map<String, dynamic> _$_$_NotificationModelToJson(
       'title': instance.title,
       'text': instance.text,
       'notificationType': EnumParser.toStringValue(instance.notificationType),
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt': ConvertUtils.dateTimeToTimestamp(instance.createdAt),
       'isRead': instance.isRead,
       'valueName': instance.valueName,
+      'valueId': instance.valueId,
     };

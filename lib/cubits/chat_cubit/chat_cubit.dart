@@ -20,10 +20,12 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatState());
 
   bool _messagesStreamInitialized = false;
+  bool _chatPresenceInitialized = false;
 
   void initChatStream({required String chatId}) {
     try {
       _messagesStreamInitialized = false;
+      _chatPresenceInitialized = false;
       emit(ChatState(isLoading: true));
       _chatStreamSubscription?.cancel();
       _chatStreamSubscription = _chatService.chatStream(chatId).listen((chat) {
@@ -67,6 +69,10 @@ class ChatCubit extends Cubit<ChatState> {
       final messagesGroups =
           ChatUtils.divideMessagesByDateAndCreatorId(messages);
       emit(state.copyWith(isLoading: false, messagesGroups: messagesGroups));
+      if (!_chatPresenceInitialized) {
+        await _chatService.initChatPresence(chatId: chatId);
+        _chatPresenceInitialized = true;
+      }
     } catch (e, s) {
       emit(AlbumChatFailure(error: e.toString(), stacktrace: s));
     }
@@ -111,6 +117,26 @@ class ChatCubit extends Cubit<ChatState> {
     } catch (e, s) {
       emit(AlbumChatFailure(error: e.toString(), stacktrace: s));
     }
+  }
+
+  void muteAlbumChat(String chatId) async {
+    try {
+      await _chatService.muteAlbumChat(chatId);
+    } catch (e, s) {
+      emit(AlbumChatFailure(error: e.toString(), stacktrace: s));
+    }
+  }
+
+  void unMuteAlbumChat(String chatId) async {
+    try {
+      await _chatService.unMuteAlbumChat(chatId);
+    } catch (e, s) {
+      emit(AlbumChatFailure(error: e.toString(), stacktrace: s));
+    }
+  }
+
+  Future<void> setUserOffline({required String chatId}) async {
+    await _chatService.setUserOffline(chatId: chatId);
   }
 
   @override

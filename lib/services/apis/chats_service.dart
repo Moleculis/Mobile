@@ -23,4 +23,16 @@ abstract class ChatsService {
     required String chatId,
     required String messageId,
   });
+
+  Future<void> muteAlbumChat(String chatId);
+
+  Future<void> unMuteAlbumChat(String chatId);
+
+  Future<void> initChatPresence({
+    required String chatId,
+  });
+
+  Future<void> setUserOffline({
+    required String chatId,
+  });
 }

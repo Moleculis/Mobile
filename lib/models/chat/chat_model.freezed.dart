@@ -20,13 +20,14 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 class _$ChatModelTearOff {
   const _$ChatModelTearOff();
 
-  _ChatModel call({required String id,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: chatTypeFromString) required ChatType chatType,
-    required List<String> usersUsernames,
-    String? groupId,
-    List<String>? mutedForUserNames,
-    List<String>? onlineUsersNames}) {
+  _ChatModel call(
+      {required String id,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
+          required ChatType chatType,
+      required List<String> usersUsernames,
+      String? groupId,
+      List<String>? mutedForUserNames,
+      List<String>? onlineUsersNames}) {
     return _ChatModel(
       id: id,
       chatType: chatType,
@@ -48,20 +49,14 @@ const $ChatModel = _$ChatModelTearOff();
 /// @nodoc
 mixin _$ChatModel {
   String get id => throw _privateConstructorUsedError;
-
   @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
   ChatType get chatType => throw _privateConstructorUsedError;
-
   List<String> get usersUsernames => throw _privateConstructorUsedError;
-
   String? get groupId => throw _privateConstructorUsedError;
-
   List<String>? get mutedForUserNames => throw _privateConstructorUsedError;
-
   List<String>? get onlineUsersNames => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $ChatModelCopyWith<ChatModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -72,13 +67,14 @@ abstract class $ChatModelCopyWith<$Res> {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) then) =
       _$ChatModelCopyWithImpl<$Res>;
 
-  $Res call({String id,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: chatTypeFromString) ChatType chatType,
-    List<String> usersUsernames,
-    String? groupId,
-    List<String>? mutedForUserNames,
-    List<String>? onlineUsersNames});
+  $Res call(
+      {String id,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
+          ChatType chatType,
+      List<String> usersUsernames,
+      String? groupId,
+      List<String>? mutedForUserNames,
+      List<String>? onlineUsersNames});
 }
 
 /// @nodoc
@@ -106,23 +102,23 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
       chatType: chatType == freezed
           ? _value.chatType
           : chatType // ignore: cast_nullable_to_non_nullable
-      as ChatType,
+              as ChatType,
       usersUsernames: usersUsernames == freezed
           ? _value.usersUsernames
           : usersUsernames // ignore: cast_nullable_to_non_nullable
-      as List<String>,
+              as List<String>,
       groupId: groupId == freezed
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
-      as String?,
+              as String?,
       mutedForUserNames: mutedForUserNames == freezed
           ? _value.mutedForUserNames
           : mutedForUserNames // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
       onlineUsersNames: onlineUsersNames == freezed
           ? _value.onlineUsersNames
           : onlineUsersNames // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
     ));
   }
 }
@@ -134,13 +130,14 @@ abstract class _$ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       __$ChatModelCopyWithImpl<$Res>;
 
   @override
-  $Res call({String id,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: chatTypeFromString) ChatType chatType,
-    List<String> usersUsernames,
-    String? groupId,
-    List<String>? mutedForUserNames,
-    List<String>? onlineUsersNames});
+  $Res call(
+      {String id,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
+          ChatType chatType,
+      List<String> usersUsernames,
+      String? groupId,
+      List<String>? mutedForUserNames,
+      List<String>? onlineUsersNames});
 }
 
 /// @nodoc
@@ -169,23 +166,23 @@ class __$ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
       chatType: chatType == freezed
           ? _value.chatType
           : chatType // ignore: cast_nullable_to_non_nullable
-      as ChatType,
+              as ChatType,
       usersUsernames: usersUsernames == freezed
           ? _value.usersUsernames
           : usersUsernames // ignore: cast_nullable_to_non_nullable
-      as List<String>,
+              as List<String>,
       groupId: groupId == freezed
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
-      as String?,
+              as String?,
       mutedForUserNames: mutedForUserNames == freezed
           ? _value.mutedForUserNames
           : mutedForUserNames // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
       onlineUsersNames: onlineUsersNames == freezed
           ? _value.onlineUsersNames
           : onlineUsersNames // ignore: cast_nullable_to_non_nullable
-      as List<String>?,
+              as List<String>?,
     ));
   }
 }
@@ -193,13 +190,14 @@ class __$ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ChatModel implements _ChatModel {
-  _$_ChatModel({required this.id,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: chatTypeFromString) required this.chatType,
-    required this.usersUsernames,
-    this.groupId,
-    this.mutedForUserNames,
-    this.onlineUsersNames});
+  _$_ChatModel(
+      {required this.id,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
+          required this.chatType,
+      required this.usersUsernames,
+      this.groupId,
+      this.mutedForUserNames,
+      this.onlineUsersNames});
 
   factory _$_ChatModel.fromJson(Map<String, dynamic> json) =>
       _$_$_ChatModelFromJson(json);
@@ -268,34 +266,33 @@ class _$_ChatModel implements _ChatModel {
 }
 
 abstract class _ChatModel implements ChatModel {
-  factory _ChatModel({required String id,
-    @JsonKey(toJson: EnumParser.toStringValue,
-        fromJson: chatTypeFromString) required ChatType chatType,
-    required List<String> usersUsernames,
-    String? groupId,
-    List<String>? mutedForUserNames,
-    List<String>? onlineUsersNames}) = _$_ChatModel;
+  factory _ChatModel(
+      {required String id,
+      @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
+          required ChatType chatType,
+      required List<String> usersUsernames,
+      String? groupId,
+      List<String>? mutedForUserNames,
+      List<String>? onlineUsersNames}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
 
   @override
   String get id => throw _privateConstructorUsedError;
+
   @override
   @JsonKey(toJson: EnumParser.toStringValue, fromJson: chatTypeFromString)
   ChatType get chatType => throw _privateConstructorUsedError;
+
   @override
   List<String> get usersUsernames => throw _privateConstructorUsedError;
-
   @override
   String? get groupId => throw _privateConstructorUsedError;
-
   @override
   List<String>? get mutedForUserNames => throw _privateConstructorUsedError;
-
   @override
   List<String>? get onlineUsersNames => throw _privateConstructorUsedError;
-
   @override
   @JsonKey(ignore: true)
   _$ChatModelCopyWith<_ChatModel> get copyWith =>

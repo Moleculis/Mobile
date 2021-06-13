@@ -13,6 +13,7 @@ interface NotificationModel {
     createdAt: Timestamp,
     isRead: boolean,
     valueName?: string,
+    valueId?: string,
 }
 
 export default NotificationModel;

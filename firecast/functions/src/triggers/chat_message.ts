@@ -56,11 +56,14 @@ exports.onCreateChatMessage = functions.firestore
                     notificationType: isGroupChat ? "newGroupChatMessage" : "newPersonalChatMessage",
                     text: isGroupChat ? "New message in the group chat" : `New message from ${authUser.username}`,
                     createdAt: FieldValue.serverTimestamp(),
+                    valueId: messageModel.chatId,
                     isRead: false,
                 } as NotificationModel;
             }).forEach((notification) => {
                 if (notification.receiverUsername !== creatorUsername) {
-                    notificationsBatch.set(notificationsCollection.doc(), notification);
+                    const notificationRef = notificationsCollection.doc();
+                    notification.id = notificationRef.id;
+                    notificationsBatch.set(notificationRef, notification);
                 }
             });
             requestsPromises.push(notificationsBatch.commit());
