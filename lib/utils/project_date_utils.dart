@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:intl/intl.dart';
-import 'package:moleculis/utils/extensions/datetime_extension.dart';
+import 'package:moleculis/utils/extensions/date_time_extension.dart';
 
 class ProjectDateUtils {
   static String formatDate(String pattern, DateTime date) {

@@ -10,13 +10,12 @@ abstract class MessageModel implements _$MessageModel {
 
   factory MessageModel({
     required String id,
-    required String creatorId,
+    required String creatorUsername,
     required String text,
     @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull,
       toJson: ConvertUtils.dateTimeToTimestamp,
-    )
-        required DateTime createdAt,
+    ) required DateTime createdAt,
     required String chatId,
     @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestamp,
@@ -37,7 +36,7 @@ abstract class MessageModel implements _$MessageModel {
   }) {
     return MessageModel(
       id: '',
-      creatorId: creatorId,
+      creatorUsername: creatorId,
       createdAt: DateTime.now(),
       text: text,
       isDeleted: false,

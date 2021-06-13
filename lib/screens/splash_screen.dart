@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context: context,
             screen: AuthScreen(),
           );
-        } else if (state.currentUser != null) {
+        } else if (state.currentUserModel != null) {
           Navigation.toScreenAndCleanBackStack(
             context: context,
             screen: HomeScreen(),

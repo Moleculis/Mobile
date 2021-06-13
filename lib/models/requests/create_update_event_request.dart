@@ -6,7 +6,7 @@ class CreateUpdateEventRequest {
   final bool? isPrivate;
   final String? location;
   final DateTime? date;
-  final List<String?>? users;
+  final List<String>? usersUsernames;
 
   CreateUpdateEventRequest({
     this.title,
@@ -14,7 +14,7 @@ class CreateUpdateEventRequest {
     this.isPrivate,
     this.location,
     this.date,
-    this.users,
+    this.usersUsernames,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,7 +24,7 @@ class CreateUpdateEventRequest {
       'isPrivate': this.isPrivate,
       'location': this.location,
       'date': FormatUtils.formatDateTime(this.date!),
-      'users': this.users,
+      'users': this.usersUsernames,
     };
   }
 
@@ -34,7 +34,7 @@ class CreateUpdateEventRequest {
     bool? isPrivate,
     String? location,
     DateTime? date,
-    List<String?>? users,
+    List<String>? users,
   }) {
     return CreateUpdateEventRequest(
       title: title ?? this.title,
@@ -42,7 +42,7 @@ class CreateUpdateEventRequest {
       isPrivate: isPrivate ?? this.isPrivate,
       location: location ?? this.location,
       date: date ?? this.date,
-      users: users ?? this.users,
+      usersUsernames: users ?? this.usersUsernames,
     );
   }
 }

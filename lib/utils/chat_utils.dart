@@ -2,7 +2,7 @@ import 'package:moleculis/blocs/auth/auth_bloc.dart';
 import 'package:moleculis/models/chat/message_model.dart';
 import 'package:moleculis/models/chat/messages_group_model.dart';
 import 'package:moleculis/models/user/user_small.dart';
-import 'package:moleculis/utils/extensions/datetime_extension.dart';
+import 'package:moleculis/utils/extensions/date_time_extension.dart';
 import 'package:moleculis/utils/hash_utils.dart';
 import 'package:moleculis/utils/locator.dart';
 import 'package:moleculis/utils/sort_utils.dart';
@@ -35,31 +35,32 @@ class ChatUtils {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
-      } else if (messages[i - 1].creatorId == messages[i].creatorId &&
+      } else
+      if (messages[i - 1].creatorUsername == messages[i].creatorUsername &&
           messages[i - 1].createdAt.isSameDay(messages[i].createdAt)) {
         subResult.add(messages[i]);
         if (i == messages.length - 1) {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
       } else {
         SortUtils.messages(subResult);
         result.add(MessagesGroupModel(
           messagesGroup: subResult,
-          groupCreatorId: subResult.first.creatorId,
+          groupCreatorUsername: subResult.first.creatorUsername,
         ));
         subResult = []..add(messages[i]);
         if (i == messages.length - 1) {
           SortUtils.messages(subResult);
           result.add(MessagesGroupModel(
             messagesGroup: subResult,
-            groupCreatorId: subResult.first.creatorId,
+            groupCreatorUsername: subResult.first.creatorUsername,
           ));
         }
       }

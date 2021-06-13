@@ -110,11 +110,11 @@ class Input extends StatelessWidget {
           TextFormField(
             validator: validator == null
                 ? (String? s) {
-                    if (isRequired && (s == null || s.isEmpty)) {
-                      return '${title ?? hint ?? 'Field'} cannot be empty';
-                    }
-                    return null;
-                  }
+              if (isRequired && (s == null || s.isEmpty)) {
+                return '${title ?? hint ?? 'Field'} cannot be empty';
+              }
+              return null;
+            }
                 : validator,
             onChanged: onChanged,
             onTap: onTap,

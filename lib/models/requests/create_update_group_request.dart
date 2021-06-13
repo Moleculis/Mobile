@@ -1,13 +1,13 @@
 class CreateUpdateGroupRequest {
   final String? title;
   final String? description;
-  final List<String>? users;
+  final List<String>? usersUsernames;
   final List<String>? admins;
 
   CreateUpdateGroupRequest({
     this.title,
     this.description,
-    this.users,
+    this.usersUsernames,
     this.admins,
   });
 
@@ -15,7 +15,7 @@ class CreateUpdateGroupRequest {
     return {
       'title': this.title,
       'description': this.description,
-      'users': this.users,
+      'users': this.usersUsernames,
       'admins': this.admins,
     };
   }
@@ -29,7 +29,7 @@ class CreateUpdateGroupRequest {
     return CreateUpdateGroupRequest(
       title: title ?? this.title,
       description: description ?? this.description,
-      users: users ?? this.users,
+      usersUsernames: users ?? this.usersUsernames,
       admins: admins ?? this.admins,
     );
   }

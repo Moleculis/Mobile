@@ -22,7 +22,7 @@ class _$MessageModelTearOff {
 
   _MessageModel call(
       {required String id,
-      required String creatorId,
+      required String creatorUsername,
       required String text,
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestampNonNull, toJson: ConvertUtils.dateTimeToTimestamp)
           required DateTime createdAt,
@@ -32,7 +32,7 @@ class _$MessageModelTearOff {
       bool isDeleted = false}) {
     return _MessageModel(
       id: id,
-      creatorId: creatorId,
+      creatorUsername: creatorUsername,
       text: text,
       createdAt: createdAt,
       chatId: chatId,
@@ -52,7 +52,7 @@ const $MessageModel = _$MessageModelTearOff();
 /// @nodoc
 mixin _$MessageModel {
   String get id => throw _privateConstructorUsedError;
-  String get creatorId => throw _privateConstructorUsedError;
+  String get creatorUsername => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
   @JsonKey(
       fromJson: ConvertUtils.dateTimeFromTimestampNonNull,
@@ -76,9 +76,10 @@ abstract class $MessageModelCopyWith<$Res> {
   factory $MessageModelCopyWith(
           MessageModel value, $Res Function(MessageModel) then) =
       _$MessageModelCopyWithImpl<$Res>;
+
   $Res call(
       {String id,
-      String creatorId,
+      String creatorUsername,
       String text,
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestampNonNull, toJson: ConvertUtils.dateTimeToTimestamp)
           DateTime createdAt,
@@ -99,7 +100,7 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? creatorId = freezed,
+    Object? creatorUsername = freezed,
     Object? text = freezed,
     Object? createdAt = freezed,
     Object? chatId = freezed,
@@ -111,9 +112,9 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      creatorId: creatorId == freezed
-          ? _value.creatorId
-          : creatorId // ignore: cast_nullable_to_non_nullable
+      creatorUsername: creatorUsername == freezed
+          ? _value.creatorUsername
+          : creatorUsername // ignore: cast_nullable_to_non_nullable
               as String,
       text: text == freezed
           ? _value.text
@@ -145,10 +146,11 @@ abstract class _$MessageModelCopyWith<$Res>
   factory _$MessageModelCopyWith(
           _MessageModel value, $Res Function(_MessageModel) then) =
       __$MessageModelCopyWithImpl<$Res>;
+
   @override
   $Res call(
       {String id,
-      String creatorId,
+      String creatorUsername,
       String text,
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestampNonNull, toJson: ConvertUtils.dateTimeToTimestamp)
           DateTime createdAt,
@@ -171,7 +173,7 @@ class __$MessageModelCopyWithImpl<$Res> extends _$MessageModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? creatorId = freezed,
+    Object? creatorUsername = freezed,
     Object? text = freezed,
     Object? createdAt = freezed,
     Object? chatId = freezed,
@@ -183,9 +185,9 @@ class __$MessageModelCopyWithImpl<$Res> extends _$MessageModelCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      creatorId: creatorId == freezed
-          ? _value.creatorId
-          : creatorId // ignore: cast_nullable_to_non_nullable
+      creatorUsername: creatorUsername == freezed
+          ? _value.creatorUsername
+          : creatorUsername // ignore: cast_nullable_to_non_nullable
               as String,
       text: text == freezed
           ? _value.text
@@ -216,7 +218,7 @@ class __$MessageModelCopyWithImpl<$Res> extends _$MessageModelCopyWithImpl<$Res>
 class _$_MessageModel extends _MessageModel {
   _$_MessageModel(
       {required this.id,
-      required this.creatorId,
+      required this.creatorUsername,
       required this.text,
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestampNonNull, toJson: ConvertUtils.dateTimeToTimestamp)
           required this.createdAt,
@@ -232,7 +234,7 @@ class _$_MessageModel extends _MessageModel {
   @override
   final String id;
   @override
-  final String creatorId;
+  final String creatorUsername;
   @override
   final String text;
   @override
@@ -253,7 +255,7 @@ class _$_MessageModel extends _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, creatorId: $creatorId, text: $text, createdAt: $createdAt, chatId: $chatId, updatedAt: $updatedAt, isDeleted: $isDeleted)';
+    return 'MessageModel(id: $id, creatorUsername: $creatorUsername, text: $text, createdAt: $createdAt, chatId: $chatId, updatedAt: $updatedAt, isDeleted: $isDeleted)';
   }
 
   @override
@@ -262,9 +264,9 @@ class _$_MessageModel extends _MessageModel {
         (other is _MessageModel &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.creatorId, creatorId) ||
+            (identical(other.creatorUsername, creatorUsername) ||
                 const DeepCollectionEquality()
-                    .equals(other.creatorId, creatorId)) &&
+                    .equals(other.creatorUsername, creatorUsername)) &&
             (identical(other.text, text) ||
                 const DeepCollectionEquality().equals(other.text, text)) &&
             (identical(other.createdAt, createdAt) ||
@@ -284,7 +286,7 @@ class _$_MessageModel extends _MessageModel {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(creatorId) ^
+      const DeepCollectionEquality().hash(creatorUsername) ^
       const DeepCollectionEquality().hash(text) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(chatId) ^
@@ -305,7 +307,7 @@ class _$_MessageModel extends _MessageModel {
 abstract class _MessageModel extends MessageModel {
   factory _MessageModel(
       {required String id,
-      required String creatorId,
+      required String creatorUsername,
       required String text,
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestampNonNull, toJson: ConvertUtils.dateTimeToTimestamp)
           required DateTime createdAt,
@@ -313,6 +315,7 @@ abstract class _MessageModel extends MessageModel {
       @JsonKey(fromJson: ConvertUtils.dateTimeFromTimestamp, toJson: ConvertUtils.dateTimeToTimestamp)
           DateTime? updatedAt,
       bool isDeleted}) = _$_MessageModel;
+
   _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -320,8 +323,10 @@ abstract class _MessageModel extends MessageModel {
 
   @override
   String get id => throw _privateConstructorUsedError;
+
   @override
-  String get creatorId => throw _privateConstructorUsedError;
+  String get creatorUsername => throw _privateConstructorUsedError;
+
   @override
   String get text => throw _privateConstructorUsedError;
   @override

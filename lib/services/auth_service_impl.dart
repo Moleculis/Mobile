@@ -1,6 +1,7 @@
 import 'package:moleculis/models/requests/login_request.dart';
 import 'package:moleculis/models/requests/register_request.dart';
 import 'package:moleculis/services/apis/auth_service.dart';
+import 'package:moleculis/services/apis/user_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/storage/shared_pref_manager.dart';
 import 'package:moleculis/utils/jwt.dart';
@@ -10,6 +11,8 @@ class AuthServiceImpl implements AuthService {
   final HttpHelper _httpHelper = locator<HttpHelper>();
   final SharedPrefManager _prefs = locator<SharedPrefManager>();
   final String _endpointBase = '/users';
+
+  final UserService _userService = locator<UserService>();
 
   String get _loginEndpoint => _endpointBase + '/login';
 
@@ -44,8 +47,9 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<String?> logOut() async {
     final Map<String, dynamic> response =
-        await _httpHelper.post(_logOutEndpoint);
+    await _httpHelper.post(_logOutEndpoint);
     await _prefs.clear();
+    await _userService.deleteCurrentUserDeviceToken();
     return response['message'];
   }
 }

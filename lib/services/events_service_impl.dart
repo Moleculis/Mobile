@@ -1,6 +1,10 @@
+import 'package:moleculis/blocs/auth/auth_bloc.dart';
+import 'package:moleculis/models/enums/notification_type.dart';
+import 'package:moleculis/models/notification/notification_model.dart';
 import 'package:moleculis/models/page.dart';
 import 'package:moleculis/models/requests/create_update_event_request.dart';
 import 'package:moleculis/services/apis/events_service.dart';
+import 'package:moleculis/services/apis/notifications_service.dart';
 import 'package:moleculis/services/http_helper.dart';
 import 'package:moleculis/utils/locator.dart';
 
@@ -32,10 +36,8 @@ class EventsServiceImpl implements EventsService {
   }
 
   @override
-  Future<String?> updateEvent(
-    int? eventId,
-    CreateUpdateEventRequest request,
-  ) async {
+  Future<String?> updateEvent(int? eventId,
+      CreateUpdateEventRequest request,) async {
     final response = await _httpHelper.put(
       _updateEventEndpoint(eventId),
       body: request.toMap(),
@@ -49,6 +51,21 @@ class EventsServiceImpl implements EventsService {
       _createEventEndpoint,
       body: request.toMap(),
     );
+    final userUsername = locator<AuthBloc>().state.currentUser!.username;
+    final notifications = request.usersUsernames!.map((userName) {
+      return NotificationModel(
+        id: '',
+        creatorUsername: userUsername,
+        receiverUsername: userName,
+        title: 'New event',
+        text: "You've been invited to a new event: ${request.title}",
+        notificationType: NotificationType.newEvent,
+        createdAt: DateTime.now(),
+      );
+    }).toList();
+    notifications
+        .removeWhere((element) => element.receiverUsername == userUsername);
+    await locator<NotificationsService>().createNotifications(notifications);
     return response['message'];
   }
 

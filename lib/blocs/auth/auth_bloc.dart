@@ -18,6 +18,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthService _authService = locator<AuthService>();
   final UserService _userService = locator<UserService>();
 
+  StreamSubscription? _userModelSubscription;
+
   AuthBloc() : super(AuthState());
 
   @override
@@ -57,18 +59,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       yield state.copyWith(isLoading: true);
       final User user = await _userService.getCurrentUser();
+      _userModelSubscription?.cancel();
       final List<User> otherUsers = await _userService.getOtherUsers();
       yield state.copyWith(
-        isLoading: false,
         currentUser: user,
         otherUsers: otherUsers,
       );
+      yield* _loadUserModel();
     } on AppException catch (e) {
       yield AuthFailure(error: e.toString());
     }
   }
 
+  bool _tokenInitialized = false;
+
   Stream<AuthState> _login(String username, String password) async* {
+    final normalState = state;
     try {
       yield state.copyWith(isLoading: true);
       await _authService.login(
@@ -81,10 +87,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } on AppException catch (e) {
       yield AuthFailure(error: e.toString());
     } finally {
-      yield state.copyWith(
-        isLoading: false,
-      );
+      yield normalState;
+      yield* _loadUserModel();
     }
+  }
+
+  Stream<AuthState> _loadUserModel() async* {
+    late final User user;
+    if (state.currentUser == null) {
+      yield state.copyWith(isLoading: true);
+      user = await _userService.getCurrentUser();
+      _userModelSubscription?.cancel();
+      final List<User> otherUsers = await _userService.getOtherUsers();
+      yield state.copyWith(
+        currentUser: user,
+        otherUsers: otherUsers,
+      );
+    } else {
+      user = state.currentUser!;
+    }
+    _userModelSubscription?.cancel();
+    _userModelSubscription =
+        _userService.currentUserModelStream(user.username).listen(
+              (userModel) {
+            if (userModel == null) {
+              _userService.createUserModel();
+            } else {
+              if (!_tokenInitialized) {
+                _userService.updateUserDeviceToken(userModel);
+                _tokenInitialized = true;
+              }
+              emit(state.copyWith(
+                currentUserModel: userModel,
+                isLoading: false,
+              ));
+            }
+          },
+        );
   }
 
   Stream<AuthState> _register(RegisterRequest registerRequest) async* {
@@ -104,6 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield state.copyWith(isLoading: true);
       final String? message = await _authService.logOut();
       yield LogOutSuccess(message: message);
+      _tokenInitialized = false;
     } on AppException catch (e) {
       yield AuthFailure(error: e.toString());
     } finally {

@@ -11,6 +11,7 @@ import 'package:moleculis/screens/chat/widgets/messages_group_widget.dart';
 import 'package:moleculis/screens/chat/widgets/no_messages_view.dart';
 import 'package:moleculis/utils/chat_utils.dart';
 import 'package:moleculis/utils/locator.dart';
+import 'package:moleculis/utils/option_utils.dart';
 import 'package:moleculis/utils/widget_utils.dart';
 import 'package:moleculis/widgets/message_input.dart';
 
@@ -66,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    chatCubit.setUserOffline(chatId: chatId);
     chatCubit.close();
     super.dispose();
   }
@@ -159,7 +161,8 @@ class _ChatScreenState extends State<ChatScreen> {
           itemBuilder: (_, index) {
             final messagesList = chatState.messagesGroups![index];
             final messageCreator = members.firstWhere(
-              (element) => element.username == messagesList.groupCreatorId,
+                  (element) =>
+                  element.username == messagesList.groupCreatorUsername,
             );
             return MessagesGroupWidget(
               messageCreator: messageCreator,
@@ -177,6 +180,12 @@ class _ChatScreenState extends State<ChatScreen> {
       context,
       centerTitle: true,
       leading: WidgetUtils.backButton(context),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.more_horiz, color: Colors.black),
+          onPressed: onOptionTap,
+        ),
+      ],
       title: Text(
         user?.displayName ?? group?.title ?? '',
         style: TextStyle(
@@ -186,5 +195,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  void onOptionTap() {
+    if (!chatCubit.state.isLoading) {
+      OptionUtils.onChatOptionTap(context, chat: chatCubit.state.chat);
+    }
   }
 }

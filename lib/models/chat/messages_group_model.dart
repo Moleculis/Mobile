@@ -2,12 +2,12 @@ import 'package:moleculis/models/chat/message_model.dart';
 
 class MessagesGroupModel {
   final List<MessageModel> messagesGroup;
-  final String groupCreatorId;
+  final String groupCreatorUsername;
   final DateTime? date;
 
   MessagesGroupModel({
     required this.messagesGroup,
-    required this.groupCreatorId,
+    required this.groupCreatorUsername,
     this.date,
   });
 
@@ -18,7 +18,7 @@ class MessagesGroupModel {
   }) {
     return MessagesGroupModel(
       messagesGroup: messagesGroup ?? this.messagesGroup,
-      groupCreatorId: groupCreatorId ?? this.groupCreatorId,
+      groupCreatorUsername: groupCreatorId ?? this.groupCreatorUsername,
       date: date ?? this.date,
     );
   }
